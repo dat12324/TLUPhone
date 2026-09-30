@@ -1,0 +1,1415 @@
+// Mock data sản phẩm điện thoại chi tiết
+// Thiết kế chuẩn RESTful / Document model để sau này thay thế trực tiếp bằng API Backend & MongoDB
+
+const products = [
+  {
+    id: 1,
+    name: 'iPhone 15 Pro Max',
+    brand: 'Apple',
+    image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15-pro-max_3.png',
+    images: [
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15-pro-max_3.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15-pro-max-titan-tu-nhien.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15-pro-max-titan-xanh.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15-pro-max-titan-trang.png',
+    ],
+    price: 34990000,
+    originalPrice: 39990000,
+    specs: '6.7 inches, 256GB',
+    rating: 4.8,
+    reviewCount: 245,
+    shortDescription: 'iPhone 15 Pro Max với khung viền Titan chuẩn hàng không vũ trụ, chip A17 Pro mạnh mẽ vượt trội và camera tiềm vọng zoom 5x đỉnh cao.',
+    description: `iPhone 15 Pro Max là đỉnh cao công nghệ của Apple trong năm 2023 - 2024. Máy sở hữu thiết kế khung viền Titan cao cấp giúp giảm đáng kể trọng lượng nhưng vẫn giữ được độ bền bỉ vượt trội. Mặt kính Ceramic Shield siêu bền cùng khả năng kháng nước chuẩn IP68 mang lại sự an tâm tuyệt đối trong mọi điều kiện sử dụng.
+
+Trang bị sức mạnh từ con chip Apple A17 Pro tiến trình 3nm đầu tiên trên thế giới, iPhone 15 Pro Max mang đến hiệu năng xử lý đồ họa Ray Tracing đỉnh cao, sẵn sàng chiến mọi tựa game AAA. Hệ thống camera 48MP thế hệ mới hỗ trợ zoom quang học 5x sắc nét và cổng sạc USB-C chuẩn USB 3 cho tốc độ truyền dữ liệu siêu tốc.`,
+    highlights: [
+      'Khung viền Titan hàng không vũ trụ siêu nhẹ, siêu bền',
+      'Chip Apple A17 Pro 3nm mang lại hiệu năng gaming đột phá',
+      'Camera chính 48MP cùng ống kính Tele zoom quang học 5x',
+      'Màn hình Super Retina XDR 120Hz ProMotion siêu mượt',
+      'Nút Action Button tùy biến đa năng thay thế cần gạt rung',
+      'Cổng kết nối USB-C chuẩn USB 3 tốc độ lên đến 10Gbps',
+    ],
+    variants: [
+      { id: 'v1', ram: '8GB', storage: '256GB', price: 34990000, originalPrice: 39990000 },
+      { id: 'v2', ram: '8GB', storage: '512GB', price: 40990000, originalPrice: 45990000 },
+      { id: 'v3', ram: '8GB', storage: '1TB', price: 46990000, originalPrice: 51990000 },
+    ],
+    colors: [
+      {
+        id: 'c1',
+        name: 'Titan Tự Nhiên',
+        colorCode: '#9ca3af',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15-pro-max_3.png',
+      },
+      {
+        id: 'c2',
+        name: 'Titan Xanh',
+        colorCode: '#1e3a8a',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15-pro-max-titan-xanh.png',
+      },
+      {
+        id: 'c3',
+        name: 'Titan Trắng',
+        colorCode: '#f3f4f6',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15-pro-max-titan-trang.png',
+      },
+      {
+        id: 'c4',
+        name: 'Titan Đen',
+        colorCode: '#1f2937',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15-pro-max-titan-tu-nhien.png',
+      },
+    ],
+    stockByCombination: {
+      v1_c1: 15,
+      v1_c2: 8,
+      v1_c3: 0,
+      v1_c4: 12,
+      v2_c1: 5,
+      v2_c2: 0,
+      v2_c3: 6,
+      v2_c4: 4,
+      v3_c1: 2,
+      v3_c2: 1,
+      v3_c3: 0,
+      v3_c4: 3,
+    },
+    specifications: {
+      display: {
+        title: 'Màn hình',
+        items: {
+          'Công nghệ màn hình': 'OLED Super Retina XDR, Dynamic Island',
+          'Kích thước': '6.7 inches',
+          'Độ phân giải': '2796 x 1290 Pixels (460 ppi)',
+          'Tần số quét': '120Hz ProMotion thích ứng',
+          'Độ sáng tối đa': '2000 nits (ngoài trời)',
+        },
+      },
+      performance: {
+        title: 'Hiệu năng',
+        items: {
+          'Chip xử lý (CPU)': 'Apple A17 Pro 6 nhân (3nm)',
+          'Chip đồ họa (GPU)': 'Apple GPU 6 nhân',
+          'RAM': '8GB',
+          'Bộ nhớ trong': '256GB / 512GB / 1TB',
+        },
+      },
+      camera: {
+        title: 'Camera',
+        items: {
+          'Camera sau': 'Chính 48MP (f/1.78) + Siêu rộng 12MP (f/2.2) + Tele 12MP zoom quang 5x (f/2.8)',
+          'Camera trước': '12MP TrueDepth (f/1.9)',
+          'Quay video': '4K@60fps, ProRes 4K@60fps, Quay video không gian (Spatial Video)',
+        },
+      },
+      battery: {
+        title: 'Pin & Sạc',
+        items: {
+          'Dung lượng pin': '4422 mAh',
+          'Công suất sạc': 'Sạc nhanh 20W có dây, MagSafe 15W, Qi2 15W',
+          'Loại cổng sạc': 'USB Type-C (chuẩn USB 3, tốc độ 10Gbps)',
+        },
+      },
+      connectivity: {
+        title: 'Kết nối',
+        items: {
+          'SIM': '1 Nano-SIM + 1 eSIM hoặc 2 eSIM',
+          'Mạng di động': '5G Sub-6 GHz',
+          'Wi-Fi': 'Wi-Fi 6E (802.11ax)',
+          'Bluetooth': 'v5.3',
+          'NFC': 'Có (hỗ trợ Apple Pay)',
+        },
+      },
+      general: {
+        title: 'Thông tin khác',
+        items: {
+          'Hệ điều hành': 'iOS 17',
+          'Kích thước': '159.9 x 76.7 x 8.25 mm',
+          'Trọng lượng': '221 g',
+          'Chống nước/bụi': 'IP68 (ngâm nước 6m trong 30 phút)',
+          'Thời điểm ra mắt': '09/2023',
+        },
+      },
+    },
+  },
+  {
+    id: 2,
+    name: 'iPhone 15',
+    brand: 'Apple',
+    image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15-plus_1_.png',
+    images: [
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15-plus_1_.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15_1__2.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15-xanh-la.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15-vang.png',
+    ],
+    price: 22990000,
+    originalPrice: 24990000,
+    specs: '6.1 inches, 128GB',
+    rating: 4.6,
+    reviewCount: 189,
+    shortDescription: 'iPhone 15 với Dynamic Island hoàn toàn mới, camera chính 48MP và cổng kết nối USB-C tiện lợi.',
+    description: `iPhone 15 mang đến sự đổi mới toàn diện với cụm Dynamic Island thông minh, camera chính nâng cấp lên 48MP sắc nét và mặt lưng kính pha màu mờ sang trọng. Máy trang bị vi xử lý Apple A16 Bionic mạnh mẽ và tiết kiệm năng lượng.`,
+    highlights: [
+      'Dynamic Island hiển thị thông báo và hoạt động trực tiếp',
+      'Camera chính 48MP chụp ảnh siêu nét và zoom 2x chất lượng quang học',
+      'Mặt lưng kính pha màu độc đáo với khung nhôm cao cấp',
+      'Chip Apple A16 Bionic cân mượt mọi tác vụ',
+      'Cổng sạc USB-C phổ biến',
+    ],
+    variants: [
+      { id: 'v1', ram: '6GB', storage: '128GB', price: 22990000, originalPrice: 24990000 },
+      { id: 'v2', ram: '6GB', storage: '256GB', price: 25990000, originalPrice: 27990000 },
+    ],
+    colors: [
+      {
+        id: 'c1',
+        name: 'Hồng Pastel',
+        colorCode: '#fbcfe8',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15-plus_1_.png',
+      },
+      {
+        id: 'c2',
+        name: 'Xanh Mint',
+        colorCode: '#ccfbf1',
+        image: 'https://cdn2.cellphones.com.vn/358x/media/catalog/product/i/p/iphone-15-128gb-xanh-duong.png',
+      },
+      {
+        id: 'c3',
+        name: 'Vàng Pastel',
+        colorCode: '#fef08a',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15-vang.png',
+      },
+      {
+        id: 'c4',
+        name: 'Đen',
+        colorCode: '#1f2937',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15_1__2.png',
+      },
+    ],
+    stockByCombination: {
+      v1_c1: 10,
+      v1_c2: 7,
+      v1_c3: 0,
+      v1_c4: 15,
+      v2_c1: 4,
+      v2_c2: 2,
+      v2_c3: 3,
+      v2_c4: 0,
+    },
+    specifications: {
+      display: {
+        title: 'Màn hình',
+        items: {
+          'Công nghệ màn hình': 'OLED Super Retina XDR, Dynamic Island',
+          'Kích thước': '6.1 inches',
+          'Độ phân giải': '2556 x 1179 Pixels',
+          'Tần số quét': '60Hz',
+          'Độ sáng tối đa': '2000 nits',
+        },
+      },
+      performance: {
+        title: 'Hiệu năng',
+        items: {
+          'Chip xử lý (CPU)': 'Apple A16 Bionic 6 nhân',
+          'Chip đồ họa (GPU)': 'Apple GPU 5 nhân',
+          'RAM': '6GB',
+          'Bộ nhớ trong': '128GB / 256GB',
+        },
+      },
+      camera: {
+        title: 'Camera',
+        items: {
+          'Camera sau': 'Chính 48MP + Góc siêu rộng 12MP',
+          'Camera trước': '12MP TrueDepth',
+          'Quay video': '4K@60fps, Cinematic 4K HDR',
+        },
+      },
+      battery: {
+        title: 'Pin & Sạc',
+        items: {
+          'Dung lượng pin': '3349 mAh',
+          'Công suất sạc': '20W, sạc không dây MagSafe 15W',
+          'Loại cổng sạc': 'USB Type-C',
+        },
+      },
+      connectivity: {
+        title: 'Kết nối',
+        items: {
+          'SIM': '1 Nano-SIM + 1 eSIM',
+          'Mạng di động': '5G',
+          'Wi-Fi': 'Wi-Fi 6',
+          'Bluetooth': 'v5.3',
+          'NFC': 'Có',
+        },
+      },
+      general: {
+        title: 'Thông tin khác',
+        items: {
+          'Hệ điều hành': 'iOS 17',
+          'Kích thước': '147.6 x 71.6 x 7.8 mm',
+          'Trọng lượng': '171 g',
+          'Chống nước/bụi': 'IP68',
+          'Thời điểm ra mắt': '09/2023',
+        },
+      },
+    },
+  },
+  {
+    id: 3,
+    name: 'Samsung Galaxy S24 Ultra',
+    brand: 'Samsung',
+    image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-s24-ultra_-1_1.png',
+    images: [
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-s24-ultra_-1_1.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/g/a/galaxy-s24-ultra-xam.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/g/a/galaxy-s24-ultra-den.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/g/a/galaxy-s24-ultra-tim.png',
+    ],
+    price: 31990000,
+    originalPrice: 36990000,
+    specs: '6.8 inches, 256GB',
+    rating: 4.7,
+    reviewCount: 312,
+    shortDescription: 'Galaxy AI quyền năng, khung viền Titan sang trọng và camera 200MP đột phá với bút S-Pen tích hợp.',
+    description: `Samsung Galaxy S24 Ultra mở ra kỷ nguyên AI trên thiết bị di động với các tính năng thông minh: Khoanh tròn để tìm kiếm, Phiên dịch trực tiếp cuộc gọi, Trợ lý ghi chú thông minh. Máy trang bị khung viền Titan, màn hình phẳng chống chói Corning Gorilla Armor và sức mạnh từ Snapdragon 8 Gen 3 for Galaxy.`,
+    highlights: [
+      'Trải nghiệm Galaxy AI: Circle to Search, Live Translate, Note Assist',
+      'Khung viền Titan bền bỉ kết hợp mặt kính chống chói đỉnh cao',
+      'Camera 200MP tích hợp công nghệ ProVisual Engine AI',
+      'Màn hình 6.8 inch Dynamic AMOLED 2X sáng 2600 nits',
+      'Bút S-Pen tích hợp bên trong thân máy',
+    ],
+    variants: [
+      { id: 'v1', ram: '12GB', storage: '256GB', price: 31990000, originalPrice: 36990000 },
+      { id: 'v2', ram: '12GB', storage: '512GB', price: 35990000, originalPrice: 40990000 },
+      { id: 'v3', ram: '12GB', storage: '1TB', price: 42990000, originalPrice: 46990000 },
+    ],
+    colors: [
+      {
+        id: 'c1',
+        name: 'Xám Titan',
+        colorCode: '#6b7280',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-s24-ultra_-1_1.png',
+      },
+      {
+        id: 'c2',
+        name: 'Đen Titan',
+        colorCode: '#111827',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/g/a/galaxy-s24-ultra-den.png',
+      },
+      {
+        id: 'c3',
+        name: 'Tím Titan',
+        colorCode: '#7c3aed',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/g/a/galaxy-s24-ultra-tim.png',
+      },
+      {
+        id: 'c4',
+        name: 'Vàng Titan',
+        colorCode: '#eab308',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/g/a/galaxy-s24-ultra-xam.png',
+      },
+    ],
+    stockByCombination: {
+      v1_c1: 18,
+      v1_c2: 12,
+      v1_c3: 5,
+      v1_c4: 0,
+      v2_c1: 6,
+      v2_c2: 0,
+      v2_c3: 4,
+      v2_c4: 2,
+      v3_c1: 1,
+      v3_c2: 0,
+      v3_c3: 2,
+      v3_c4: 1,
+    },
+    specifications: {
+      display: {
+        title: 'Màn hình',
+        items: {
+          'Công nghệ màn hình': 'Dynamic AMOLED 2X, Vision Booster',
+          'Kích thước': '6.8 inches',
+          'Độ phân giải': 'QHD+ (3120 x 1440 Pixels)',
+          'Tần số quét': '120Hz thích ứng (1-120Hz)',
+          'Độ sáng tối đa': '2600 nits',
+        },
+      },
+      performance: {
+        title: 'Hiệu năng',
+        items: {
+          'Chip xử lý (CPU)': 'Snapdragon 8 Gen 3 for Galaxy 8 nhân (4nm)',
+          'Chip đồ họa (GPU)': 'Adreno 750',
+          'RAM': '12GB',
+          'Bộ nhớ trong': '256GB / 512GB / 1TB',
+        },
+      },
+      camera: {
+        title: 'Camera',
+        items: {
+          'Camera sau': 'Chính 200MP (OIS) + Siêu rộng 12MP + Tele 50MP (5x) + Tele 10MP (3x)',
+          'Camera trước': '12MP Dual Pixel AF',
+          'Quay video': '8K@30fps, 4K@120fps',
+        },
+      },
+      battery: {
+        title: 'Pin & Sạc',
+        items: {
+          'Dung lượng pin': '5000 mAh',
+          'Công suất sạc': 'Sạc nhanh siêu tốc 45W, sạc không dây 15W',
+          'Loại cổng sạc': 'USB Type-C (chuẩn 3.2)',
+        },
+      },
+      connectivity: {
+        title: 'Kết nối',
+        items: {
+          'SIM': '2 Nano-SIM hoặc 1 Nano + 1 eSIM',
+          'Mạng di động': '5G',
+          'Wi-Fi': 'Wi-Fi 7 (802.11be)',
+          'Bluetooth': 'v5.3',
+          'NFC': 'Có',
+        },
+      },
+      general: {
+        title: 'Thông tin khác',
+        items: {
+          'Hệ điều hành': 'Android 14, One UI 6.1 (hỗ trợ update 7 năm)',
+          'Kích thước': '162.3 x 79.0 x 8.6 mm',
+          'Trọng lượng': '232 g',
+          'Chống nước/bụi': 'IP68',
+          'Thời điểm ra mắt': '01/2024',
+        },
+      },
+    },
+  },
+  {
+    id: 4,
+    name: 'Samsung Galaxy S24',
+    brand: 'Samsung',
+    image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-s24_2.png',
+    images: [
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-s24_2.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-s24-plus_1_.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-s24-vang.png',
+    ],
+    price: 19990000,
+    originalPrice: 22990000,
+    specs: '6.2 inches, 128GB',
+    rating: 4.5,
+    reviewCount: 178,
+    shortDescription: 'Galaxy AI trong thân máy nhỏ gọn, màn hình Dynamic AMOLED 2X 120Hz và chip Exynos 2400 mạnh mẽ.',
+    description: `Samsung Galaxy S24 sở hữu thiết kế nhỏ gọn, viền siêu mỏng ấn tượng cùng đầy đủ tính năng Galaxy AI hiện đại. Máy mang lại trải nghiệm cầm nắm hoàn hảo cho người dùng yêu thích thiết bị vừa tay.`,
+    highlights: [
+      'Kích thước gọn nhẹ 6.2 inch với viền màn hình siêu mỏng',
+      'Đầy đủ bộ tính năng Galaxy AI thông minh',
+      'Màn hình 120Hz độ sáng rực rỡ 2600 nits',
+      'Cụm 3 camera 50MP sắc nét',
+    ],
+    variants: [
+      { id: 'v1', ram: '8GB', storage: '128GB', price: 19990000, originalPrice: 22990000 },
+      { id: 'v2', ram: '8GB', storage: '256GB', price: 21990000, originalPrice: 24990000 },
+    ],
+    colors: [
+      {
+        id: 'c1',
+        name: 'Đen Onyx',
+        colorCode: '#111827',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-s24_2.png',
+      },
+      {
+        id: 'c2',
+        name: 'Xám Marble',
+        colorCode: '#9ca3af',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-s24-plus_1_.png',
+      },
+      {
+        id: 'c3',
+        name: 'Tím Cobalt',
+        colorCode: '#6d28d9',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-s24_2.png',
+      },
+      {
+        id: 'c4',
+        name: 'Vàng Amber',
+        colorCode: '#f59e0b',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-s24-vang.png',
+      },
+    ],
+    stockByCombination: {
+      v1_c1: 10,
+      v1_c2: 8,
+      v1_c3: 0,
+      v1_c4: 5,
+      v2_c1: 7,
+      v2_c2: 3,
+      v2_c3: 4,
+      v2_c4: 0,
+    },
+    specifications: {
+      display: {
+        title: 'Màn hình',
+        items: {
+          'Công nghệ màn hình': 'Dynamic AMOLED 2X',
+          'Kích thước': '6.2 inches',
+          'Độ phân giải': 'FHD+ (2340 x 1080 Pixels)',
+          'Tần số quét': '120Hz thích ứng (1-120Hz)',
+          'Độ sáng tối đa': '2600 nits',
+        },
+      },
+      performance: {
+        title: 'Hiệu năng',
+        items: {
+          'Chip xử lý (CPU)': 'Exynos 2400 10 nhân (4nm)',
+          'Chip đồ họa (GPU)': 'Xclipse 940',
+          'RAM': '8GB',
+          'Bộ nhớ trong': '128GB / 256GB',
+        },
+      },
+      camera: {
+        title: 'Camera',
+        items: {
+          'Camera sau': 'Chính 50MP + Siêu rộng 12MP + Tele 10MP (3x)',
+          'Camera trước': '12MP',
+          'Quay video': '8K@30fps, 4K@60fps',
+        },
+      },
+      battery: {
+        title: 'Pin & Sạc',
+        items: {
+          'Dung lượng pin': '4000 mAh',
+          'Công suất sạc': '25W có dây, 15W không dây',
+          'Loại cổng sạc': 'USB Type-C',
+        },
+      },
+      connectivity: {
+        title: 'Kết nối',
+        items: {
+          'SIM': '2 Nano-SIM hoặc 1 eSIM + 1 Nano-SIM',
+          'Mạng di động': '5G',
+          'Wi-Fi': 'Wi-Fi 6E',
+          'Bluetooth': 'v5.3',
+          'NFC': 'Có',
+        },
+      },
+      general: {
+        title: 'Thông tin khác',
+        items: {
+          'Hệ điều hành': 'Android 14, One UI 6.1',
+          'Kích thước': '147.0 x 70.6 x 7.6 mm',
+          'Trọng lượng': '167 g',
+          'Chống nước/bụi': 'IP68',
+          'Thời điểm ra mắt': '01/2024',
+        },
+      },
+    },
+  },
+  {
+    id: 5,
+    name: 'Samsung Galaxy A55',
+    brand: 'Samsung',
+    image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-a55-5g_2_.png',
+    images: [
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-a55-5g_2_.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-a55-xanh.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-a55-tim.png',
+    ],
+    price: 9490000,
+    originalPrice: 10990000,
+    specs: '6.6 inches, 128GB',
+    rating: 4.3,
+    reviewCount: 156,
+    shortDescription: 'Khung viền kim loại cao cấp, chip Exynos 1480 có GPU AMD và bảo mật Knox Vault hàng đầu.',
+    description: `Samsung Galaxy A55 5G khẳng định vị thế phân khúc tầm trung với khung viền kim loại sang trọng, vi xử lý Exynos 1480 tích hợp GPU kiến trúc RDNA của AMD cho hiệu năng đồ họa ấn tượng.`,
+    highlights: [
+      'Khung viền kim loại lần đầu tiên xuất hiện trên dòng Galaxy A',
+      'Chip Exynos 1480 tiến trình 4nm mạnh mẽ, mượt mà',
+      'Màn hình Super AMOLED 120Hz rực rỡ',
+      'Bảo mật phần cứng Samsung Knox Vault',
+    ],
+    variants: [
+      { id: 'v1', ram: '8GB', storage: '128GB', price: 9490000, originalPrice: 10990000 },
+      { id: 'v2', ram: '8GB', storage: '256GB', price: 10490000, originalPrice: 11990000 },
+    ],
+    colors: [
+      {
+        id: 'c1',
+        name: 'Xanh Iceblue',
+        colorCode: '#bfdbfe',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-a55-5g_2_.png',
+      },
+      {
+        id: 'c2',
+        name: 'Xanh Navy',
+        colorCode: '#1e3a8a',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-a55-xanh.png',
+      },
+      {
+        id: 'c3',
+        name: 'Tím Lilac',
+        colorCode: '#ddd6fe',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-a55-tim.png',
+      },
+    ],
+    stockByCombination: {
+      v1_c1: 20,
+      v1_c2: 15,
+      v1_c3: 10,
+      v2_c1: 8,
+      v2_c2: 0,
+      v2_c3: 5,
+    },
+    specifications: {
+      display: {
+        title: 'Màn hình',
+        items: {
+          'Công nghệ màn hình': 'Super AMOLED',
+          'Kích thước': '6.6 inches',
+          'Độ phân giải': 'FHD+ (2340 x 1080 Pixels)',
+          'Tần số quét': '120Hz',
+          'Độ sáng tối đa': '1000 nits',
+        },
+      },
+      performance: {
+        title: 'Hiệu năng',
+        items: {
+          'Chip xử lý (CPU)': 'Exynos 1480 8 nhân (4nm)',
+          'Chip đồ họa (GPU)': 'Xclipse 530 (AMD RDNA 2)',
+          'RAM': '8GB',
+          'Bộ nhớ trong': '128GB / 256GB (hỗ trợ thẻ MicroSD 1TB)',
+        },
+      },
+      camera: {
+        title: 'Camera',
+        items: {
+          'Camera sau': 'Chính 50MP (OIS) + Siêu rộng 12MP + Macro 5MP',
+          'Camera trước': '32MP',
+          'Quay video': '4K@30fps',
+        },
+      },
+      battery: {
+        title: 'Pin & Sạc',
+        items: {
+          'Dung lượng pin': '5000 mAh',
+          'Công suất sạc': '25W',
+          'Loại cổng sạc': 'USB Type-C',
+        },
+      },
+      connectivity: {
+        title: 'Kết nối',
+        items: {
+          'SIM': '2 Nano-SIM hoặc 1 SIM + 1 thẻ nhớ',
+          'Mạng di động': '5G',
+          'Wi-Fi': 'Wi-Fi 6',
+          'Bluetooth': 'v5.3',
+          'NFC': 'Có',
+        },
+      },
+      general: {
+        title: 'Thông tin khác',
+        items: {
+          'Hệ điều hành': 'Android 14, One UI 6.1',
+          'Kích thước': '161.1 x 77.4 x 8.2 mm',
+          'Trọng lượng': '213 g',
+          'Chống nước/bụi': 'IP67',
+          'Thời điểm ra mắt': '03/2024',
+        },
+      },
+    },
+  },
+  {
+    id: 6,
+    name: 'Xiaomi 14 Ultra',
+    brand: 'Xiaomi',
+    image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/x/i/xiaomi-14-ultra_1__1.png',
+    images: [
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/x/i/xiaomi-14-ultra_1__1.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/x/i/xiaomi-14-ultra-trang.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/x/i/xiaomi-14-ultra-den.png',
+    ],
+    price: 23990000,
+    originalPrice: 26990000,
+    specs: '6.73 inches, 512GB',
+    rating: 4.6,
+    reviewCount: 98,
+    shortDescription: 'Ống kính quang học Leica thế hệ mới với 4 camera 50MP cảm biến 1-inch và chip Snapdragon 8 Gen 3.',
+    description: `Xiaomi 14 Ultra là tuyệt tác nhiếp ảnh di động được đồng chế tác cùng Leica. Máy trang bị cảm biến chính Sony LYT-900 1 inch với khẩu độ biến thiên mượt mà từ f/1.63 đến f/4.0 cùng màn hình cong nhẹ 4 cạnh siêu ấn tượng.`,
+    highlights: [
+      'Hệ thống 4 camera Leica 50MP cảm biến 1 inch đỉnh cao',
+      'Khẩu độ biến thiên vô cấp cơ học f/1.63 - f/4.0',
+      'Vi xử lý Snapdragon 8 Gen 3 hiệu năng cực đại',
+      'Màn hình 2K AMOLED 120Hz LTPO 3000 nits',
+      'Sạc nhanh 90W có dây, 80W không dây',
+    ],
+    variants: [
+      { id: 'v1', ram: '16GB', storage: '512GB', price: 23990000, originalPrice: 26990000 },
+    ],
+    colors: [
+      {
+        id: 'c1',
+        name: 'Đen Da Thuần Chay',
+        colorCode: '#1f2937',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/x/i/xiaomi-14-ultra_1__1.png',
+      },
+      {
+        id: 'c2',
+        name: 'Trắng Da Thuần Chay',
+        colorCode: '#f3f4f6',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/x/i/xiaomi-14-ultra-trang.png',
+      },
+    ],
+    stockByCombination: {
+      v1_c1: 10,
+      v1_c2: 5,
+    },
+    specifications: {
+      display: {
+        title: 'Màn hình',
+        items: {
+          'Công nghệ màn hình': 'LTPO AMOLED, Dolby Vision',
+          'Kích thước': '6.73 inches',
+          'Độ phân giải': 'WQHD+ (3200 x 1440 Pixels)',
+          'Tần số quét': '1 - 120Hz',
+          'Độ sáng tối đa': '3000 nits',
+        },
+      },
+      performance: {
+        title: 'Hiệu năng',
+        items: {
+          'Chip xử lý (CPU)': 'Snapdragon 8 Gen 3 (4nm)',
+          'Chip đồ họa (GPU)': 'Adreno 750',
+          'RAM': '16GB LPDDR5X',
+          'Bộ nhớ trong': '512GB UFS 4.0',
+        },
+      },
+      camera: {
+        title: 'Camera',
+        items: {
+          'Camera sau': 'Leica Quad 50MP (1-inch LYT-900) + Tele 50MP 3.2x + Tele tiềm vọng 50MP 5x + Siêu rộng 50MP',
+          'Camera trước': '32MP',
+          'Quay video': '8K@30fps, 4K@120fps Dolby Vision',
+        },
+      },
+      battery: {
+        title: 'Pin & Sạc',
+        items: {
+          'Dung lượng pin': '5000 mAh',
+          'Công suất sạc': 'HyperCharge 90W, Sạc không dây 80W',
+          'Loại cổng sạc': 'USB Type-C 3.2 Gen 2',
+        },
+      },
+      connectivity: {
+        title: 'Kết nối',
+        items: {
+          'SIM': '2 Nano-SIM',
+          'Mạng di động': '5G',
+          'Wi-Fi': 'Wi-Fi 7',
+          'Bluetooth': 'v5.4',
+          'NFC': 'Có',
+        },
+      },
+      general: {
+        title: 'Thông tin khác',
+        items: {
+          'Hệ điều hành': 'Xiaomi HyperOS, Android 14',
+          'Kích thước': '161.4 x 75.3 x 9.2 mm',
+          'Trọng lượng': '219.8 g',
+          'Chống nước/bụi': 'IP68',
+          'Thời điểm ra mắt': '02/2024',
+        },
+      },
+    },
+  },
+  {
+    id: 7,
+    name: 'Xiaomi Redmi Note 13 Pro',
+    brand: 'Xiaomi',
+    image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/x/i/xiaomi-redmi-note-13-pro-5g_1_1.png',
+    images: [
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/x/i/xiaomi-redmi-note-13-pro-5g_1_1.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/x/i/redmi-note-13-pro-xanh.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/x/i/redmi-note-13-pro-tim.png',
+    ],
+    price: 7490000,
+    originalPrice: 8990000,
+    specs: '6.67 inches, 128GB',
+    rating: 4.4,
+    reviewCount: 267,
+    shortDescription: 'Camera 200MP chống rung OIS, màn hình AMOLED 1.5K 120Hz cùng sạc nhanh 67W cực ấn tượng.',
+    description: `Redmi Note 13 Pro 5G mang trải nghiệm cao cấp xuống phân khúc phổ thông với camera độ phân giải khủng 200MP, màn hình CrystalRes 1.5K 120Hz sắc nét và chip Snapdragon 7s Gen 2 tiến trình 4nm.`,
+    highlights: [
+      'Camera chính 200MP chống rung quang học OIS',
+      'Màn hình 1.5K 120Hz AMOLED 1800 nits',
+      'Chip Snapdragon 7s Gen 2 tiết kiệm pin, hiệu năng tốt',
+      'Sạc Turbo 67W nạp đầy pin nhanh chóng',
+    ],
+    variants: [
+      { id: 'v1', ram: '8GB', storage: '128GB', price: 7490000, originalPrice: 8990000 },
+      { id: 'v2', ram: '8GB', storage: '256GB', price: 8290000, originalPrice: 9490000 },
+    ],
+    colors: [
+      {
+        id: 'c1',
+        name: 'Đen Bán Dạ',
+        colorCode: '#1f2937',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/x/i/xiaomi-redmi-note-13-pro-5g_1_1.png',
+      },
+      {
+        id: 'c2',
+        name: 'Xanh Cực Quang',
+        colorCode: '#38bdf8',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/x/i/redmi-note-13-pro-xanh.png',
+      },
+      {
+        id: 'c3',
+        name: 'Tím Cực Quang',
+        colorCode: '#c084fc',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/x/i/redmi-note-13-pro-tim.png',
+      },
+    ],
+    stockByCombination: {
+      v1_c1: 15,
+      v1_c2: 12,
+      v1_c3: 0,
+      v2_c1: 8,
+      v2_c2: 6,
+      v2_c3: 4,
+    },
+    specifications: {
+      display: {
+        title: 'Màn hình',
+        items: {
+          'Công nghệ màn hình': 'AMOLED, 68 tỷ màu',
+          'Kích thước': '6.67 inches',
+          'Độ phân giải': '1.5K (2712 x 1220 Pixels)',
+          'Tần số quét': '120Hz',
+          'Độ sáng tối đa': '1800 nits',
+        },
+      },
+      performance: {
+        title: 'Hiệu năng',
+        items: {
+          'Chip xử lý (CPU)': 'Snapdragon 7s Gen 2 (4nm)',
+          'Chip đồ họa (GPU)': 'Adreno 710',
+          'RAM': '8GB',
+          'Bộ nhớ trong': '128GB / 256GB',
+        },
+      },
+      camera: {
+        title: 'Camera',
+        items: {
+          'Camera sau': 'Chính 200MP (OIS) + Siêu rộng 8MP + Macro 2MP',
+          'Camera trước': '16MP',
+          'Quay video': '4K@30fps, 1080p@60fps',
+        },
+      },
+      battery: {
+        title: 'Pin & Sạc',
+        items: {
+          'Dung lượng pin': '5100 mAh',
+          'Công suất sạc': 'Turbo 67W',
+          'Loại cổng sạc': 'USB Type-C',
+        },
+      },
+      connectivity: {
+        title: 'Kết nối',
+        items: {
+          'SIM': '2 Nano-SIM hoặc 1 SIM + 1 eSIM',
+          'Mạng di động': '5G',
+          'Wi-Fi': 'Wi-Fi 5',
+          'Bluetooth': 'v5.2',
+          'NFC': 'Có',
+        },
+      },
+      general: {
+        title: 'Thông tin khác',
+        items: {
+          'Hệ điều hành': 'MIUI 14 (lên HyperOS), Android 13',
+          'Kích thước': '161.15 x 74.24 x 7.98 mm',
+          'Trọng lượng': '187 g',
+          'Chống nước/bụi': 'IP54',
+          'Thời điểm ra mắt': '01/2024',
+        },
+      },
+    },
+  },
+  {
+    id: 8,
+    name: 'OPPO Find X7 Ultra',
+    brand: 'OPPO',
+    image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/o/p/oppo-find-x7-ultra.png',
+    images: [
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/o/p/oppo-find-x7-ultra.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/o/p/oppo-find-x7-ultra-nau.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/o/p/oppo-find-x7-ultra-den.png',
+    ],
+    price: 22990000,
+    originalPrice: 25990000,
+    specs: '6.82 inches, 256GB',
+    rating: 4.5,
+    reviewCount: 87,
+    shortDescription: 'Smartphone đầu tiên trang bị camera kép tiềm vọng và công nghệ màu Hasselblad huyền thoại.',
+    description: `OPPO Find X7 Ultra là smartphone đầu tiên trên thế giới sở hữu cụm camera kép tiềm vọng, kết hợp cùng cảm biến 1-inch Sony LYT-900 và thuật toán màu HyperTone tinh chỉnh bởi Hasselblad.`,
+    highlights: [
+      'Hệ thống camera quad 50MP hợp tác cùng Hasselblad',
+      'Camera kép tiềm vọng Zoom 3x và 6x quang học',
+      'Chip Snapdragon 8 Gen 3 siêu mạnh mẽ',
+      'Màn hình 2K LTPO 4500 nits đỉnh cao',
+      'Sạc SuperVOOC 100W nạp pin siêu tốc',
+    ],
+    variants: [
+      { id: 'v1', ram: '12GB', storage: '256GB', price: 22990000, originalPrice: 25990000 },
+      { id: 'v2', ram: '16GB', storage: '512GB', price: 25990000, originalPrice: 28990000 },
+    ],
+    colors: [
+      {
+        id: 'c1',
+        name: 'Nâu Ocean Blue (Da)',
+        colorCode: '#92400e',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/o/p/oppo-find-x7-ultra.png',
+      },
+      {
+        id: 'c2',
+        name: 'Đen Midnight (Da)',
+        colorCode: '#1f2937',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/o/p/oppo-find-x7-ultra-den.png',
+      },
+    ],
+    stockByCombination: {
+      v1_c1: 6,
+      v1_c2: 8,
+      v2_c1: 3,
+      v2_c2: 0,
+    },
+    specifications: {
+      display: {
+        title: 'Màn hình',
+        items: {
+          'Công nghệ màn hình': 'LTPO AMOLED, 1 tỷ màu',
+          'Kích thước': '6.82 inches',
+          'Độ phân giải': 'QHD+ (3168 x 1440 Pixels)',
+          'Tần số quét': '1 - 120Hz',
+          'Độ sáng tối đa': '4500 nits',
+        },
+      },
+      performance: {
+        title: 'Hiệu năng',
+        items: {
+          'Chip xử lý (CPU)': 'Snapdragon 8 Gen 3 (4nm)',
+          'Chip đồ họa (GPU)': 'Adreno 750',
+          'RAM': '12GB / 16GB',
+          'Bộ nhớ trong': '256GB / 512GB UFS 4.0',
+        },
+      },
+      camera: {
+        title: 'Camera',
+        items: {
+          'Camera sau': '4 camera 50MP: Cảm biến 1-inch LYT-900 + Góc rộng + Tele 3x + Tele tiềm vọng 6x',
+          'Camera trước': '32MP Sony IMX709',
+          'Quay video': '4K@60fps Dolby Vision',
+        },
+      },
+      battery: {
+        title: 'Pin & Sạc',
+        items: {
+          'Dung lượng pin': '5000 mAh',
+          'Công suất sạc': 'SuperVOOC 100W, Sạc không dây 50W',
+          'Loại cổng sạc': 'USB Type-C 3.2',
+        },
+      },
+      connectivity: {
+        title: 'Kết nối',
+        items: {
+          'SIM': '2 Nano-SIM',
+          'Mạng di động': '5G',
+          'Wi-Fi': 'Wi-Fi 7',
+          'Bluetooth': 'v5.4',
+          'NFC': 'Có',
+        },
+      },
+      general: {
+        title: 'Thông tin khác',
+        items: {
+          'Hệ điều hành': 'ColorOS 14, Android 14',
+          'Kích thước': '164.3 x 76.2 x 9.5 mm',
+          'Trọng lượng': '221 g',
+          'Chống nước/bụi': 'IP68',
+          'Thời điểm ra mắt': '01/2024',
+        },
+      },
+    },
+  },
+  {
+    id: 9,
+    name: 'OPPO Reno 11',
+    brand: 'OPPO',
+    image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/o/p/oppo-reno11-5g.png',
+    images: [
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/o/p/oppo-reno11-5g.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/o/p/oppo-reno11-xanh.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/o/p/oppo-reno11-xam.png',
+    ],
+    price: 9990000,
+    originalPrice: 11990000,
+    specs: '6.7 inches, 256GB',
+    rating: 4.3,
+    reviewCount: 134,
+    shortDescription: 'Chuyên gia chân dung với camera tele 32MP, màn hình cong 3D 120Hz và sạc nhanh SuperVOOC 67W.',
+    description: `OPPO Reno 11 tiếp tục khẳng định danh xưng 'Chuyên gia chân dung' với camera telephoto 32MP cảm biến Sony IMX709 chuyên biệt, kết hợp thiết kế mặt lưng lượn sóng tự nhiên tuyệt đẹp.`,
+    highlights: [
+      'Camera chân dung tele 32MP cảm biến Sony',
+      'Màn hình cong 3D 120Hz viền siêu mỏng',
+      'Sạc nhanh SuperVOOC 67W an toàn',
+      'Hệ điều hành ColorOS 14 mượt mà',
+    ],
+    variants: [
+      { id: 'v1', ram: '8GB', storage: '256GB', price: 9990000, originalPrice: 11990000 },
+    ],
+    colors: [
+      {
+        id: 'c1',
+        name: 'Xanh Sóng Biển',
+        colorCode: '#a7f3d0',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/o/p/oppo-reno11-5g.png',
+      },
+      {
+        id: 'c2',
+        name: 'Xám Hoa Cương',
+        colorCode: '#4b5563',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/o/p/oppo-reno11-xam.png',
+      },
+    ],
+    stockByCombination: {
+      v1_c1: 15,
+      v1_c2: 10,
+    },
+    specifications: {
+      display: {
+        title: 'Màn hình',
+        items: {
+          'Công nghệ màn hình': 'OLED 3D cong',
+          'Kích thước': '6.7 inches',
+          'Độ phân giải': 'FHD+ (2412 x 1080 Pixels)',
+          'Tần số quét': '120Hz',
+          'Độ sáng tối đa': '950 nits',
+        },
+      },
+      performance: {
+        title: 'Hiệu năng',
+        items: {
+          'Chip xử lý (CPU)': 'MediaTek Dimensity 7050 5G (6nm)',
+          'Chip đồ họa (GPU)': 'Mali-G68 MC4',
+          'RAM': '8GB',
+          'Bộ nhớ trong': '256GB',
+        },
+      },
+      camera: {
+        title: 'Camera',
+        items: {
+          'Camera sau': 'Chính 50MP (OIS) + Chân dung Tele 32MP + Góc rộng 8MP',
+          'Camera trước': '32MP',
+          'Quay video': '4K@30fps, 1080p@60fps',
+        },
+      },
+      battery: {
+        title: 'Pin & Sạc',
+        items: {
+          'Dung lượng pin': '5000 mAh',
+          'Công suất sạc': 'SuperVOOC 67W',
+          'Loại cổng sạc': 'USB Type-C',
+        },
+      },
+      connectivity: {
+        title: 'Kết nối',
+        items: {
+          'SIM': '2 Nano-SIM',
+          'Mạng di động': '5G',
+          'Wi-Fi': 'Wi-Fi 6',
+          'Bluetooth': 'v5.3',
+          'NFC': 'Có',
+        },
+      },
+      general: {
+        title: 'Thông tin khác',
+        items: {
+          'Hệ điều hành': 'ColorOS 14, Android 14',
+          'Kích thước': '162.4 x 74.3 x 7.99 mm',
+          'Trọng lượng': '182 g',
+          'Chống nước/bụi': 'IPX4',
+          'Thời điểm ra mắt': '01/2024',
+        },
+      },
+    },
+  },
+  {
+    id: 10,
+    name: 'iPhone 14',
+    brand: 'Apple',
+    image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-14_1.png',
+    images: [
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-14_1.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-14-blue.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-14-purple.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-14-starlight.png',
+    ],
+    price: 17990000,
+    originalPrice: 19990000,
+    specs: '6.1 inches, 128GB',
+    rating: 4.5,
+    reviewCount: 423,
+    shortDescription: 'Hiệu năng bền bỉ với chip A15 Bionic 5 nhân GPU, camera nâng cấp chụp đêm và tính năng phát hiện va chạm.',
+    description: `iPhone 14 mang đến sự ổn định tuyệt đối với hiệu năng mạnh mẽ từ chip Apple A15 Bionic, thời lượng pin bền bỉ cả ngày dài và chế độ quay phim Hành Động (Action Mode) siêu mượt.`,
+    highlights: [
+      'Chip A15 Bionic với 5 lõi GPU xử lý mượt mà',
+      'Camera chính nâng cấp với cảm biến lớn hơn',
+      'Chế độ quay video Action Mode chống rung như gimbal',
+      'Tính năng Phát hiện va chạm (Crash Detection) an toàn',
+    ],
+    variants: [
+      { id: 'v1', ram: '6GB', storage: '128GB', price: 17990000, originalPrice: 19990000 },
+      { id: 'v2', ram: '6GB', storage: '256GB', price: 20990000, originalPrice: 22990000 },
+    ],
+    colors: [
+      {
+        id: 'c1',
+        name: 'Đen Midnight',
+        colorCode: '#1f2937',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-14_1.png',
+      },
+      {
+        id: 'c2',
+        name: 'Trắng Starlight',
+        colorCode: '#f9fafb',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-14-starlight.png',
+      },
+      {
+        id: 'c3',
+        name: 'Xanh Blue',
+        colorCode: '#60a5fa',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-14-blue.png',
+      },
+      {
+        id: 'c4',
+        name: 'Tím Purple',
+        colorCode: '#c084fc',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-14-purple.png',
+      },
+    ],
+    stockByCombination: {
+      v1_c1: 10,
+      v1_c2: 8,
+      v1_c3: 0,
+      v1_c4: 5,
+      v2_c1: 4,
+      v2_c2: 2,
+      v2_c3: 0,
+      v2_c4: 3,
+    },
+    specifications: {
+      display: {
+        title: 'Màn hình',
+        items: {
+          'Công nghệ màn hình': 'OLED Super Retina XDR',
+          'Kích thước': '6.1 inches',
+          'Độ phân giải': '2532 x 1170 Pixels',
+          'Tần số quét': '60Hz',
+          'Độ sáng tối đa': '1200 nits',
+        },
+      },
+      performance: {
+        title: 'Hiệu năng',
+        items: {
+          'Chip xử lý (CPU)': 'Apple A15 Bionic 6 nhân',
+          'Chip đồ họa (GPU)': 'Apple GPU 5 nhân',
+          'RAM': '6GB',
+          'Bộ nhớ trong': '128GB / 256GB',
+        },
+      },
+      camera: {
+        title: 'Camera',
+        items: {
+          'Camera sau': 'Chính 12MP + Góc siêu rộng 12MP',
+          'Camera trước': '12MP TrueDepth AF',
+          'Quay video': '4K@60fps, Cinematic 4K HDR',
+        },
+      },
+      battery: {
+        title: 'Pin & Sạc',
+        items: {
+          'Dung lượng pin': '3279 mAh',
+          'Công suất sạc': '20W, MagSafe 15W',
+          'Loại cổng sạc': 'Lightning',
+        },
+      },
+      connectivity: {
+        title: 'Kết nối',
+        items: {
+          'SIM': '1 Nano-SIM + 1 eSIM',
+          'Mạng di động': '5G',
+          'Wi-Fi': 'Wi-Fi 6',
+          'Bluetooth': 'v5.3',
+          'NFC': 'Có',
+        },
+      },
+      general: {
+        title: 'Thông tin khác',
+        items: {
+          'Hệ điều hành': 'iOS 16 (hỗ trợ nâng cấp)',
+          'Kích thước': '146.7 x 71.5 x 7.8 mm',
+          'Trọng lượng': '172 g',
+          'Chống nước/bụi': 'IP68',
+          'Thời điểm ra mắt': '09/2022',
+        },
+      },
+    },
+  },
+  {
+    id: 11,
+    name: 'Samsung Galaxy Z Flip 5',
+    brand: 'Samsung',
+    image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-z-flip-5-256gb_1.png',
+    images: [
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-z-flip-5-256gb_1.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-z-flip-5-tim.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-z-flip-5-kem.png',
+    ],
+    price: 19990000,
+    originalPrice: 25990000,
+    specs: '6.7 inches, 256GB',
+    rating: 4.4,
+    reviewCount: 145,
+    shortDescription: 'Màn hình ngoài Flex Window 3.4 inch độc đáo, bản lề gập không khe hở Flex Hinge và chip Snapdragon 8 Gen 2 for Galaxy.',
+    description: `Samsung Galaxy Z Flip 5 đem đến sự bứt phá với màn hình ngoài Flex Window 3.4 inch tiện dụng, bản lề gập khít không kẽ hở và khả năng chụp ảnh linh hoạt không cần chân máy (FlexCam).`,
+    highlights: [
+      'Màn hình ngoài Flex Window 3.4 inch đa năng',
+      'Bản lề Flex Hinge gập phẳng không khe hở',
+      'Chụp ảnh FlexCam rảnh tay đa góc độ',
+      'Chip Snapdragon 8 Gen 2 for Galaxy mạnh mẽ',
+    ],
+    variants: [
+      { id: 'v1', ram: '8GB', storage: '256GB', price: 19990000, originalPrice: 25990000 },
+      { id: 'v2', ram: '8GB', storage: '512GB', price: 22990000, originalPrice: 28990000 },
+    ],
+    colors: [
+      {
+        id: 'c1',
+        name: 'Xanh Mint',
+        colorCode: '#a7f3d0',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-z-flip-5-256gb_1.png',
+      },
+      {
+        id: 'c2',
+        name: 'Tím Fancy',
+        colorCode: '#e9d5ff',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-z-flip-5-tim.png',
+      },
+      {
+        id: 'c3',
+        name: 'Xám Phantom',
+        colorCode: '#374151',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-z-flip-5-256gb_1.png',
+      },
+      {
+        id: 'c4',
+        name: 'Kem Cream',
+        colorCode: '#fef3c7',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-z-flip-5-kem.png',
+      },
+    ],
+    stockByCombination: {
+      v1_c1: 12,
+      v1_c2: 7,
+      v1_c3: 5,
+      v1_c4: 0,
+      v2_c1: 4,
+      v2_c2: 0,
+      v2_c3: 3,
+      v2_c4: 2,
+    },
+    specifications: {
+      display: {
+        title: 'Màn hình',
+        items: {
+          'Công nghệ màn hình': 'Chính: Dynamic AMOLED 2X 120Hz; Phụ: Super AMOLED 60Hz',
+          'Kích thước': 'Chính: 6.7 inches; Phụ: 3.4 inches',
+          'Độ phân giải': 'Chính: FHD+ (2640 x 1080); Phụ: 720 x 748',
+          'Tần số quét': 'Chính: 1 - 120Hz thích ứng',
+          'Độ sáng tối đa': '1750 nits',
+        },
+      },
+      performance: {
+        title: 'Hiệu năng',
+        items: {
+          'Chip xử lý (CPU)': 'Snapdragon 8 Gen 2 for Galaxy (4nm)',
+          'Chip đồ họa (GPU)': 'Adreno 740',
+          'RAM': '8GB',
+          'Bộ nhớ trong': '256GB / 512GB',
+        },
+      },
+      camera: {
+        title: 'Camera',
+        items: {
+          'Camera sau': 'Chính 12MP (OIS) + Siêu rộng 12MP',
+          'Camera trước': '10MP',
+          'Quay video': '4K@60fps',
+        },
+      },
+      battery: {
+        title: 'Pin & Sạc',
+        items: {
+          'Dung lượng pin': '3700 mAh',
+          'Công suất sạc': '25W có dây, 15W không dây',
+          'Loại cổng sạc': 'USB Type-C',
+        },
+      },
+      connectivity: {
+        title: 'Kết nối',
+        items: {
+          'SIM': '1 Nano-SIM + 1 eSIM',
+          'Mạng di động': '5G',
+          'Wi-Fi': 'Wi-Fi 6E',
+          'Bluetooth': 'v5.3',
+          'NFC': 'Có',
+        },
+      },
+      general: {
+        title: 'Thông tin khác',
+        items: {
+          'Hệ điều hành': 'Android 13, One UI 5.1.1',
+          'Kích thước': 'Mở: 165.1 x 71.9 x 6.9 mm; Gập: 85.1 x 71.9 x 15.1 mm',
+          'Trọng lượng': '187 g',
+          'Chống nước/bụi': 'IPX8 kháng nước',
+          'Thời điểm ra mắt': '07/2023',
+        },
+      },
+    },
+  },
+  {
+    id: 12,
+    name: 'Xiaomi Poco X6 Pro',
+    brand: 'Xiaomi',
+    image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/p/o/poco-x6-pro_2_.png',
+    images: [
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/p/o/poco-x6-pro_2_.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/p/o/poco-x6-pro-vang.png',
+      'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/p/o/poco-x6-pro-xam.png',
+    ],
+    price: 7990000,
+    originalPrice: 9490000,
+    specs: '6.67 inches, 256GB',
+    rating: 4.3,
+    reviewCount: 198,
+    shortDescription: 'Quái thú gaming tầm trung với Dimensity 8300-Ultra, màn hình CrystalRes 1.5K 120Hz và sạc nhanh 67W.',
+    description: `POCO X6 Pro 5G được mệnh danh là 'Quái thú phân khúc tầm trung' nhờ con chip Dimensity 8300-Ultra siêu mạnh ghi điểm Antutu trên 1.4 triệu điểm, tản nhiệt buồng hơi LiquidCool 2.0 và màn hình 1.5K 120Hz cực mượt mà.`,
+    highlights: [
+      'Chip Dimensity 8300-Ultra điểm hiệu năng khủng',
+      'Màn hình 1.5K AMOLED 120Hz siêu nét, viền siêu mỏng',
+      'Hệ điều hành Xiaomi HyperOS tối ưu độ mượt',
+      'Sạc nhanh 67W kèm củ sạc theo hộp',
+    ],
+    variants: [
+      { id: 'v1', ram: '8GB', storage: '256GB', price: 7990000, originalPrice: 9490000 },
+      { id: 'v2', ram: '12GB', storage: '512GB', price: 9290000, originalPrice: 10490000 },
+    ],
+    colors: [
+      {
+        id: 'c1',
+        name: 'Vàng POCO (Da nhân tạo)',
+        colorCode: '#eab308',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/p/o/poco-x6-pro-vang.png',
+      },
+      {
+        id: 'c2',
+        name: 'Đen Bóng',
+        colorCode: '#1f2937',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/p/o/poco-x6-pro_2_.png',
+      },
+      {
+        id: 'c3',
+        name: 'Xám',
+        colorCode: '#6b7280',
+        image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/p/o/poco-x6-pro-xam.png',
+      },
+    ],
+    stockByCombination: {
+      v1_c1: 15,
+      v1_c2: 10,
+      v1_c3: 0,
+      v2_c1: 8,
+      v2_c2: 4,
+      v2_c3: 3,
+    },
+    specifications: {
+      display: {
+        title: 'Màn hình',
+        items: {
+          'Công nghệ màn hình': 'AMOLED 68 tỷ màu, Dolby Vision',
+          'Kích thước': '6.67 inches',
+          'Độ phân giải': '1.5K (2712 x 1220 Pixels)',
+          'Tần số quét': '120Hz',
+          'Độ sáng tối đa': '1800 nits',
+        },
+      },
+      performance: {
+        title: 'Hiệu năng',
+        items: {
+          'Chip xử lý (CPU)': 'MediaTek Dimensity 8300-Ultra (4nm)',
+          'Chip đồ họa (GPU)': 'Mali-G615-MC6',
+          'RAM': '8GB / 12GB LPDDR5X',
+          'Bộ nhớ trong': '256GB / 512GB UFS 4.0',
+        },
+      },
+      camera: {
+        title: 'Camera',
+        items: {
+          'Camera sau': 'Chính 64MP (OIS) + Siêu rộng 8MP + Macro 2MP',
+          'Camera trước': '16MP',
+          'Quay video': '4K@30fps, 1080p@60fps',
+        },
+      },
+      battery: {
+        title: 'Pin & Sạc',
+        items: {
+          'Dung lượng pin': '5000 mAh',
+          'Công suất sạc': '67W Turbo',
+          'Loại cổng sạc': 'USB Type-C',
+        },
+      },
+      connectivity: {
+        title: 'Kết nối',
+        items: {
+          'SIM': '2 Nano-SIM',
+          'Mạng di động': '5G',
+          'Wi-Fi': 'Wi-Fi 6',
+          'Bluetooth': 'v5.4',
+          'NFC': 'Có',
+        },
+      },
+      general: {
+        title: 'Thông tin khác',
+        items: {
+          'Hệ điều hành': 'Xiaomi HyperOS, Android 14',
+          'Kích thước': '160.45 x 74.34 x 8.25 mm',
+          'Trọng lượng': '186 g',
+          'Chống nước/bụi': 'IP54',
+          'Thời điểm ra mắt': '01/2024',
+        },
+      },
+    },
+  },
+]
+
+// Danh sách hãng lấy từ dữ liệu sản phẩm
+export const brands = [...new Set(products.map((p) => p.brand))]
+
+// Các khoảng giá để lọc
+export const priceRanges = [
+  { label: 'Dưới 5 triệu', min: 0, max: 5000000 },
+  { label: '5 - 10 triệu', min: 5000000, max: 10000000 },
+  { label: '10 - 20 triệu', min: 10000000, max: 20000000 },
+  { label: '20 - 30 triệu', min: 20000000, max: 30000000 },
+  { label: 'Trên 30 triệu', min: 30000000, max: Infinity },
+]
+
+export default products
