@@ -40,6 +40,7 @@ const Footer = () => {
                 <li key={item.path}>
                   <Link
                     to={item.path}
+                    onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })}
                     className="text-sm hover:text-primary transition-colors"
                   >
                     {item.label}
@@ -97,7 +98,7 @@ const Footer = () => {
       <div className="border-t border-gray-700">
         <div className="container mx-auto px-4 py-4">
           <p className="text-center text-sm text-gray-400">
-            © 2024 TLUPhone. Đồ án tốt nghiệp - Đại học Thủy Lợi.
+            © 2026 TLUPhone.
           </p>
         </div>
       </div>

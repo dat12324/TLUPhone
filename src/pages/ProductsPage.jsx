@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { FiSearch, FiFilter, FiX, FiChevronDown } from 'react-icons/fi'
 import ProductCard from '../components/ProductCard'
 import products, { brands, priceRanges } from '../data/products'
@@ -10,11 +11,22 @@ const sortOptions = [
 ]
 
 const ProductsPage = () => {
+  const [searchParams] = useSearchParams()
+  const brandQuery = searchParams.get('brand')
+
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedBrands, setSelectedBrands] = useState([])
+  const [selectedBrands, setSelectedBrands] = useState(brandQuery ? [brandQuery] : [])
   const [selectedPriceRange, setSelectedPriceRange] = useState(null)
   const [sortBy, setSortBy] = useState('default')
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false)
+
+  // Đồng bộ hãng khi URL thay đổi
+  useEffect(() => {
+    if (brandQuery) {
+      setSelectedBrands([brandQuery])
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }, [brandQuery])
 
   // Xử lý chọn/bỏ chọn hãng
   const toggleBrand = (brand) => {

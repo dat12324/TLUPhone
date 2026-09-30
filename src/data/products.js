@@ -18,6 +18,9 @@ const products = [
     specs: '6.7 inches, 256GB',
     rating: 4.8,
     reviewCount: 245,
+    isFeatured: true,
+    isNew: true,
+    isHotDeal: true,
     shortDescription: 'iPhone 15 Pro Max với khung viền Titan chuẩn hàng không vũ trụ, chip A17 Pro mạnh mẽ vượt trội và camera tiềm vọng zoom 5x đỉnh cao.',
     description: `iPhone 15 Pro Max là đỉnh cao công nghệ của Apple trong năm 2023 - 2024. Máy sở hữu thiết kế khung viền Titan cao cấp giúp giảm đáng kể trọng lượng nhưng vẫn giữ được độ bền bỉ vượt trội. Mặt kính Ceramic Shield siêu bền cùng khả năng kháng nước chuẩn IP68 mang lại sự an tâm tuyệt đối trong mọi điều kiện sử dụng.
 
@@ -149,6 +152,8 @@ Trang bị sức mạnh từ con chip Apple A17 Pro tiến trình 3nm đầu ti�
     specs: '6.1 inches, 128GB',
     rating: 4.6,
     reviewCount: 189,
+    isFeatured: true,
+    isNew: true,
     shortDescription: 'iPhone 15 với Dynamic Island hoàn toàn mới, camera chính 48MP và cổng kết nối USB-C tiện lợi.',
     description: `iPhone 15 mang đến sự đổi mới toàn diện với cụm Dynamic Island thông minh, camera chính nâng cấp lên 48MP sắc nét và mặt lưng kính pha màu mờ sang trọng. Máy trang bị vi xử lý Apple A16 Bionic mạnh mẽ và tiết kiệm năng lượng.`,
     highlights: [
@@ -272,6 +277,9 @@ Trang bị sức mạnh từ con chip Apple A17 Pro tiến trình 3nm đầu ti�
     specs: '6.8 inches, 256GB',
     rating: 4.7,
     reviewCount: 312,
+    isFeatured: true,
+    isNew: true,
+    isHotDeal: true,
     shortDescription: 'Galaxy AI quyền năng, khung viền Titan sang trọng và camera 200MP đột phá với bút S-Pen tích hợp.',
     description: `Samsung Galaxy S24 Ultra mở ra kỷ nguyên AI trên thiết bị di động với các tính năng thông minh: Khoanh tròn để tìm kiếm, Phiên dịch trực tiếp cuộc gọi, Trợ lý ghi chú thông minh. Máy trang bị khung viền Titan, màn hình phẳng chống chói Corning Gorilla Armor và sức mạnh từ Snapdragon 8 Gen 3 for Galaxy.`,
     highlights: [

@@ -5,6 +5,11 @@ import { FiSearch, FiShoppingCart, FiUser, FiMenu, FiX, FiPhone } from 'react-ic
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
+  const handleNavClick = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+    setIsMenuOpen(false)
+  }
+
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       {/* Top bar */}
@@ -22,7 +27,11 @@ const Header = () => {
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between gap-4">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 shrink-0">
+          <Link
+            to="/"
+            onClick={handleNavClick}
+            className="flex items-center gap-2 shrink-0"
+          >
             <div className="w-9 h-9 bg-primary rounded-lg flex items-center justify-center">
               <FiPhone className="text-white text-lg" />
             </div>
@@ -56,6 +65,7 @@ const Header = () => {
 
             <Link
               to="/gio-hang"
+              onClick={handleNavClick}
               className="relative p-2 text-secondary hover:text-primary transition-colors"
             >
               <FiShoppingCart className="text-xl" />
@@ -68,6 +78,7 @@ const Header = () => {
 
             <Link
               to="/tai-khoan"
+              onClick={handleNavClick}
               className="hidden sm:flex items-center gap-1.5 p-2 text-secondary hover:text-primary transition-colors"
             >
               <FiUser className="text-xl" />
@@ -99,6 +110,7 @@ const Header = () => {
               <li key={item.path}>
                 <Link
                   to={item.path}
+                  onClick={handleNavClick}
                   className="block px-4 py-2.5 text-sm font-medium text-secondary 
                              hover:text-primary transition-colors relative
                              after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 
@@ -145,7 +157,7 @@ const Header = () => {
                   to={item.path}
                   className="block px-4 py-2.5 text-sm font-medium text-secondary 
                              hover:text-primary hover:bg-gray-50 transition-colors"
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={handleNavClick}
                 >
                   {item.label}
                 </Link>
