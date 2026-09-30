@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FiSearch, FiShoppingCart, FiUser, FiMenu, FiX, FiPhone } from 'react-icons/fi'
+import { useCart } from '../../context/CartContext'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { totalCartCount } = useCart()
 
   const handleNavClick = () => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
@@ -64,16 +66,19 @@ const Header = () => {
             </button>
 
             <Link
-              to="/gio-hang"
+              to="/cart"
               onClick={handleNavClick}
               className="relative p-2 text-secondary hover:text-primary transition-colors"
+              aria-label="Giỏ hàng"
             >
               <FiShoppingCart className="text-xl" />
-              <span className="absolute -top-0.5 -right-0.5 bg-primary text-white text-xs 
-                              w-4.5 h-4.5 rounded-full flex items-center justify-center font-medium
-                              min-w-[18px] h-[18px]">
-                0
-              </span>
+              {totalCartCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 bg-primary text-white text-[11px] 
+                                w-4.5 h-4.5 rounded-full flex items-center justify-center font-bold
+                                min-w-[18px] h-[18px] shadow-xs animate-bounce-once">
+                  {totalCartCount > 99 ? '99+' : totalCartCount}
+                </span>
+              )}
             </Link>
 
             <Link

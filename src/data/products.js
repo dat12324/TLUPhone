@@ -1,7 +1,9 @@
 // Mock data sản phẩm điện thoại chi tiết
 // Thiết kế chuẩn RESTful / Document model để sau này thay thế trực tiếp bằng API Backend & MongoDB
 
-const products = [
+import crawledProducts from './crawledProducts'
+
+const seedProducts = [
   {
     id: 1,
     name: 'iPhone 15 Pro Max',
@@ -1409,6 +1411,8 @@ Trang bị sức mạnh từ con chip Apple A17 Pro tiến trình 3nm đầu ti�
 ]
 
 // Danh sách hãng lấy từ dữ liệu sản phẩm
+const products = [...seedProducts, ...crawledProducts]
+
 export const brands = [...new Set(products.map((p) => p.brand))]
 
 // Các khoảng giá để lọc

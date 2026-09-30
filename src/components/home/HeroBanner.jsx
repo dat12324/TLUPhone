@@ -22,7 +22,7 @@ const HeroBanner = () => {
     if (isPaused) return
     const timer = setInterval(() => {
       handleNext()
-    }, 5000)
+    }, 10000)
     return () => clearInterval(timer)
   }, [isPaused, handleNext])
 

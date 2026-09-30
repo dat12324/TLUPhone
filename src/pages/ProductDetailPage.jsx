@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import {
   FiStar,
   FiShoppingCart,
@@ -17,6 +17,7 @@ import {
 } from 'react-icons/fi'
 import ProductCard from '../components/ProductCard'
 import products from '../data/products'
+import { useCart } from '../context/CartContext'
 
 const PLACEHOLDER_IMAGE = '/images/products/placeholder.svg'
 
@@ -27,6 +28,8 @@ const formatPrice = (price) => {
 
 const ProductDetailPage = () => {
   const { id } = useParams()
+  const navigate = useNavigate()
+  const { addToCart } = useCart()
   const productId = parseInt(id, 10)
 
   // Tìm sản phẩm theo id
@@ -126,6 +129,33 @@ const ProductDetailPage = () => {
     if (quantity < currentStock) {
       setQuantity((prev) => prev + 1)
     }
+  }
+
+  // Thêm vào giỏ hàng
+  const handleAddToCart = () => {
+    if (isOutOfStock) return
+    addToCart(
+      product,
+      selectedVariant,
+      selectedColor,
+      quantity,
+      selectedImage,
+      currentStock
+    )
+  }
+
+  // Mua ngay (Thêm vào giỏ và chuyển đến trang Cart)
+  const handleBuyNow = () => {
+    if (isOutOfStock) return
+    addToCart(
+      product,
+      selectedVariant,
+      selectedColor,
+      quantity,
+      selectedImage,
+      currentStock
+    )
+    navigate('/cart')
   }
 
   // Sản phẩm liên quan cùng hãng
@@ -409,11 +439,12 @@ const ProductDetailPage = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <button
                     type="button"
+                    onClick={handleAddToCart}
                     disabled={isOutOfStock}
                     className={`flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl font-semibold text-sm transition-all shadow-sm ${
                       isOutOfStock
                         ? 'bg-gray-200 text-gray-400 cursor-not-allowed border border-gray-200'
-                        : 'border-2 border-primary text-primary bg-rose-50 hover:bg-primary hover:text-white'
+                        : 'border-2 border-primary text-primary bg-rose-50 hover:bg-primary hover:text-white cursor-pointer active:scale-[0.98]'
                     }`}
                   >
                     <FiShoppingCart className="text-lg" />
@@ -422,11 +453,12 @@ const ProductDetailPage = () => {
 
                   <button
                     type="button"
+                    onClick={handleBuyNow}
                     disabled={isOutOfStock}
                     className={`flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl font-semibold text-sm transition-all shadow-sm ${
                       isOutOfStock
                         ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                        : 'bg-primary text-white hover:bg-rose-700 active:scale-[0.99]'
+                        : 'bg-primary text-white hover:bg-rose-700 active:scale-[0.98] cursor-pointer'
                     }`}
                   >
                     <FiZap className="text-lg" />

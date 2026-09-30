@@ -10,6 +10,9 @@ const sortOptions = [
   { value: 'price-desc', label: 'Giá: Cao → Thấp' },
 ]
 
+// 4 rows on the desktop product grid (4 columns x 4 rows).
+const PRODUCTS_PER_LOAD = 16
+
 const ProductsPage = () => {
   const [searchParams] = useSearchParams()
   const brandQuery = searchParams.get('brand')
@@ -19,6 +22,7 @@ const ProductsPage = () => {
   const [selectedPriceRange, setSelectedPriceRange] = useState(null)
   const [sortBy, setSortBy] = useState('default')
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false)
+  const [visibleCount, setVisibleCount] = useState(PRODUCTS_PER_LOAD)
 
   // Đồng bộ hãng khi URL thay đổi
   useEffect(() => {
@@ -88,6 +92,14 @@ const ProductsPage = () => {
 
     return result
   }, [searchQuery, selectedBrands, selectedPriceRange, sortBy])
+
+  // Start again from four rows whenever search, filters, or sorting changes.
+  useEffect(() => {
+    setVisibleCount(PRODUCTS_PER_LOAD)
+  }, [searchQuery, selectedBrands, selectedPriceRange, sortBy])
+
+  const visibleProducts = filteredProducts.slice(0, visibleCount)
+  const remainingProducts = filteredProducts.length - visibleProducts.length
 
   // Component bộ lọc (dùng chung cho desktop sidebar & mobile drawer)
   const FilterContent = () => (
@@ -247,11 +259,26 @@ const ProductsPage = () => {
         {/* Grid sản phẩm */}
         <div className="flex-1">
           {filteredProducts.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
-              {filteredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
+            <>
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+                {visibleProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+
+              {remainingProducts > 0 && (
+                <div className="mt-8 flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => setVisibleCount((count) => count + PRODUCTS_PER_LOAD)}
+                    className="inline-flex min-w-64 items-center justify-center gap-2 rounded-xl border border-blue-100 bg-blue-50 px-7 py-3 text-sm font-semibold text-blue-600 shadow-sm transition hover:border-blue-200 hover:bg-blue-100 active:scale-95"
+                  >
+                    <span>Xem thêm {remainingProducts} sản phẩm</span>
+                    <FiChevronDown />
+                  </button>
+                </div>
+              )}
+            </>
           ) : (
             <div className="text-center py-20">
               <p className="text-gray-400 text-lg mb-2">
