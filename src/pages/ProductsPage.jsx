@@ -1,8 +1,18 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { FiSearch, FiFilter, FiX, FiChevronDown } from 'react-icons/fi'
+import {
+  FiSearch,
+  FiFilter,
+  FiX,
+  FiChevronDown,
+  FiStar,
+  FiTag,
+  FiArrowUp,
+  FiArrowDown,
+} from 'react-icons/fi'
 import ProductCard from '../components/ProductCard'
 import products, { brands, priceRanges } from '../data/products'
+import { filterAndSortProducts } from '../helpers/productFilters'
 
 const sortOptions = [
   { value: 'default', label: 'Mặc định' },
@@ -10,8 +20,11 @@ const sortOptions = [
   { value: 'price-desc', label: 'Giá: Cao → Thấp' },
 ]
 
-// 4 rows on the desktop product grid (4 columns x 4 rows).
-const PRODUCTS_PER_LOAD = 16
+// 5 rows on the desktop product grid (5 columns x 5 rows).
+const PRODUCTS_PER_LOAD = 25
+
+const formatBrandName = (brand) =>
+  brand ? `${brand.charAt(0).toUpperCase()}${brand.slice(1)}` : brand
 
 const ProductsPage = () => {
   const [searchParams] = useSearchParams()
@@ -22,7 +35,9 @@ const ProductsPage = () => {
   const [selectedPriceRange, setSelectedPriceRange] = useState(null)
   const [sortBy, setSortBy] = useState('default')
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false)
+  const [isDesktopFilterOpen, setIsDesktopFilterOpen] = useState(false)
   const [visibleCount, setVisibleCount] = useState(PRODUCTS_PER_LOAD)
+  const hasMounted = useRef(false)
 
   // Đồng bộ hãng khi URL thay đổi
   useEffect(() => {
@@ -60,43 +75,31 @@ const ProductsPage = () => {
 
   // Lọc và sắp xếp sản phẩm
   const filteredProducts = useMemo(() => {
-    let result = [...products]
-
-    // Lọc theo từ khóa tìm kiếm
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase()
-      result = result.filter(
-        (p) =>
-          p.name.toLowerCase().includes(query) ||
-          p.brand.toLowerCase().includes(query)
-      )
-    }
-
-    // Lọc theo hãng
-    if (selectedBrands.length > 0) {
-      result = result.filter((p) => selectedBrands.includes(p.brand))
-    }
-
-    // Lọc theo khoảng giá
-    if (selectedPriceRange !== null) {
-      const range = priceRanges[selectedPriceRange]
-      result = result.filter((p) => p.price >= range.min && p.price < range.max)
-    }
-
-    // Sắp xếp
-    if (sortBy === 'price-asc') {
-      result.sort((a, b) => a.price - b.price)
-    } else if (sortBy === 'price-desc') {
-      result.sort((a, b) => b.price - a.price)
-    }
-
-    return result
+    return filterAndSortProducts({
+      products,
+      searchQuery,
+      selectedBrands,
+      selectedPriceRange,
+      priceRanges,
+      sortBy,
+    })
   }, [searchQuery, selectedBrands, selectedPriceRange, sortBy])
 
   // Start again from four rows whenever search, filters, or sorting changes.
   useEffect(() => {
     setVisibleCount(PRODUCTS_PER_LOAD)
   }, [searchQuery, selectedBrands, selectedPriceRange, sortBy])
+
+  useEffect(() => {
+    if (
+      hasMounted.current &&
+      filteredProducts.length < 8 &&
+      (selectedBrands.length > 0 || selectedPriceRange !== null)
+    ) {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+    hasMounted.current = true
+  }, [selectedBrands, selectedPriceRange, filteredProducts.length])
 
   const visibleProducts = filteredProducts.slice(0, visibleCount)
   const remainingProducts = filteredProducts.length - visibleProducts.length
@@ -123,7 +126,7 @@ const ProductsPage = () => {
                            focus:ring-primary focus:ring-offset-0 cursor-pointer"
               />
               <span className="text-sm text-gray-600 group-hover:text-secondary transition-colors">
-                {brand}
+                {formatBrandName(brand)}
               </span>
             </label>
           ))}
@@ -207,8 +210,8 @@ const ProductsPage = () => {
           )}
         </div>
 
-        {/* Sắp xếp */}
-        <div className="relative">
+        {/* Sắp xếp trên mobile */}
+        <div className="relative lg:hidden">
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
@@ -244,23 +247,112 @@ const ProductsPage = () => {
         </button>
       </div>
 
-      {/* Layout chính: Sidebar + Grid sản phẩm */}
-      <div className="flex gap-8">
-        {/* Sidebar filter - desktop */}
-        <aside className="hidden lg:block w-60 shrink-0">
-          <div className="sticky top-32 bg-white rounded-xl border border-gray-100 p-5">
-            <h2 className="text-base font-semibold text-secondary mb-4">
-              Bộ lọc
-            </h2>
+      {/* Bộ lọc và sắp xếp ngang trên desktop */}
+      <div className="relative hidden lg:block mb-8">
+        <h2 className="mb-5 text-2xl font-bold text-secondary">
+          Chọn theo tiêu chí
+        </h2>
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setIsDesktopFilterOpen((open) => !open)}
+            className={`inline-flex items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors ${
+              isDesktopFilterOpen || hasActiveFilters
+                ? 'border-primary bg-primary text-white'
+                : 'border-gray-200 bg-white text-secondary hover:border-primary hover:text-primary'
+            }`}
+          >
+            <FiFilter />
+            Bộ lọc
+            {hasActiveFilters && (
+              <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-white px-1 text-xs text-primary">
+                {selectedBrands.length + (selectedPriceRange !== null ? 1 : 0)}
+              </span>
+            )}
+          </button>
+
+          {brands.slice(0, 6).map((brand) => (
+            <button
+              key={brand}
+              type="button"
+              onClick={() => toggleBrand(brand)}
+              className={`rounded-lg border px-4 py-2.5 text-sm transition-colors ${
+                selectedBrands.includes(brand)
+                  ? 'border-primary bg-primary/10 text-primary'
+                  : 'border-gray-200 bg-gray-50 text-secondary hover:border-primary hover:text-primary'
+              }`}
+            >
+              {formatBrandName(brand)}
+            </button>
+          ))}
+        </div>
+
+        {isDesktopFilterOpen && (
+          <div className="absolute left-0 top-full z-30 mt-2 w-[min(560px,calc(100vw-2rem))] rounded-xl border border-gray-100 bg-white p-5 shadow-xl">
             <FilterContent />
           </div>
-        </aside>
+        )}
 
-        {/* Grid sản phẩm */}
-        <div className="flex-1">
+        <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
+          <h2 className="text-2xl font-bold text-secondary">Sắp xếp theo</h2>
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setSortBy('default')}
+              className={`inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm transition-colors ${
+                sortBy === 'default'
+                  ? 'border-blue-500 bg-blue-50 text-blue-500'
+                  : 'border-gray-200 bg-white text-secondary hover:border-blue-300'
+              }`}
+            >
+              <FiStar />
+              Phổ biến
+            </button>
+            <button
+              type="button"
+              onClick={() => setSortBy('hot')}
+              className={`inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm transition-colors ${
+                sortBy === 'hot'
+                  ? 'border-blue-500 bg-blue-50 text-blue-500'
+                  : 'border-gray-200 bg-white text-secondary hover:border-blue-300'
+              }`}
+            >
+              <FiTag />
+              Khuyến mãi HOT
+            </button>
+            <button
+              type="button"
+              onClick={() => setSortBy('price-asc')}
+              className={`inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm transition-colors ${
+                sortBy === 'price-asc'
+                  ? 'border-blue-500 bg-blue-50 text-blue-500'
+                  : 'border-gray-200 bg-white text-secondary hover:border-blue-300'
+              }`}
+            >
+              <FiArrowUp />
+              Giá thấp - Cao
+            </button>
+            <button
+              type="button"
+              onClick={() => setSortBy('price-desc')}
+              className={`inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm transition-colors ${
+                sortBy === 'price-desc'
+                  ? 'border-blue-500 bg-blue-50 text-blue-500'
+                  : 'border-gray-200 bg-white text-secondary hover:border-blue-300'
+              }`}
+            >
+              <FiArrowDown />
+              Giá cao - Thấp
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Grid sản phẩm */}
+      <div>
           {filteredProducts.length > 0 ? (
             <>
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
                 {visibleProducts.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
@@ -292,7 +384,6 @@ const ProductsPage = () => {
               </button>
             </div>
           )}
-        </div>
       </div>
 
       {/* Mobile filter drawer (overlay) */}

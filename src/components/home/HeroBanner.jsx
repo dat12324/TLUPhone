@@ -7,7 +7,6 @@ const PLACEHOLDER_IMAGE = '/images/products/placeholder.svg'
 
 const HeroBanner = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [isPaused, setIsPaused] = useState(false)
 
   const handleNext = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % heroBanners.length)
@@ -19,20 +18,17 @@ const HeroBanner = () => {
 
   // Tự động chuyển banner sau 5 giây (tạm dừng khi hover)
   useEffect(() => {
-    if (isPaused) return
     const timer = setInterval(() => {
       handleNext()
-    }, 10000)
+    }, 15000)
     return () => clearInterval(timer)
-  }, [isPaused, handleNext])
+  }, [handleNext])
 
   const currentBanner = heroBanners[currentIndex]
 
   return (
     <div
       className="relative rounded-2xl md:rounded-3xl overflow-hidden shadow-lg"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
     >
       {/* Banner Slide Content */}
       <div

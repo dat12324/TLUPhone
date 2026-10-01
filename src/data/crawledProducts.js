@@ -1,4 +1,4 @@
-import rawProducts from './cellphones_dien_thoai_full.json'
+import rawProducts from './cellphones_dien_thoai_full.json' with { type: 'json' }
 
 const PLACEHOLDER_IMAGE = '/images/products/placeholder.svg'
 
@@ -38,6 +38,49 @@ const improveImage = (url) => {
 const normalizePrice = (value, fallback = 0) => {
   const price = Number(value)
   return Number.isFinite(price) && price > 0 ? price : fallback
+}
+
+const normalizeSpecKey = (value = '') =>
+  value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+
+const groupTechnicalSpecifications = (items) => {
+  const groups = {
+    display: { title: 'Màn hình', items: {} },
+    rearCamera: { title: 'Camera sau', items: {} },
+    frontCamera: { title: 'Camera trước', items: {} },
+    performance: { title: 'Hệ điều hành - CPU', items: {} },
+    battery: { title: 'Pin & Sạc', items: {} },
+    connectivity: { title: 'Kết nối', items: {} },
+    general: { title: 'Thông tin khác', items: {} },
+  }
+
+  Object.entries(items).forEach(([key, value]) => {
+    const normalizedKey = normalizeSpecKey(key)
+    let group = groups.general
+
+    if (normalizedKey.includes('man hinh') || normalizedKey.includes('do phan giai') || normalizedKey.includes('tan so quet') || normalizedKey.includes('kieu man hinh')) {
+      group = groups.display
+    } else if (normalizedKey.includes('camera sau') || normalizedKey.includes('den flash') || normalizedKey.includes('chup anh') || normalizedKey === 'quay video' || normalizedKey === 'quay phim' || normalizedKey.includes('tinh nang camera')) {
+      group = groups.rearCamera
+    } else if (normalizedKey.includes('camera truoc') || normalizedKey.includes('quay video truoc') || normalizedKey.includes('video call')) {
+      group = groups.frontCamera
+    } else if (normalizedKey.includes('he dieu hanh') || normalizedKey.includes('chipset') || normalizedKey.includes('cpu') || normalizedKey.includes('gpu') || normalizedKey === 'ram' || normalizedKey.includes('bo nho trong')) {
+      group = groups.performance
+    } else if (normalizedKey.includes('pin') || normalizedKey.includes('sac') || normalizedKey.includes('cong sac')) {
+      group = groups.battery
+    } else if (normalizedKey.includes('mang') || normalizedKey.includes('sim') || normalizedKey.includes('nfc') || normalizedKey.includes('wi-fi') || normalizedKey.includes('bluetooth') || normalizedKey.includes('gps')) {
+      group = groups.connectivity
+    }
+
+    group.items[key] = value
+  })
+
+  return Object.fromEntries(
+    Object.entries(groups).filter(([, group]) => Object.keys(group.items).length > 0)
+  )
 }
 
 const crawledProducts = rawProducts.map((raw, index) => {
@@ -86,9 +129,7 @@ const crawledProducts = rawProducts.map((raw, index) => {
       originalPrice,
     }],
     colors: normalizedColors,
-    specifications: {
-      technical: { title: 'Thông số kỹ thuật', items: technicalItems },
-    },
+    specifications: groupTechnicalSpecifications(technicalItems),
     sourceUrl: raw.url,
   }
 })

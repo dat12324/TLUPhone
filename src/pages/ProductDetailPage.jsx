@@ -14,12 +14,30 @@ import {
   FiPlus,
   FiChevronDown,
   FiChevronUp,
+  FiX,
 } from 'react-icons/fi'
 import ProductCard from '../components/ProductCard'
 import products from '../data/products'
 import { useCart } from '../context/CartContext'
 
 const PLACEHOLDER_IMAGE = '/images/products/placeholder.svg'
+
+const normalizeSpecKey = (value = '') =>
+  value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+
+const findSpecification = (product, patterns) => {
+  const entries = Object.values(product?.specifications || {}).flatMap((group) =>
+    Object.entries(group.items || {})
+  )
+  const match = entries.find(([key]) => {
+    const normalizedKey = normalizeSpecKey(key)
+    return patterns.some((pattern) => normalizedKey.includes(pattern))
+  })
+  return match?.[1] || ''
+}
 
 // Format tiền tệ VND
 const formatPrice = (price) => {
@@ -43,6 +61,7 @@ const ProductDetailPage = () => {
   const [selectedImage, setSelectedImage] = useState('')
   const [quantity, setQuantity] = useState(1)
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
+  const [isSpecificationsOpen, setIsSpecificationsOpen] = useState(false)
 
   // Đồng bộ state khi đổi sản phẩm
   useEffect(() => {
@@ -78,6 +97,20 @@ const ProductDetailPage = () => {
   const handleImageError = (e) => {
     e.target.src = PLACEHOLDER_IMAGE
   }
+
+  const specificationSummary = product
+    ? [
+      ['Độ phân giải', findSpecification(product, ['do phan giai', 'resolution'])],
+      ['Màn hình rộng', findSpecification(product, ['kich thuoc man hinh', 'screen size', 'kich thuoc'])],
+      ['Camera sau', findSpecification(product, ['camera sau', 'rear camera'])],
+      ['Quay phim', findSpecification(product, ['quay phim', 'quay video', 'video'])],
+      ['Chipset', findSpecification(product, ['chip xu ly', 'chipset', 'cpu'])],
+      ['Hệ điều hành', findSpecification(product, ['he dieu hanh', 'operating system', 'os'])],
+      ['RAM', selectedVariant?.ram || findSpecification(product, ['ram'])],
+      ['Bộ nhớ trong (ROM)', selectedVariant?.storage || findSpecification(product, ['bo nho trong', 'storage', 'rom'])],
+        ['Dung lượng pin', findSpecification(product, ['dung luong pin', 'battery capacity', 'pin'])],
+    ].filter(([, value]) => value)
+    : []
 
   // Danh sách ảnh hiển thị (gồm ảnh chung + ảnh của các màu nếu có)
   const galleryImages = useMemo(() => {
@@ -253,11 +286,10 @@ const ProductDetailPage = () => {
                       key={idx}
                       type="button"
                       onClick={() => setSelectedImage(imgUrl)}
-                      className={`relative w-16 h-16 rounded-lg border-2 p-1 bg-white shrink-0 transition-all overflow-hidden ${
-                        selectedImage === imgUrl
+                      className={`relative w-16 h-16 rounded-lg border-2 p-1 bg-white shrink-0 transition-all overflow-hidden ${selectedImage === imgUrl
                           ? 'border-primary shadow-sm scale-105'
                           : 'border-gray-200 hover:border-gray-300 opacity-70 hover:opacity-100'
-                      }`}
+                        }`}
                     >
                       <img
                         src={imgUrl}
@@ -347,11 +379,10 @@ const ProductDetailPage = () => {
                           key={variant.id}
                           type="button"
                           onClick={() => handleSelectVariant(variant)}
-                          className={`p-3 rounded-xl border text-left transition-all ${
-                            isSelected
+                          className={`p-3 rounded-xl border text-left transition-all ${isSelected
                               ? 'border-primary bg-rose-50/50 ring-1 ring-primary text-secondary'
                               : 'border-gray-200 hover:border-gray-300 bg-white text-gray-700'
-                          }`}
+                            }`}
                         >
                           <div className="font-semibold text-sm">
                             {variant.storage} {variant.ram ? `(${variant.ram})` : ''}
@@ -385,11 +416,10 @@ const ProductDetailPage = () => {
                           key={color.id}
                           type="button"
                           onClick={() => handleSelectColor(color)}
-                          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl border text-xs font-medium transition-all ${
-                            isSelected
+                          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl border text-xs font-medium transition-all ${isSelected
                               ? 'border-primary bg-rose-50/50 ring-1 ring-primary text-secondary'
                               : 'border-gray-200 hover:border-gray-300 bg-white text-gray-700'
-                          }`}
+                            }`}
                         >
                           <span
                             className="w-4 h-4 rounded-full border border-gray-300 shadow-inner"
@@ -441,11 +471,10 @@ const ProductDetailPage = () => {
                     type="button"
                     onClick={handleAddToCart}
                     disabled={isOutOfStock}
-                    className={`flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl font-semibold text-sm transition-all shadow-sm ${
-                      isOutOfStock
+                    className={`flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl font-semibold text-sm transition-all shadow-sm ${isOutOfStock
                         ? 'bg-gray-200 text-gray-400 cursor-not-allowed border border-gray-200'
                         : 'border-2 border-primary text-primary bg-rose-50 hover:bg-primary hover:text-white cursor-pointer active:scale-[0.98]'
-                    }`}
+                      }`}
                   >
                     <FiShoppingCart className="text-lg" />
                     Thêm vào giỏ hàng
@@ -455,11 +484,10 @@ const ProductDetailPage = () => {
                     type="button"
                     onClick={handleBuyNow}
                     disabled={isOutOfStock}
-                    className={`flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl font-semibold text-sm transition-all shadow-sm ${
-                      isOutOfStock
+                    className={`flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl font-semibold text-sm transition-all shadow-sm ${isOutOfStock
                         ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                         : 'bg-primary text-white hover:bg-rose-700 active:scale-[0.98] cursor-pointer'
-                    }`}
+                      }`}
                   >
                     <FiZap className="text-lg" />
                     Mua ngay
@@ -517,9 +545,8 @@ const ProductDetailPage = () => {
                     Đánh giá chi tiết {product.name}
                   </h3>
                   <div
-                    className={`relative text-sm text-gray-600 leading-relaxed space-y-3 transition-all ${
-                      !isDescriptionExpanded ? 'max-h-48 overflow-hidden' : ''
-                    }`}
+                    className={`relative text-sm text-gray-600 leading-relaxed space-y-3 transition-all ${!isDescriptionExpanded ? 'max-h-48 overflow-hidden' : ''
+                      }`}
                   >
                     {product.description.split('\n\n').map((paragraph, index) => (
                       <p key={index}>{paragraph}</p>
@@ -561,30 +588,23 @@ const ProductDetailPage = () => {
               </h2>
 
               {product.specifications ? (
-                <div className="space-y-4 max-h-[600px] overflow-y-auto pr-1">
-                  {Object.entries(product.specifications).map(([key, group]) => (
-                    <div key={key} className="border border-gray-100 rounded-xl overflow-hidden">
-                      <div className="bg-slate-100 px-3.5 py-2 font-semibold text-xs text-secondary uppercase tracking-wider">
-                        {group.title}
+                <>
+                  <div className="divide-y divide-gray-100 text-sm">
+                    {specificationSummary.map(([specKey, specValue]) => (
+                      <div key={specKey} className="grid grid-cols-12 gap-3 py-3">
+                        <span className="col-span-5 text-gray-500">{specKey}:</span>
+                        <span className="col-span-7 text-gray-600">{specValue}</span>
                       </div>
-                      <div className="divide-y divide-gray-100 text-xs">
-                        {Object.entries(group.items).map(([specKey, specVal]) => (
-                          <div
-                            key={specKey}
-                            className="grid grid-cols-12 px-3.5 py-2.5 hover:bg-slate-50 transition-colors"
-                          >
-                            <span className="col-span-5 text-gray-500 font-medium">
-                              {specKey}
-                            </span>
-                            <span className="col-span-7 text-secondary font-semibold">
-                              {specVal}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsSpecificationsOpen(true)}
+                    className="mt-4 w-full rounded-lg border border-blue-500 py-2.5 text-sm font-medium text-blue-500 transition-colors hover:bg-blue-50"
+                  >
+                    Xem cấu hình chi tiết
+                  </button>
+                </>
               ) : (
                 <p className="text-sm text-gray-400">Đang cập nhật thông số kỹ thuật...</p>
               )}
@@ -593,6 +613,55 @@ const ProductDetailPage = () => {
         </div>
 
         {/* Phần 3: Sản phẩm tương tự */}
+        {isSpecificationsOpen && product.specifications && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+            <div className="flex max-h-[90vh] w-full max-w-6xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
+              <div className="flex items-center justify-between border-b border-gray-100 px-6 py-5 md:px-8">
+                <h2 className="text-xl font-bold text-secondary md:text-2xl">
+                  Cấu hình {product.name}
+                  {selectedVariant?.ram && selectedVariant?.storage
+                    ? ` (${selectedVariant.ram} | ${selectedVariant.storage})`
+                    : ''}
+                </h2>
+                <button
+                  type="button"
+                  onClick={() => setIsSpecificationsOpen(false)}
+                  className="rounded-full p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-secondary"
+                  aria-label="Đóng thông số kỹ thuật"
+                >
+                  <FiX className="text-xl" />
+                </button>
+              </div>
+              <div className="overflow-y-auto p-4 md:p-6">
+                <div className="space-y-0">
+                  {Object.entries(product.specifications).map(([key, group]) => (
+                    <section key={key}>
+                      <div className="bg-gray-100 px-4 py-3 text-base font-medium text-primary">
+                        {group.title}
+                      </div>
+                      <div className="divide-y divide-gray-100">
+                        {Object.entries(group.items || {}).map(([specKey, specValue]) => (
+                          <div
+                            key={specKey}
+                            className="grid grid-cols-1 gap-1 px-4 py-3.5 text-sm md:grid-cols-12 md:gap-5"
+                          >
+                            <span className="font-medium text-secondary md:col-span-3">
+                              {specKey}:
+                            </span>
+                            <span className="whitespace-pre-line text-secondary md:col-span-9">
+                              {specValue}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {relatedProducts.length > 0 && (
           <div className="mt-12">
             <div className="flex items-center justify-between mb-6">

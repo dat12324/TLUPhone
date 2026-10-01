@@ -1,7 +1,7 @@
 // Mock data sản phẩm điện thoại chi tiết
 // Thiết kế chuẩn RESTful / Document model để sau này thay thế trực tiếp bằng API Backend & MongoDB
 
-import crawledProducts from './crawledProducts'
+import normalizedProducts from './normalizedProducts.json'
 
 const seedProducts = [
   {
@@ -1411,9 +1411,13 @@ Trang bị sức mạnh từ con chip Apple A17 Pro tiến trình 3nm đầu ti�
 ]
 
 // Danh sách hãng lấy từ dữ liệu sản phẩm
-const products = [...seedProducts, ...crawledProducts]
+const products = [...seedProducts, ...normalizedProducts]
 
-export const brands = [...new Set(products.map((p) => p.brand))]
+export const brands = [...new Set(products.map((p) => p.brand))].sort((a, b) => {
+  if (a === 'Khác') return 1
+  if (b === 'Khác') return -1
+  return 0
+})
 
 // Các khoảng giá để lọc
 export const priceRanges = [
