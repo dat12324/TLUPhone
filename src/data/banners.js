@@ -142,3 +142,22 @@ export const serviceCommitments = [
     description: 'Thủ tục online nhanh gọn, xét duyệt 5 phút',
   },
 ]
+
+// Banner dùng cho trang sản phẩm
+export const productBrands = [
+  { name: 'Apple', logo: 'iPhone' }, { name: 'Samsung', logo: 'SAMSUNG' },
+  { name: 'OPPO', logo: 'oppo' }, { name: 'Xiaomi', logo: 'Xiaomi' },
+  { name: 'TECNO', logo: 'TECNO' }, { name: 'HONOR', logo: 'HONOR' },
+  { name: 'Nokia', logo: 'NOKIA' }, { name: 'realme', logo: 'realme' },
+  { name: 'vivo', logo: 'vivo' }, { name: 'OnePlus', logo: 'ONEPLUS' },
+]
+
+export const iphoneBanners = [
+  { title: 'iPhone 15 Pro Max', image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:600:600/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15-pro-max_3.png', link: '/products/1' },
+  { title: 'iPhone 15', image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:600:600/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15-plus_1_.png', link: '/products/2' },
+]
+
+export const androidBanners = [
+  { title: 'Xiaomi 14 Ultra', image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/x/i/xiaomi-14-ultra_1__1.png', link: '/products/6' },
+  { title: 'Galaxy S24 Ultra', image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-s24-ultra_-1_1.png', link: '/products/3' },
+]

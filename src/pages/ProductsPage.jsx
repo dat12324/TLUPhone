@@ -11,6 +11,7 @@ import {
   FiArrowDown,
 } from 'react-icons/fi'
 import ProductCard from '../components/ProductCard'
+import ProductsPromoHeader from '../components/products/ProductsPromoHeader'
 import products, { brands, priceRanges } from '../data/products'
 import { filterAndSortProducts } from '../helpers/productFilters'
 
@@ -175,8 +176,9 @@ const ProductsPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-6">
+      <ProductsPromoHeader />
       {/* Tiêu đề trang */}
-      <div className="mb-6">
+      <div className="hidden mb-6">
         <h1 className="text-2xl md:text-3xl font-bold text-secondary">
           Sản phẩm
         </h1>

@@ -20,10 +20,15 @@ export default {
           '0%, 100%': { transform: 'scale(1)' },
           '50%': { transform: 'scale(1.25)' },
         },
+        'slide-in-right': {
+          '0%': { transform: 'translateX(28px)', opacity: '0' },
+          '100%': { transform: 'translateX(0)', opacity: '1' },
+        },
       },
       animation: {
         'slide-up': 'slide-up 0.3s ease-out',
         'bounce-once': 'bounce-once 0.3s ease-out',
+        'slide-in-right': 'slide-in-right 0.55s ease-out',
       },
     },
   },
