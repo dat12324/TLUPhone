@@ -79,7 +79,7 @@ const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-start gap-2 text-sm">
                 <FiMapPin className="text-primary mt-0.5 shrink-0" />
-                <span>Số 175 Tây Sơn, Đống Đa, Hà Nội</span>
+                <span>Đại học Thăng Long, đường Nguyễn Xiển, Hà Nội</span>
               </li>
               <li className="flex items-center gap-2 text-sm">
                 <FiPhone className="text-primary shrink-0" />

@@ -9,11 +9,12 @@ import {
   FiChevronRight,
   FiShield,
   FiTruck,
+  FiGift,
   FiTag,
   FiX,
-  FiGift,
 } from 'react-icons/fi'
 import { useCart } from '../context/CartContext'
+import CouponSelector from '../components/common/CouponSelector'
 import coupons from '../data/coupons'
 
 const PLACEHOLDER_IMAGE = '/images/products/placeholder.svg'
@@ -44,12 +45,29 @@ const CartPage = () => {
   } = useCart()
 
   // State nhập mã giảm giá
+  // Xử lý khi bấm nút "Tiến hành thanh toán"
   const [couponCode, setCouponCode] = useState('')
   const [couponError, setCouponError] = useState('')
   const [showCouponInput, setShowCouponInput] = useState(false)
   const [selectedCouponCode, setSelectedCouponCode] = useState('')
 
-  // Xử lý khi bấm nút "Tiến hành thanh toán"
+  const handleApplyCoupon = (code = couponCode) => {
+    setCouponError('')
+    const result = applyCoupon(code)
+    if (result.success) {
+      setCouponCode('')
+      setSelectedCouponCode('')
+      setShowCouponInput(false)
+    } else {
+      setCouponError(result.message)
+    }
+  }
+
+  const handleRemoveCoupon = () => {
+    removeCoupon()
+    setCouponError('')
+  }
+
   const handleProceedToCheckout = () => {
     if (selectedItems.length === 0) return
     navigate('/checkout')
@@ -62,25 +80,9 @@ const CartPage = () => {
   )
 
   // Xử lý áp dụng mã giảm giá
-  const handleApplyCoupon = (code = couponCode) => {
-    setCouponError('')
-    const result = applyCoupon(code)
-    if (result.success) {
-      setCouponCode('')
-      setSelectedCouponCode('')
-      setShowCouponInput(false)
-      setCouponError('')
-    } else {
-      setCouponError(result.message)
-    }
-  }
+  
 
   // Xử lý hủy mã
-  const handleRemoveCoupon = () => {
-    removeCoupon()
-    setCouponError('')
-  }
-
   // Trường hợp Giỏ hàng trống
   if (cartItems.length === 0) {
     return (
@@ -363,6 +365,16 @@ const CartPage = () => {
               </div>
 
               {/* Mã giảm giá */}
+              <CouponSelector
+                appliedCoupon={appliedCoupon}
+                subtotal={selectedSubtotal}
+                onApply={applyCoupon}
+                onRemove={handleRemoveCoupon}
+                title={false}
+                className="pt-3 border-t border-gray-100"
+              />
+
+              {false && (
               <div className="pt-3 border-t border-gray-100">
                 {appliedCoupon ? (
                   // Đang có mã được áp dụng
@@ -472,8 +484,10 @@ const CartPage = () => {
                   </div>
                 )}
               </div>
+              )}
 
               {/* Giảm giá coupon trong phần chi tiết */}
+
               {couponDiscount > 0 && (
                 <div className="flex items-center justify-between text-sm text-emerald-600">
                   <span>Mã giảm giá ({appliedCoupon?.code}):</span>
@@ -540,7 +554,7 @@ const CartPage = () => {
         </div>
       </div>
 
-      {showCouponInput && !appliedCoupon && (
+      {false && showCouponInput && !appliedCoupon && (
         <div
           className="fixed inset-0 z-[100] flex items-center justify-center bg-black/55 p-4"
           onMouseDown={(event) => {
