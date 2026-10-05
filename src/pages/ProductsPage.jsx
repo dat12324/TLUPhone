@@ -45,6 +45,8 @@ const ProductsPage = () => {
     if (brandQuery) {
       setSelectedBrands([brandQuery])
       window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      setSelectedBrands([])
     }
   }, [brandQuery])
 
