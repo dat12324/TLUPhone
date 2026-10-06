@@ -12,7 +12,7 @@ import {
 } from 'react-icons/fi'
 import ProductCard from '../components/ProductCard'
 import ProductsPromoHeader from '../components/products/ProductsPromoHeader'
-import products, { brands, priceRanges } from '../data/products'
+import products, { priceRanges } from '../data/products'
 import { filterAndSortProducts } from '../helpers/productFilters'
 
 const sortOptions = [
@@ -24,19 +24,21 @@ const sortOptions = [
 // 5 rows on the desktop product grid (5 columns x 5 rows).
 const PRODUCTS_PER_LOAD = 25
 
-const formatBrandName = (brand) =>
-  brand ? `${brand.charAt(0).toUpperCase()}${brand.slice(1)}` : brand
+const storageOptions = ['64GB', '128GB', '256GB', '512GB', '1TB', '2TB']
+const capacityOptions = ['3GB', '4GB', '6GB', '8GB', '12GB', '16GB']
 
 const ProductsPage = () => {
-  const [searchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
   const brandQuery = searchParams.get('brand')
 
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedBrands, setSelectedBrands] = useState(brandQuery ? [brandQuery] : [])
   const [selectedPriceRange, setSelectedPriceRange] = useState(null)
+  const [selectedStorage, setSelectedStorage] = useState([])
+  const [selectedCapacity, setSelectedCapacity] = useState([])
   const [sortBy, setSortBy] = useState('default')
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false)
-  const [isDesktopFilterOpen, setIsDesktopFilterOpen] = useState(false)
+  const [desktopFilterPanel, setDesktopFilterPanel] = useState(null)
   const [visibleCount, setVisibleCount] = useState(PRODUCTS_PER_LOAD)
   const hasMounted = useRef(false)
 
@@ -50,18 +52,17 @@ const ProductsPage = () => {
     }
   }, [brandQuery])
 
-  // Xử lý chọn/bỏ chọn hãng
-  const toggleBrand = (brand) => {
-    setSelectedBrands((prev) =>
-      prev.includes(brand)
-        ? prev.filter((b) => b !== brand)
-        : [...prev, brand]
-    )
-  }
-
   // Xử lý chọn khoảng giá
   const togglePriceRange = (index) => {
     setSelectedPriceRange((prev) => (prev === index ? null : index))
+  }
+
+  const toggleOption = (setter, option) => {
+    setter((prev) =>
+      prev.includes(option)
+        ? prev.filter((value) => value !== option)
+        : [...prev, option]
+    )
   }
 
   // Xóa tất cả bộ lọc
@@ -69,12 +70,25 @@ const ProductsPage = () => {
     setSearchQuery('')
     setSelectedBrands([])
     setSelectedPriceRange(null)
+    setSelectedStorage([])
+    setSelectedCapacity([])
     setSortBy('default')
+    setDesktopFilterPanel(null)
+    setSearchParams({}, { replace: true })
   }
 
   // Kiểm tra có filter nào đang active không
   const hasActiveFilters =
-    searchQuery || selectedBrands.length > 0 || selectedPriceRange !== null
+    searchQuery ||
+    selectedBrands.length > 0 ||
+    selectedPriceRange !== null ||
+    selectedStorage.length > 0 ||
+    selectedCapacity.length > 0
+
+  const criteriaFilterCount =
+    (selectedPriceRange !== null ? 1 : 0) +
+    selectedStorage.length +
+    selectedCapacity.length
 
   // Lọc và sắp xếp sản phẩm
   const filteredProducts = useMemo(() => {
@@ -83,26 +97,51 @@ const ProductsPage = () => {
       searchQuery,
       selectedBrands,
       selectedPriceRange,
+      selectedStorage,
+      selectedCapacity,
       priceRanges,
       sortBy,
     })
-  }, [searchQuery, selectedBrands, selectedPriceRange, sortBy])
+  }, [
+    searchQuery,
+    selectedBrands,
+    selectedPriceRange,
+    selectedStorage,
+    selectedCapacity,
+    sortBy,
+  ])
 
   // Start again from four rows whenever search, filters, or sorting changes.
   useEffect(() => {
     setVisibleCount(PRODUCTS_PER_LOAD)
-  }, [searchQuery, selectedBrands, selectedPriceRange, sortBy])
+  }, [
+    searchQuery,
+    selectedBrands,
+    selectedPriceRange,
+    selectedStorage,
+    selectedCapacity,
+    sortBy,
+  ])
 
   useEffect(() => {
     if (
       hasMounted.current &&
       filteredProducts.length < 8 &&
-      (selectedBrands.length > 0 || selectedPriceRange !== null)
+      (selectedBrands.length > 0 ||
+        selectedPriceRange !== null ||
+        selectedStorage.length > 0 ||
+        selectedCapacity.length > 0)
     ) {
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }
     hasMounted.current = true
-  }, [selectedBrands, selectedPriceRange, filteredProducts.length])
+  }, [
+    selectedBrands,
+    selectedPriceRange,
+    selectedStorage,
+    selectedCapacity,
+    filteredProducts.length,
+  ])
 
   const visibleProducts = filteredProducts.slice(0, visibleCount)
   const remainingProducts = filteredProducts.length - visibleProducts.length
@@ -110,32 +149,6 @@ const ProductsPage = () => {
   // Component bộ lọc (dùng chung cho desktop sidebar & mobile drawer)
   const FilterContent = () => (
     <div className="space-y-6">
-      {/* Lọc theo hãng */}
-      <div>
-        <h3 className="text-sm font-semibold text-secondary mb-3 uppercase tracking-wider">
-          Hãng sản xuất
-        </h3>
-        <div className="space-y-2">
-          {brands.map((brand) => (
-            <label
-              key={brand}
-              className="flex items-center gap-2 cursor-pointer group"
-            >
-              <input
-                type="checkbox"
-                checked={selectedBrands.includes(brand)}
-                onChange={() => toggleBrand(brand)}
-                className="w-4 h-4 text-primary border-gray-300 rounded 
-                           focus:ring-primary focus:ring-offset-0 cursor-pointer"
-              />
-              <span className="text-sm text-gray-600 group-hover:text-secondary transition-colors">
-                {formatBrandName(brand)}
-              </span>
-            </label>
-          ))}
-        </div>
-      </div>
-
       {/* Lọc theo khoảng giá */}
       <div>
         <h3 className="text-sm font-semibold text-secondary mb-3 uppercase tracking-wider">
@@ -159,6 +172,50 @@ const ProductsPage = () => {
                 {range.label}
               </span>
             </label>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-sm font-semibold text-secondary mb-3 uppercase tracking-wider">
+          Bộ nhớ trong
+        </h3>
+        <div className="flex flex-wrap gap-2">
+          {storageOptions.map((option) => (
+            <button
+              key={option}
+              type="button"
+              onClick={() => toggleOption(setSelectedStorage, option)}
+              className={`rounded-lg border px-3 py-2 text-sm transition-colors ${
+                selectedStorage.includes(option)
+                  ? 'border-primary bg-primary/10 text-primary'
+                  : 'border-gray-200 bg-gray-50 text-gray-600'
+              }`}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-sm font-semibold text-secondary mb-3 uppercase tracking-wider">
+          RAM
+        </h3>
+        <div className="flex flex-wrap gap-2">
+          {capacityOptions.map((option) => (
+            <button
+              key={option}
+              type="button"
+              onClick={() => toggleOption(setSelectedCapacity, option)}
+              className={`rounded-lg border px-3 py-2 text-sm transition-colors ${
+                selectedCapacity.includes(option)
+                  ? 'border-primary bg-primary/10 text-primary'
+                  : 'border-gray-200 bg-gray-50 text-gray-600'
+              }`}
+            >
+              {option}
+            </button>
           ))}
         </div>
       </div>
@@ -254,46 +311,146 @@ const ProductsPage = () => {
       {/* Bộ lọc và sắp xếp ngang trên desktop */}
       <div className="relative hidden lg:block mb-8">
         <h2 className="mb-5 text-2xl font-bold text-secondary">
-          Chọn theo tiêu chí
+          Chọn tiêu chí
         </h2>
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-3">
           <button
             type="button"
-            onClick={() => setIsDesktopFilterOpen((open) => !open)}
-            className={`inline-flex items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors ${
-              isDesktopFilterOpen || hasActiveFilters
-                ? 'border-primary bg-primary text-white'
+            onClick={() =>
+              setDesktopFilterPanel((panel) => (panel === 'all' ? null : 'all'))
+            }
+            aria-expanded={desktopFilterPanel === 'all'}
+            className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-base font-medium transition-colors ${
+              desktopFilterPanel === 'all' || criteriaFilterCount > 0
+                ? 'border-primary bg-white text-primary'
                 : 'border-gray-200 bg-white text-secondary hover:border-primary hover:text-primary'
             }`}
           >
             <FiFilter />
             Bộ lọc
-            {hasActiveFilters && (
-              <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-white px-1 text-xs text-primary">
-                {selectedBrands.length + (selectedPriceRange !== null ? 1 : 0)}
+            {criteriaFilterCount > 0 && (
+              <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-xs text-white">
+                {criteriaFilterCount}
               </span>
             )}
           </button>
 
-          {brands.slice(0, 6).map((brand) => (
+          {[
+            { key: 'price', label: 'Giá', active: selectedPriceRange !== null },
+            { key: 'storage', label: 'Bộ nhớ trong', active: selectedStorage.length > 0 },
+            { key: 'capacity', label: 'RAM', active: selectedCapacity.length > 0 },
+          ].map(({ key, label, active }) => (
             <button
-              key={brand}
+              key={key}
               type="button"
-              onClick={() => toggleBrand(brand)}
-              className={`rounded-lg border px-4 py-2.5 text-sm transition-colors ${
-                selectedBrands.includes(brand)
-                  ? 'border-primary bg-primary/10 text-primary'
+              onClick={() =>
+                setDesktopFilterPanel((panel) => (panel === key ? null : key))
+              }
+              aria-expanded={desktopFilterPanel === key}
+              className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-base transition-colors ${
+                desktopFilterPanel === key || active
+                  ? 'border-primary bg-primary/5 text-primary'
                   : 'border-gray-200 bg-gray-50 text-secondary hover:border-primary hover:text-primary'
               }`}
             >
-              {formatBrandName(brand)}
+              {label}
+              <FiChevronDown className="text-sm" />
             </button>
           ))}
+
+          {hasActiveFilters && (
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="inline-flex items-center gap-1.5 rounded-xl px-3 py-2.5 text-sm font-medium text-primary transition-colors hover:bg-primary/10"
+            >
+              <FiX />
+              Xóa bộ lọc
+            </button>
+          )}
         </div>
 
-        {isDesktopFilterOpen && (
-          <div className="absolute left-0 top-full z-30 mt-2 w-[min(560px,calc(100vw-2rem))] rounded-xl border border-gray-100 bg-white p-5 shadow-xl">
-            <FilterContent />
+        {desktopFilterPanel && (
+          <div
+            className={`absolute top-[104px] z-30 mt-2 rounded-xl border border-gray-100 bg-white p-4 shadow-xl ${
+              desktopFilterPanel === 'all'
+                ? 'left-0 w-[min(1000px,calc(100vw-2rem))]'
+                : desktopFilterPanel === 'price'
+                  ? 'left-[145px] w-[min(360px,calc(100vw-2rem))]'
+                  : desktopFilterPanel === 'storage'
+                    ? 'left-[260px] w-[min(480px,calc(100vw-2rem))]'
+                    : 'left-[470px] w-[min(420px,calc(100vw-2rem))]'
+            }`}
+          >
+            <div className={desktopFilterPanel === 'all' ? 'grid grid-cols-3 gap-8' : ''}>
+              {(desktopFilterPanel === 'all' || desktopFilterPanel === 'price') && <div>
+                <h3 className="mb-3 text-lg font-semibold text-gray-600">Giá</h3>
+                <div className="flex flex-wrap gap-3">
+                  {priceRanges.map((range, index) => (
+                    <button
+                      key={range.label}
+                      type="button"
+                      onClick={() => togglePriceRange(index)}
+                      className={`rounded-xl border px-3.5 py-2.5 text-sm transition-colors ${
+                        selectedPriceRange === index
+                          ? 'border-primary bg-primary/10 text-primary'
+                          : 'border-gray-200 bg-gray-100 text-gray-600 hover:border-primary hover:text-primary'
+                      }`}
+                    >
+                      {range.label}
+                    </button>
+                  ))}
+                </div>
+              </div>}
+
+              {(desktopFilterPanel === 'all' || desktopFilterPanel === 'storage') && <div>
+                <h3 className="mb-3 text-lg font-semibold text-gray-600">Bộ nhớ trong</h3>
+                <div className="flex flex-wrap gap-3">
+                  {storageOptions.map((option) => (
+                    <button
+                      key={option}
+                      type="button"
+                      onClick={() => toggleOption(setSelectedStorage, option)}
+                      className={`rounded-xl border px-3.5 py-2.5 text-sm transition-colors ${
+                        selectedStorage.includes(option)
+                          ? 'border-primary bg-primary/10 text-primary'
+                          : 'border-gray-200 bg-gray-100 text-gray-600 hover:border-primary hover:text-primary'
+                      }`}
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+              </div>}
+
+              {(desktopFilterPanel === 'all' || desktopFilterPanel === 'capacity') && <div>
+                <h3 className="mb-3 text-lg font-semibold text-gray-600">RAM</h3>
+                <div className="flex flex-wrap gap-3">
+                  {capacityOptions.map((option) => (
+                    <button
+                      key={option}
+                      type="button"
+                      onClick={() => toggleOption(setSelectedCapacity, option)}
+                      className={`rounded-xl border px-3.5 py-2.5 text-sm transition-colors ${
+                        selectedCapacity.includes(option)
+                          ? 'border-primary bg-primary/10 text-primary'
+                          : 'border-gray-200 bg-gray-100 text-gray-600 hover:border-primary hover:text-primary'
+                      }`}
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+              </div>}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setDesktopFilterPanel(null)}
+              className="mt-7 w-full rounded-xl bg-primary/10 py-2.5 font-semibold text-primary transition-colors hover:bg-primary/15"
+            >
+              Đóng
+            </button>
           </div>
         )}
 

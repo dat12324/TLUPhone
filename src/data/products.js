@@ -1421,11 +1421,11 @@ export const brands = [...new Set(products.map((p) => p.brand))].sort((a, b) => 
 
 // Các khoảng giá để lọc
 export const priceRanges = [
-  { label: 'Dưới 5 triệu', min: 0, max: 5000000 },
-  { label: '5 - 10 triệu', min: 5000000, max: 10000000 },
-  { label: '10 - 20 triệu', min: 10000000, max: 20000000 },
-  { label: '20 - 30 triệu', min: 20000000, max: 30000000 },
-  { label: 'Trên 30 triệu', min: 30000000, max: Infinity },
+  { label: 'Dưới 3 triệu', min: 0, max: 3000000 },
+  { label: 'Từ 3-7 triệu', min: 3000000, max: 7000000 },
+  { label: 'Từ 7-10 triệu', min: 7000000, max: 10000000 },
+  { label: 'Từ 10-15 triệu', min: 10000000, max: 15000000 },
+  { label: 'Trên 15 triệu', min: 15000000, max: Infinity },
 ]
 
 export default products

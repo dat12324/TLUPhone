@@ -18132,9 +18132,9 @@
     "id": 1143,
     "name": "iPhone Duo 256GB",
     "brand": "Apple",
-    "image": "/images/products/placeholder.svg",
+    "image": "https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-duo-01.jpg",
     "images": [
-      "/images/products/placeholder.svg"
+      "https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-duo-01.jpg"
     ],
     "price": 64990000,
     "originalPrice": 64990000,
@@ -18161,7 +18161,7 @@
         "id": "c1",
         "name": "Mặc định",
         "colorCode": "#94a3b8",
-        "image": "/images/products/placeholder.svg"
+        "image": "https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-duo-01.jpg"
       }
     ],
     "specifications": {},

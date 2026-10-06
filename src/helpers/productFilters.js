@@ -3,6 +3,8 @@ export const filterAndSortProducts = ({
   searchQuery = '',
   selectedBrands = [],
   selectedPriceRange = null,
+  selectedStorage = [],
+  selectedCapacity = [],
   priceRanges = [],
   sortBy = 'default',
 }) => {
@@ -30,6 +32,25 @@ export const filterAndSortProducts = ({
         (product) => product.price >= range.min && product.price < range.max
       )
     }
+  }
+
+  const normalizeCapacity = (value = '') =>
+    value.toString().replace(/\s+/g, '').toUpperCase()
+
+  if (selectedStorage.length > 0) {
+    result = result.filter((product) =>
+      (product.variants || []).some((variant) =>
+        selectedStorage.includes(normalizeCapacity(variant.storage))
+      )
+    )
+  }
+
+  if (selectedCapacity.length > 0) {
+    result = result.filter((product) =>
+      (product.variants || []).some((variant) =>
+        selectedCapacity.includes(normalizeCapacity(variant.ram))
+      )
+    )
   }
 
   if (sortBy === 'price-asc') {

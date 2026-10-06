@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { FiArrowRight } from 'react-icons/fi'
 import BannerCarousel from '../common/BannerCarousel'
 import { productBrands, iphoneBanners, androidBanners } from '../../data/banners'
@@ -15,17 +15,41 @@ const PromoCard = ({ banner, android = false }) => (
   </Link>
 )
 
-const ProductsPromoHeader = () => (
-  <section className="mb-8">
-    <div className="mb-8 grid grid-cols-1 gap-3 lg:grid-cols-2">
-      <BannerCarousel items={iphoneBanners} interval={7000} ariaLabel="Banner iPhone" renderSlide={(banner) => <PromoCard banner={banner} />} />
-      <BannerCarousel items={androidBanners} interval={7000} ariaLabel="Banner Android" renderSlide={(banner) => <PromoCard banner={banner} android />} />
-    </div>
-    <h1 className="mb-4 text-2xl font-bold text-secondary md:text-3xl">Điện thoại</h1>
-    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-10">
-      {productBrands.map((brand) => <Link key={brand.name} to={`/products?brand=${encodeURIComponent(brand.name)}`} className="flex h-14 items-center justify-center rounded-lg border border-gray-200 bg-white px-2 text-center text-sm font-bold text-gray-800 shadow-sm transition hover:border-primary hover:text-primary hover:shadow-md"><span className={brand.name === 'OPPO' || brand.name === 'realme' ? 'text-xl font-medium' : ''}>{brand.logo}</span></Link>)}
-    </div>
-  </section>
-)
+const ProductsPromoHeader = () => {
+  const [searchParams] = useSearchParams()
+  const selectedBrand = searchParams.get('brand')
+
+  return (
+    <section className="mb-8">
+      <div className="mb-8 grid grid-cols-1 gap-3 lg:grid-cols-2">
+        <BannerCarousel items={iphoneBanners} interval={7000} ariaLabel="Banner iPhone" renderSlide={(banner) => <PromoCard banner={banner} />} />
+        <BannerCarousel items={androidBanners} interval={7000} ariaLabel="Banner Android" renderSlide={(banner) => <PromoCard banner={banner} android />} />
+      </div>
+      <h1 className="mb-4 text-2xl font-bold text-secondary md:text-3xl">Hãng</h1>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-10">
+        {productBrands.map((brand) => {
+          const isSelected = selectedBrand?.toLowerCase() === brand.name.toLowerCase()
+
+          return (
+            <Link
+              key={brand.name}
+              to={isSelected ? '/products' : `/products?brand=${encodeURIComponent(brand.name)}`}
+              aria-current={isSelected ? 'true' : undefined}
+              className={`flex h-14 items-center justify-center rounded-lg border px-2 text-center text-sm font-bold transition-all duration-200 active:scale-95 ${
+                isSelected
+                  ? 'scale-[1.02] border-primary bg-primary/10 text-primary shadow-md ring-2 ring-primary/15'
+                  : 'border-gray-200 bg-white text-gray-800 shadow-sm hover:-translate-y-0.5 hover:border-primary hover:text-primary hover:shadow-md'
+              }`}
+            >
+              <span className={brand.name === 'OPPO' || brand.name === 'realme' ? 'text-xl font-medium' : ''}>
+                {brand.logo}
+              </span>
+            </Link>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
 
 export default ProductsPromoHeader
