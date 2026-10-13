@@ -1,25 +1,25 @@
-import { FiShield, FiRotateCcw, FiTruck, FiCreditCard } from 'react-icons/fi'
+import { FiInfo, FiPhoneCall, FiSmartphone, FiTruck } from 'react-icons/fi'
 
 const services = [
   {
-    icon: <FiShield className="text-xl text-primary" />,
-    title: '100% Chính Hãng',
-    desc: 'Bảo hành chính hãng VAT',
+    icon: <FiSmartphone className="text-xl text-primary" />,
+    title: 'Chuyên điện thoại',
+    desc: 'Tập trung vào các dòng smartphone',
   },
   {
-    icon: <FiRotateCcw className="text-xl text-primary" />,
-    title: '1 Đổi 1 Trong 30 Ngày',
-    desc: 'Nếu phát sinh lỗi NSX',
+    icon: <FiInfo className="text-xl text-primary" />,
+    title: 'Thông tin rõ ràng',
+    desc: 'Giá bán và cấu hình minh bạch',
   },
   {
     icon: <FiTruck className="text-xl text-primary" />,
-    title: 'Giao Siêu Tốc 2H',
-    desc: 'Miễn phí đơn từ 500K',
+    title: 'Miễn phí vận chuyển',
+    desc: 'Áp dụng cho đơn hàng từ 500K',
   },
   {
-    icon: <FiCreditCard className="text-xl text-primary" />,
-    title: 'Trả Góp 0% Lãi Suất',
-    desc: 'Thủ tục online nhanh 5 phút',
+    icon: <FiPhoneCall className="text-xl text-primary" />,
+    title: 'Hỗ trợ mua hàng',
+    desc: 'Hotline 1900 1234',
   },
 ]
 
@@ -29,15 +29,15 @@ const ServicesCommitment = () => {
       {services.map((s, idx) => (
         <div
           key={idx}
-          className="bg-white rounded-xl border border-gray-100 p-3.5 sm:p-4 flex items-center gap-3 shadow-xs hover:shadow-md transition-shadow"
+          className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-3.5 transition-colors hover:border-rose-200 sm:p-4"
         >
           <div className="w-10 h-10 rounded-lg bg-rose-50 flex items-center justify-center shrink-0">
             {s.icon}
           </div>
           <div className="min-w-0">
-            <h4 className="text-xs sm:text-sm font-bold text-secondary truncate">
+            <h3 className="truncate text-xs font-bold text-secondary sm:text-sm">
               {s.title}
-            </h4>
+            </h3>
             <p className="text-[11px] sm:text-xs text-gray-500 truncate">
               {s.desc}
             </p>

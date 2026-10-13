@@ -9,6 +9,7 @@ import RegisterPage from '../pages/RegisterPage'
 import ForgotPasswordPage from '../pages/ForgotPasswordPage'
 import ProfilePage from '../pages/ProfilePage'
 import OrdersPage from '../pages/OrdersPage'
+import NotFoundPage from '../pages/NotFoundPage'
 
 const AppRoutes = () => (
   <Routes>
@@ -22,6 +23,7 @@ const AppRoutes = () => (
     <Route path="/forgot-password" element={<ForgotPasswordPage />} />
     <Route path="/profile" element={<ProfilePage />} />
     <Route path="/orders" element={<OrdersPage />} />
+    <Route path="*" element={<NotFoundPage />} />
   </Routes>
 )
 

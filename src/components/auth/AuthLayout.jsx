@@ -4,11 +4,11 @@ import {
   FiGift,
   FiPackage,
   FiPercent,
-  FiPhone,
   FiShield,
   FiShoppingBag,
   FiSmartphone,
 } from 'react-icons/fi'
+import BrandLogo from '../common/BrandLogo'
 
 const memberBenefits = [
   {
@@ -38,12 +38,7 @@ const AuthLayout = ({ title, subtitle, children }) => (
     <aside className="relative hidden w-[54%] overflow-hidden bg-[#f5f5f7] px-10 py-8 lg:flex lg:flex-col xl:px-16 xl:py-10">
       <div className="relative z-10 mx-auto flex h-full w-full max-w-3xl flex-col">
         <Link to="/" className="flex w-fit items-center gap-3" aria-label="Về trang chủ TLUPhone">
-          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-white shadow-lg shadow-rose-200">
-            <FiPhone className="text-xl" />
-          </span>
-          <span className="text-2xl font-extrabold tracking-tight text-secondary">
-            TLU<span className="text-primary">Phone</span>
-          </span>
+          <BrandLogo size="lg" />
         </Link>
 
         <div className="mt-9 xl:mt-12">
@@ -96,12 +91,7 @@ const AuthLayout = ({ title, subtitle, children }) => (
       <div className="mx-auto flex min-h-[calc(100vh-3rem)] w-full max-w-xl flex-col">
         <div className="flex items-center justify-between lg:justify-end">
           <Link to="/" className="flex items-center gap-2 lg:hidden" aria-label="Về trang chủ TLUPhone">
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-white">
-              <FiPhone />
-            </span>
-            <span className="text-lg font-extrabold text-secondary">
-              TLU<span className="text-primary">Phone</span>
-            </span>
+            <BrandLogo size="sm" />
           </Link>
           <Link
             to="/"

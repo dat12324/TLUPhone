@@ -1,5 +1,7 @@
 import { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react'
 import couponsData from '../data/coupons'
+import products from '../data/products'
+import { usePromotion } from './PromotionContext'
 
 const CartContext = createContext()
 
@@ -7,6 +9,7 @@ const CART_STORAGE_KEY = 'tluphone_cart'
 const COUPON_STORAGE_KEY = 'tluphone_coupon'
 
 export const CartProvider = ({ children }) => {
+  const { applyPromotionToProduct, phase: promotionPhase } = usePromotion()
   // Lấy dữ liệu giỏ hàng ban đầu từ localStorage (nếu có)
   const [cartItems, setCartItems] = useState(() => {
     try {
@@ -39,6 +42,42 @@ export const CartProvider = ({ children }) => {
       console.error('Lỗi khi lưu giỏ hàng vào localStorage:', error)
     }
   }, [cartItems])
+
+  // Đồng bộ lại giá trong giỏ khi chương trình bắt đầu hoặc hết hạn.
+  useEffect(() => {
+    setCartItems((prevItems) => prevItems.map((item) => {
+      const baseProduct = products.find(
+        (product) => String(product.id) === String(item.productId)
+      )
+      if (!baseProduct) return item
+
+      const effectiveProduct = applyPromotionToProduct(baseProduct)
+      const effectiveVariant = item.selectedVariant
+        ? effectiveProduct.variants?.find(
+          (variant) => String(variant.id) === String(item.selectedVariant.id)
+        )
+        : null
+      const price = effectiveVariant?.price ?? effectiveProduct.price
+      const originalPrice = effectiveVariant?.originalPrice
+        ?? effectiveProduct.originalPrice
+        ?? price
+
+      if (item.price === price && item.originalPrice === originalPrice) return item
+
+      return {
+        ...item,
+        price,
+        originalPrice,
+        selectedVariant: item.selectedVariant && effectiveVariant
+          ? {
+              ...item.selectedVariant,
+              price: effectiveVariant.price,
+              originalPrice: effectiveVariant.originalPrice,
+            }
+          : item.selectedVariant,
+      }
+    }))
+  }, [applyPromotionToProduct, promotionPhase])
 
   // Đồng bộ coupon vào localStorage
   useEffect(() => {
@@ -94,6 +133,17 @@ export const CartProvider = ({ children }) => {
         updated[existingIndex] = {
           ...existingItem,
           quantity: newQuantity,
+          price: itemPrice,
+          originalPrice: itemOriginalPrice,
+          selectedVariant: selectedVariant
+            ? {
+                id: selectedVariant.id,
+                ram: selectedVariant.ram,
+                storage: selectedVariant.storage,
+                price: selectedVariant.price,
+                originalPrice: selectedVariant.originalPrice,
+              }
+            : null,
           stock, // Cập nhật lại tồn kho mới nhất
           selected: true, // Tự động tick chọn khi thêm lại
         }
@@ -203,6 +253,19 @@ export const CartProvider = ({ children }) => {
   const selectedSubtotal = useMemo(() => {
     return selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
   }, [selectedItems])
+
+  // Thu hồi coupon ngay khi giỏ hàng không còn đáp ứng giá trị đơn tối thiểu.
+  // Việc này cũng xóa coupon khỏi localStorage qua effect đồng bộ phía trên,
+  // tránh để mã cũ tự xuất hiện lại ở bước thanh toán.
+  useEffect(() => {
+    if (!appliedCoupon || selectedSubtotal >= appliedCoupon.minOrder) return
+
+    const couponCode = appliedCoupon.code
+    const minFormatted = appliedCoupon.minOrder.toLocaleString('vi-VN') + '₫'
+
+    setAppliedCoupon(null)
+    showToast(`Mã "${couponCode}" đã được gỡ vì đơn hàng chưa đạt ${minFormatted}`)
+  }, [appliedCoupon, selectedSubtotal])
 
   /**
    * Áp dụng mã giảm giá
@@ -330,9 +393,13 @@ export const CartProvider = ({ children }) => {
   return (
     <CartContext.Provider value={value}>
       {children}
-      {/* Toast thông báo góc màn hình */}
+      {/* Toast thông báo góc trên màn hình */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-secondary text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 border border-gray-700 animate-slide-up text-sm font-medium">
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed top-20 right-4 sm:right-6 z-[70] bg-secondary text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 border border-gray-700 animate-slide-up text-sm font-medium"
+        >
           <span className="w-2 h-2 rounded-full bg-emerald-400" />
           <span>{toastMessage}</span>
         </div>

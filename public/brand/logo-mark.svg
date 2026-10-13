@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-labelledby="title desc">
+  <title id="title">Biểu tượng TLUPhone</title>
+  <desc id="desc">Chữ T cách điệu bên trong một chiếc điện thoại</desc>
+  <rect width="48" height="48" rx="13" fill="#e11d48"/>
+  <rect x="13.5" y="6.5" width="21" height="35" rx="6.5" fill="none" stroke="#fff" stroke-width="3"/>
+  <path d="M18.5 17.5h11M24 17.5v12" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="24" cy="36.5" r="1.5" fill="#fff"/>
+</svg>

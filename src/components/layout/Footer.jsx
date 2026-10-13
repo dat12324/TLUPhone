@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { FiPhone, FiMail, FiMapPin, FiFacebook } from 'react-icons/fi'
+import BrandLogo from '../common/BrandLogo'
 
 const Footer = () => {
   return (
@@ -9,16 +10,21 @@ const Footer = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Cột 1: Giới thiệu */}
           <div>
-            <h3 className="text-white text-lg font-bold mb-4">
-              TLU<span className="text-primary">Phone</span>
-            </h3>
+            <Link to="/" aria-label="TLUPhone - Trang chủ" className="mb-4 inline-flex transition-opacity hover:opacity-85">
+              <BrandLogo variant="dark" size="sm" />
+            </Link>
             <p className="text-sm leading-relaxed mb-4">
               Cửa hàng điện thoại trực tuyến uy tín, cung cấp các sản phẩm 
               smartphone chính hãng với giá tốt nhất thị trường.
             </p>
             <div className="flex gap-3">
-              <a href="#" className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center 
-                                    hover:bg-primary transition-colors">
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook TLUPhone"
+                className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-primary transition-colors"
+              >
                 <FiFacebook className="text-sm" />
               </a>
             </div>
@@ -33,9 +39,9 @@ const Footer = () => {
               {[
                 { label: 'Trang chủ', path: '/' },
                 { label: 'Sản phẩm', path: '/products' },
-                { label: 'Khuyến mãi', path: '/khuyen-mai' },
-                { label: 'Tin tức', path: '/tin-tuc' },
-                { label: 'Liên hệ', path: '/lien-he' },
+                { label: 'Giỏ hàng', path: '/cart' },
+                { label: 'Đơn hàng của tôi', path: '/orders' },
+                { label: 'Tài khoản', path: '/profile' },
               ].map((item) => (
                 <li key={item.path}>
                   <Link

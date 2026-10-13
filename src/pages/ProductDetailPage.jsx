@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import {
   FiStar,
@@ -19,6 +19,7 @@ import {
 import ProductCard from '../components/ProductCard'
 import products from '../data/products'
 import { useCart } from '../context/CartContext'
+import { usePromotion } from '../context/PromotionContext'
 
 const PLACEHOLDER_IMAGE = '/images/products/placeholder.svg'
 
@@ -48,12 +49,14 @@ const ProductDetailPage = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const { addToCart } = useCart()
+  const { applyPromotionToProduct } = usePromotion()
   const productId = parseInt(id, 10)
 
   // Tìm sản phẩm theo id
   const product = useMemo(() => {
-    return products.find((p) => p.id === productId)
-  }, [productId])
+    const baseProduct = products.find((p) => p.id === productId)
+    return applyPromotionToProduct(baseProduct)
+  }, [productId, applyPromotionToProduct])
 
   // State quản lý lựa chọn
   const [selectedVariant, setSelectedVariant] = useState(null)
@@ -62,6 +65,33 @@ const ProductDetailPage = () => {
   const [quantity, setQuantity] = useState(1)
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
   const [isSpecificationsOpen, setIsSpecificationsOpen] = useState(false)
+  const modalCloseBtnRef = useRef(null)
+
+  // Khóa cuộn trang nền và lắng nghe phím Escape khi Modal thông số mở
+  useEffect(() => {
+    if (!isSpecificationsOpen) return undefined
+
+    const originalOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    // Focus tự động vào nút đóng khi mở modal để hỗ trợ bàn phím / accessibility
+    const focusTimer = setTimeout(() => {
+      modalCloseBtnRef.current?.focus()
+    }, 50)
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setIsSpecificationsOpen(false)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => {
+      clearTimeout(focusTimer)
+      document.body.style.overflow = originalOverflow
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isSpecificationsOpen])
 
   // Đồng bộ state khi đổi sản phẩm
   useEffect(() => {
@@ -600,7 +630,7 @@ const ProductDetailPage = () => {
                   <button
                     type="button"
                     onClick={() => setIsSpecificationsOpen(true)}
-                    className="mt-4 w-full rounded-lg border border-blue-500 py-2.5 text-sm font-medium text-blue-500 transition-colors hover:bg-blue-50"
+                    className="mt-4 w-full rounded-xl border border-primary/30 py-2.5 text-sm font-semibold text-primary transition-all duration-200 hover:border-primary hover:bg-rose-50 active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-xs"
                   >
                     Xem cấu hình chi tiết
                   </button>
@@ -612,51 +642,84 @@ const ProductDetailPage = () => {
           </div>
         </div>
 
-        {/* Phần 3: Sản phẩm tương tự */}
+        {/* Modal Thông số kỹ thuật chi tiết */}
         {isSpecificationsOpen && product.specifications && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-            <div className="flex max-h-[90vh] w-full max-w-6xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
-              <div className="flex items-center justify-between border-b border-gray-100 px-6 py-5 md:px-8">
-                <h2 className="text-xl font-bold text-secondary md:text-2xl">
-                  Cấu hình {product.name}
-                  {selectedVariant?.ram && selectedVariant?.storage
-                    ? ` (${selectedVariant.ram} | ${selectedVariant.storage})`
-                    : ''}
-                </h2>
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 sm:p-4 backdrop-blur-xs transition-opacity animate-fade-in"
+            onClick={() => setIsSpecificationsOpen(false)}
+            role="presentation"
+          >
+            <div
+              className="flex max-h-[88vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl border border-gray-100"
+              onClick={(e) => e.stopPropagation()}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="spec-modal-title"
+            >
+              {/* Header Modal */}
+              <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4 sm:px-6 sm:py-5 bg-white shrink-0">
+                <div>
+                  <h2 id="spec-modal-title" className="text-lg sm:text-xl font-bold text-secondary flex items-center gap-2">
+                    Thông số kỹ thuật chi tiết
+                  </h2>
+                  <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
+                    {product.name}
+                    {selectedVariant?.ram && selectedVariant?.storage
+                      ? ` • ${selectedVariant.ram} / ${selectedVariant.storage}`
+                      : ''}
+                  </p>
+                </div>
                 <button
                   type="button"
+                  ref={modalCloseBtnRef}
                   onClick={() => setIsSpecificationsOpen(false)}
-                  className="rounded-full p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-secondary"
+                  className="rounded-full p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary/20"
                   aria-label="Đóng thông số kỹ thuật"
                 >
                   <FiX className="text-xl" />
                 </button>
               </div>
-              <div className="overflow-y-auto p-4 md:p-6">
-                <div className="space-y-0">
-                  {Object.entries(product.specifications).map(([key, group]) => (
-                    <section key={key}>
-                      <div className="bg-gray-100 px-4 py-3 text-base font-medium text-primary">
+
+              {/* Bảng thông số kỹ thuật */}
+              <div className="overflow-y-auto p-4 sm:p-6 space-y-4">
+                {Object.entries(product.specifications).map(([key, group]) => (
+                  <section key={key} className="rounded-xl border border-gray-100 overflow-hidden shadow-xs">
+                    <div className="bg-rose-50/60 px-4 py-2.5 border-b border-rose-100/60 flex items-center gap-2">
+                      <span className="w-1.5 h-3.5 bg-primary rounded-full inline-block" />
+                      <h3 className="text-xs sm:text-sm font-bold text-primary uppercase tracking-wider">
                         {group.title}
-                      </div>
-                      <div className="divide-y divide-gray-100">
-                        {Object.entries(group.items || {}).map(([specKey, specValue]) => (
-                          <div
-                            key={specKey}
-                            className="grid grid-cols-1 gap-1 px-4 py-3.5 text-sm md:grid-cols-12 md:gap-5"
-                          >
-                            <span className="font-medium text-secondary md:col-span-3">
-                              {specKey}:
-                            </span>
-                            <span className="whitespace-pre-line text-secondary md:col-span-9">
-                              {specValue}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </section>
-                  ))}
-                </div>
+                      </h3>
+                    </div>
+                    <div className="divide-y divide-gray-100 text-sm">
+                      {Object.entries(group.items || {}).map(([specKey, specValue], rowIndex) => (
+                        <div
+                          key={specKey}
+                          className={`grid grid-cols-1 sm:grid-cols-12 gap-1 sm:gap-4 px-4 py-3 transition-colors ${
+                            rowIndex % 2 === 1 ? 'bg-gray-50/60' : 'bg-white'
+                          }`}
+                        >
+                          <span className="font-medium text-gray-500 sm:col-span-4 text-xs sm:text-sm">
+                            {specKey}
+                          </span>
+                          <span className="text-secondary sm:col-span-8 text-xs sm:text-sm whitespace-pre-line break-words leading-relaxed">
+                            {specValue}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                ))}
+              </div>
+
+              {/* Footer Modal */}
+              <div className="border-t border-gray-100 px-5 py-3 sm:px-6 bg-gray-50/70 flex justify-end shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setIsSpecificationsOpen(false)}
+                  className="rounded-xl bg-gray-200 hover:bg-gray-300 px-5 py-2 text-sm font-semibold text-gray-700 transition-colors"
+                >
+                  Đóng
+                </button>
               </div>
             </div>
           </div>

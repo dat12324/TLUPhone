@@ -6,6 +6,12 @@ const ScrollToTop = () => {
   const { pathname, search } = useLocation()
 
   useEffect(() => {
+    const params = new URLSearchParams(search)
+    // Nếu có truy vấn tìm kiếm, không ép cuộn lên đỉnh (0) để trang đích tự động cuộn/focus vào kết quả
+    if (params.has('search')) {
+      return
+    }
+
     window.scrollTo({
       top: 0,
       left: 0,

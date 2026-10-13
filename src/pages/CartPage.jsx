@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   FiTrash2,
@@ -9,13 +8,9 @@ import {
   FiChevronRight,
   FiShield,
   FiTruck,
-  FiGift,
-  FiTag,
-  FiX,
 } from 'react-icons/fi'
 import { useCart } from '../context/CartContext'
 import CouponSelector from '../components/common/CouponSelector'
-import coupons from '../data/coupons'
 
 const PLACEHOLDER_IMAGE = '/images/products/placeholder.svg'
 
@@ -44,30 +39,6 @@ const CartPage = () => {
     totalSaved,
   } = useCart()
 
-  // State nhập mã giảm giá
-  // Xử lý khi bấm nút "Tiến hành thanh toán"
-  const [couponCode, setCouponCode] = useState('')
-  const [couponError, setCouponError] = useState('')
-  const [showCouponInput, setShowCouponInput] = useState(false)
-  const [selectedCouponCode, setSelectedCouponCode] = useState('')
-
-  const handleApplyCoupon = (code = couponCode) => {
-    setCouponError('')
-    const result = applyCoupon(code)
-    if (result.success) {
-      setCouponCode('')
-      setSelectedCouponCode('')
-      setShowCouponInput(false)
-    } else {
-      setCouponError(result.message)
-    }
-  }
-
-  const handleRemoveCoupon = () => {
-    removeCoupon()
-    setCouponError('')
-  }
-
   const handleProceedToCheckout = () => {
     if (selectedItems.length === 0) return
     navigate('/checkout')
@@ -79,10 +50,6 @@ const CartPage = () => {
     0
   )
 
-  // Xử lý áp dụng mã giảm giá
-  
-
-  // Xử lý hủy mã
   // Trường hợp Giỏ hàng trống
   if (cartItems.length === 0) {
     return (
@@ -369,122 +336,10 @@ const CartPage = () => {
                 appliedCoupon={appliedCoupon}
                 subtotal={selectedSubtotal}
                 onApply={applyCoupon}
-                onRemove={handleRemoveCoupon}
+                onRemove={removeCoupon}
                 title={false}
                 className="pt-3 border-t border-gray-100"
               />
-
-              {false && (
-              <div className="pt-3 border-t border-gray-100">
-                {appliedCoupon ? (
-                  // Đang có mã được áp dụng
-                  <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <FiTag className="text-emerald-600" />
-                        <div>
-                          <span className="text-sm font-bold text-emerald-700">
-                            {appliedCoupon.code}
-                          </span>
-                          <p className="text-[11px] text-emerald-600">
-                            {appliedCoupon.description}
-                          </p>
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={handleRemoveCoupon}
-                        className="p-1 text-gray-400 hover:text-rose-500 transition-colors"
-                        title="Hủy mã giảm giá"
-                      >
-                        <FiX className="text-sm" />
-                      </button>
-                    </div>
-                    {couponDiscount > 0 && (
-                      <p className="text-xs font-semibold text-emerald-700 mt-1.5">
-                        Giảm: -{formatPrice(couponDiscount)}
-                      </p>
-                    )}
-                    {couponDiscount === 0 && selectedSubtotal < appliedCoupon.minOrder && (
-                      <p className="text-[11px] text-amber-600 mt-1.5">
-                        * Đơn tối thiểu {formatPrice(appliedCoupon.minOrder)} để áp dụng
-                      </p>
-                    )}
-                  </div>
-                ) : (
-                  // Chưa có mã → hiện nút "Chọn" hoặc ô nhập
-                  <div>
-                    {!showCouponInput ? (
-                      <button
-                        type="button"
-                        onClick={() => setShowCouponInput(true)}
-                        className="flex items-center justify-between w-full py-2 text-sm group"
-                      >
-                        <span className="flex items-center gap-2 text-gray-600">
-                          <FiTag className="text-primary" />
-                          <span>Áp dụng mã giảm giá</span>
-                        </span>
-                        <span className="text-primary font-semibold group-hover:underline">
-                          Chọn
-                        </span>
-                      </button>
-                    ) : (
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          <FiTag className="text-primary shrink-0" />
-                          <span className="text-sm font-medium text-gray-600">
-                            Nhập mã giảm giá
-                          </span>
-                        </div>
-                        <div className="flex gap-2">
-                          <input
-                            type="text"
-                            value={couponCode}
-                            onChange={(e) => {
-                              setCouponCode(e.target.value.toUpperCase())
-                              setCouponError('')
-                            }}
-                            onKeyDown={(e) => e.key === 'Enter' && handleApplyCoupon()}
-                            placeholder="Nhập mã tại đây..."
-                            className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm
-                                       focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary
-                                       uppercase placeholder:normal-case transition-colors"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => handleApplyCoupon()}
-                            disabled={!couponCode.trim()}
-                            className={`px-4 py-2 rounded-lg text-sm font-bold transition-all shrink-0 ${
-                              couponCode.trim()
-                                ? 'bg-primary text-white hover:bg-rose-700 active:scale-95'
-                                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                            }`}
-                          >
-                            Áp dụng
-                          </button>
-                        </div>
-                        {couponError && (
-                          <p className="text-xs text-rose-500 font-medium">
-                            {couponError}
-                          </p>
-                        )}
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setShowCouponInput(false)
-                            setCouponCode('')
-                            setCouponError('')
-                          }}
-                          className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
-                        >
-                          Đóng
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-              )}
 
               {/* Giảm giá coupon trong phần chi tiết */}
 
@@ -628,7 +483,7 @@ const CartPage = () => {
                       </span>
                       <span className="min-w-0 flex-1">
                         <strong className="block text-sm text-secondary sm:text-base">{coupon.code}</strong>
-                        <span className="mt-1 block text-sm text-blue-600">{coupon.description}</span>
+                        <span className="mt-1 block text-sm font-medium text-rose-600">{coupon.description}</span>
                         <span className={`mt-2 block text-xs ${eligible ? 'text-gray-500' : 'text-amber-600'}`}>
                           {eligible
                             ? 'Có thể áp dụng cho đơn hàng'

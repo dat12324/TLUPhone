@@ -5,6 +5,7 @@ import Footer from './components/layout/Footer'
 import AppRoutes from './routes/AppRoutes'
 import { CartProvider } from './context/CartContext'
 import { AuthProvider } from './context/AuthContext'
+import { PromotionProvider } from './context/PromotionContext'
 import ChatbotWidget from './components/common/ChatbotWidget'
 
 const authPaths = ['/login', '/register', '/forgot-password']
@@ -27,14 +28,16 @@ const AppLayout = () => {
 
 function App() {
   return (
-    <CartProvider>
-      <AuthProvider>
-        <Router>
-          <ScrollToTop />
-          <AppLayout />
-        </Router>
-      </AuthProvider>
-    </CartProvider>
+    <PromotionProvider>
+      <CartProvider>
+        <AuthProvider>
+          <Router>
+            <ScrollToTop />
+            <AppLayout />
+          </Router>
+        </AuthProvider>
+      </CartProvider>
+    </PromotionProvider>
   )
 }
 

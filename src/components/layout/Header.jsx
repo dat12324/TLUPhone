@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import {
   FiChevronDown,
   FiLogOut,
@@ -12,24 +12,61 @@ import {
 } from 'react-icons/fi'
 import { useCart } from '../../context/CartContext'
 import { useAuth } from '../../context/AuthContext'
+import BrandLogo from '../common/BrandLogo'
 
-const SearchBar = ({ mobile = false }) => (
-  <div className={mobile ? 'relative md:hidden' : 'relative hidden min-w-0 flex-1 md:block'}>
-    <input
-      type="text"
-      placeholder="Tìm kiếm điện thoại..."
-      className="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-4 pr-10 text-sm text-secondary outline-none transition placeholder:text-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/15"
-      aria-label="Tìm kiếm điện thoại"
-    />
-    <button
-      type="button"
-      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-primary"
-      aria-label="Tìm kiếm"
+const SearchBar = ({ mobile = false }) => {
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const currentSearch = searchParams.get('search') || ''
+  const [keyword, setKeyword] = useState(currentSearch)
+
+  useEffect(() => {
+    setKeyword(currentSearch)
+  }, [currentSearch])
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    const trimmed = keyword.trim()
+    if (trimmed) {
+      navigate(`/products?search=${encodeURIComponent(trimmed)}`)
+      setTimeout(() => {
+        const resultsEl = document.getElementById('search-results')
+        if (resultsEl) {
+          const headerOffset = 85
+          const elementPosition = resultsEl.getBoundingClientRect().top
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+          window.scrollTo({ top: Math.max(0, offsetPosition), behavior: 'smooth' })
+        }
+      }, 100)
+    } else {
+      navigate('/products')
+    }
+  }
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className={mobile ? 'relative mt-2.5 md:hidden' : 'relative hidden min-w-0 flex-1 md:block'}
+      role="search"
     >
-      <FiSearch className="text-lg" />
-    </button>
-  </div>
-)
+      <input
+        type="text"
+        value={keyword}
+        onChange={(event) => setKeyword(event.target.value)}
+        placeholder="Tìm kiếm điện thoại..."
+        className="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-4 pr-10 text-sm text-secondary outline-none transition placeholder:text-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/15"
+        aria-label="Tìm kiếm điện thoại"
+      />
+      <button
+        type="submit"
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-primary"
+        aria-label="Tìm kiếm"
+      >
+        <FiSearch className="text-lg" />
+      </button>
+    </form>
+  )
+}
 
 const Header = () => {
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false)
@@ -90,12 +127,7 @@ const Header = () => {
             className="flex shrink-0 items-center gap-2 rounded-lg transition-opacity hover:opacity-80"
             aria-label="TLUPhone - Trang chủ"
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-              <FiPhone className="text-lg text-white" />
-            </span>
-            <span className="hidden text-xl font-bold text-secondary sm:block">
-              TLU<span className="text-primary">Phone</span>
-            </span>
+            <BrandLogo size="sm" responsive />
           </Link>
 
           <SearchBar />

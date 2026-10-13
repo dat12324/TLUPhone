@@ -82,7 +82,8 @@ export const buildCheckoutOrder = ({
     store: shippingMethod === 'store_pickup' ? selectedStore : null,
   },
   paymentMethod,
-  voucher: appliedCoupon
+  // Không ghi nhận voucher đã mất điều kiện vào đơn hàng.
+  voucher: appliedCoupon && discount > 0
     ? {
         id: appliedCoupon.id,
         code: appliedCoupon.code,

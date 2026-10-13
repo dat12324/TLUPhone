@@ -1,68 +1,40 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { FiZap, FiStar, FiAward, FiChevronRight, FiClock } from 'react-icons/fi'
+import { FiZap, FiStar, FiAward, FiChevronRight } from 'react-icons/fi'
 import HeroBanner from '../components/home/HeroBanner'
 import ServicesCommitment from '../components/home/ServicesCommitment'
 import BrandList from '../components/home/BrandList'
 import PromoBanners from '../components/home/PromoBanners'
 import BrandTabsSection from '../components/home/BrandTabsSection'
+import PromotionCountdown from '../components/home/PromotionCountdown'
 import ProductCard from '../components/ProductCard'
 import products from '../data/products'
-
-// Thời gian kết thúc Flash Sale mặc định (đếm ngược đến 23:59:59 cuối ngày)
-// Sau này khi có Backend API, bạn chỉ cần gán thời gian từ API vào đây
-const getInitialTargetTime = () => {
-  const endOfDay = new Date()
-  endOfDay.setHours(23, 59, 59, 999)
-  return endOfDay.getTime()
-}
+import { usePromotion } from '../context/PromotionContext'
 
 const HomePage = () => {
-  // Mốc thời gian kết thúc Flash Sale (chuẩn bị sẵn để nhận từ Backend API)
-  const [flashSaleEndTime] = useState(getInitialTargetTime())
-
-  // State lưu trữ thời gian còn lại (Giờ, Phút, Giây)
-  const [timeLeft, setTimeLeft] = useState({
-    hours: '00',
-    minutes: '00',
-    seconds: '00',
-  })
-
-  // Effect chạy đếm ngược mỗi giây
-  useEffect(() => {
-    const updateCountdown = () => {
-      const now = new Date().getTime()
-      const difference = flashSaleEndTime - now
-
-      if (difference <= 0) {
-        setTimeLeft({ hours: '00', minutes: '00', seconds: '00' })
-        return
-      }
-
-      const hours = Math.floor((difference / (1000 * 60 * 60)) % 24)
-      const minutes = Math.floor((difference / (1000 * 60)) % 60)
-      const seconds = Math.floor((difference / 1000) % 60)
-
-      setTimeLeft({
-        hours: String(hours).padStart(2, '0'),
-        minutes: String(minutes).padStart(2, '0'),
-        seconds: String(seconds).padStart(2, '0'),
-      })
-    }
-
-    // Cập nhật ngay lần đầu tiên
-    updateCountdown()
-    const timer = setInterval(updateCountdown, 1000)
-
-    return () => clearInterval(timer)
-  }, [flashSaleEndTime])
+  const {
+    promotion,
+    phase: promotionPhase,
+    promotionItems,
+    applyPromotionToProduct,
+  } = usePromotion()
 
   // 1. Sản phẩm khuyến mãi hấp dẫn (có giảm giá hoặc isHotDeal)
   const hotDealProducts = useMemo(() => {
+    if (promotionItems.length > 0) {
+      if (promotionPhase !== 'active') return []
+
+      return promotionItems
+        .map((item) => products.find((product) => String(product.id) === String(item.productId)))
+        .filter(Boolean)
+        .map(applyPromotionToProduct)
+        .slice(0, 5)
+    }
+
     return products
       .filter((p) => p.isHotDeal || (p.originalPrice && p.originalPrice > p.price))
       .slice(0, 5)
-  }, [])
+  }, [promotionItems, promotionPhase, applyPromotionToProduct])
 
   // 2. Sản phẩm nổi bật (isFeatured)
   const featuredProducts = useMemo(() => {
@@ -92,43 +64,31 @@ const HomePage = () => {
 
         {/* 4. Section: Khuyến mãi hấp dẫn (Flash Sale / Hot Deals) */}
         {hotDealProducts.length > 0 && (
-          <section className="my-10 bg-gradient-to-r from-rose-500 via-red-500 to-rose-600 rounded-2xl md:rounded-3xl p-5 md:p-7 text-white shadow-md">
+          <section className="my-10 rounded-2xl border border-rose-700 bg-primary p-5 text-white md:p-7">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-amber-300 text-2xl animate-pulse">
-                  <FiZap />
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/20 bg-white/10 text-2xl text-amber-300">
+                  <FiZap aria-hidden="true" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
                     <h2 className="text-xl md:text-2xl font-extrabold tracking-tight">
-                      Khuyến Mãi Hấp Dẫn
+                      {promotionItems.length > 0 ? promotion.title : 'Khuyến Mãi Hấp Dẫn'}
                     </h2>
                     <span className="bg-amber-400 text-secondary text-[11px] font-extrabold px-2 py-0.5 rounded-md uppercase">
                       HOT DEAL
                     </span>
                   </div>
                   <p className="text-xs md:text-sm text-white/80 mt-0.5">
-                    Giá sốc trong tuần - Số lượng có hạn
+                    {promotionItems.length > 0
+                      ? promotion.description
+                      : 'Các sản phẩm đang có giá thấp hơn giá niêm yết'}
                   </p>
                 </div>
               </div>
-
-              {/* Countdown timer tự động đếm ngược theo thời gian thực */}
-              <div className="flex items-center gap-2 self-start sm:self-auto bg-black/25 backdrop-blur-sm px-3.5 py-1.5 rounded-xl text-xs font-semibold">
-                <FiClock className="text-amber-300" />
-                <span>Kết thúc sau:</span>
-                <span className="bg-white text-secondary px-1.5 py-0.5 rounded font-mono font-bold">
-                  {timeLeft.hours}
-                </span>
-                <span>:</span>
-                <span className="bg-white text-secondary px-1.5 py-0.5 rounded font-mono font-bold">
-                  {timeLeft.minutes}
-                </span>
-                <span>:</span>
-                <span className="bg-white text-secondary px-1.5 py-0.5 rounded font-mono font-bold">
-                  {timeLeft.seconds}
-                </span>
-              </div>
+              {promotionItems.length > 0 && (
+                <PromotionCountdown promotion={promotion} />
+              )}
             </div>
 
             {/* Grid sản phẩm Khuyến mãi */}
@@ -141,7 +101,7 @@ const HomePage = () => {
             <div className="text-center mt-6">
               <Link
                 to="/products"
-                className="inline-flex items-center gap-2 bg-white text-primary hover:bg-rose-50 font-bold text-xs sm:text-sm px-6 py-2.5 rounded-xl shadow-sm transition-all hover:scale-105"
+                className="inline-flex items-center gap-2 rounded-xl bg-white px-6 py-2.5 text-xs font-bold text-primary transition-colors hover:bg-rose-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white sm:text-sm"
               >
                 <span>Xem tất cả khuyến mãi</span>
                 <FiChevronRight className="text-base" />
@@ -150,7 +110,7 @@ const HomePage = () => {
           </section>
         )}
 
-        {/* 5. Banner khuyến mãi phụ 1 (Học sinh - Sinh viên & Thu cũ đổi mới) */}
+        {/* 5. Lối tắt khám phá sản phẩm */}
         <PromoBanners startIndex={0} count={2} />
 
         {/* 6. Section: Sản phẩm nổi bật */}
@@ -190,7 +150,7 @@ const HomePage = () => {
         {/* 7. Section: Sản phẩm theo hãng (Tabs Apple / Samsung / Xiaomi / OPPO) */}
         <BrandTabsSection />
 
-        {/* 8. Banner khuyến mãi phụ 2 (Miễn phí vận chuyển) */}
+        {/* 8. Thông tin vận chuyển */}
         <PromoBanners startIndex={2} count={1} />
 
         {/* 9. Section: Điện thoại mới */}

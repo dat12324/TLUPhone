@@ -1,6 +1,23 @@
 // Mock data cho Banner và Dịch vụ trên HomePage
 // Thiết kế chuẩn Schema để sau này quản lý từ Admin Backend API
 
+// Schema dữ liệu mà API Admin cần trả về cho khu vực khuyến mãi trang chủ.
+export const homePromotion = {
+  id: 'home-hot-deals',
+  title: 'Khuyến Mãi Hấp Dẫn',
+  description: 'Ưu đãi có thời hạn trong 2 ngày',
+  status: 'active',
+  startsAt: '2026-10-13T12:32:36+07:00',
+  endsAt: '2026-10-15T12:32:36+07:00',
+  products: [
+    { productId: 1, price: 34990000, originalPrice: 39990000 },
+    { productId: 2, price: 22990000, originalPrice: 24990000 },
+    { productId: 3, price: 31990000, originalPrice: 36990000 },
+    { productId: 4, price: 19990000, originalPrice: 22990000 },
+    { productId: 5, price: 9490000, originalPrice: 10990000 },
+  ],
+}
+
 export const heroBanners = [
   {
     id: 1,
@@ -92,30 +109,30 @@ export const homeBrands = [
 export const promoBanners = [
   {
     id: 'student-deal',
-    title: 'Ưu đãi Học sinh - Sinh viên',
-    subtitle: 'Giảm thêm đến 500.000₫ cho tất cả sản phẩm',
-    tag: 'BACK TO SCHOOL',
+    title: 'Tìm điện thoại phù hợp',
+    subtitle: 'Lọc theo thương hiệu, mức giá, bộ nhớ và nhu cầu sử dụng',
+    tag: 'DỄ CHỌN, DỄ SO SÁNH',
     link: '/products',
-    bgGradient: 'from-amber-500 to-rose-600',
-    iconText: '🎓',
+    tone: 'rose',
+    icon: 'phone',
   },
   {
     id: 'trade-in',
-    title: 'Thu Cũ Đổi Mới - Trợ Giá Đến 4 Triệu',
-    subtitle: 'Thủ tục định giá 5 phút, không lo bù nhiều tiền',
-    tag: 'LÊN ĐỜI DỄ DÀNG',
+    title: 'Nhiều thương hiệu điện thoại',
+    subtitle: 'Khám phá Apple, Samsung, Xiaomi, OPPO, vivo và realme',
+    tag: 'NHIỀU LỰA CHỌN',
     link: '/products',
-    bgGradient: 'from-blue-600 to-indigo-700',
-    iconText: '🔄',
+    tone: 'slate',
+    icon: 'brands',
   },
   {
     id: 'free-ship',
-    title: 'Miễn Phí Vận Chuyển Toàn Quốc',
-    subtitle: 'Giao siêu tốc 2H tại Hà Nội & TP. Hồ Chí Minh',
-    tag: 'FREESHIP 100%',
+    title: 'Miễn phí vận chuyển',
+    subtitle: 'Áp dụng cho đơn hàng từ 500K',
+    tag: 'ĐƠN TỪ 500K',
     link: '/products',
-    bgGradient: 'from-emerald-600 to-teal-700',
-    iconText: '🚀',
+    tone: 'emerald',
+    icon: 'shipping',
   },
 ]
 
@@ -123,23 +140,23 @@ export const promoBanners = [
 export const serviceCommitments = [
   {
     id: 1,
-    title: '100% Hàng Chính Hãng',
-    description: 'Đầy đủ hóa đơn VAT & tem bảo hành',
+    title: 'Chuyên điện thoại',
+    description: 'Tập trung vào các dòng smartphone',
   },
   {
     id: 2,
-    title: 'Bảo Hành 12 Tháng',
-    description: 'Đổi mới trong 30 ngày nếu lỗi NSX',
+    title: 'Thông tin rõ ràng',
+    description: 'Giá bán và cấu hình minh bạch',
   },
   {
     id: 3,
-    title: 'Giao Hàng Siêu Tốc 2H',
-    description: 'Miễn phí cho đơn hàng từ 500K',
+    title: 'Miễn phí vận chuyển',
+    description: 'Áp dụng cho đơn hàng từ 500K',
   },
   {
     id: 4,
-    title: 'Hỗ Trợ Trả Góp 0%',
-    description: 'Thủ tục online nhanh gọn, xét duyệt 5 phút',
+    title: 'Hỗ trợ mua hàng',
+    description: 'Hotline 1900 1234',
   },
 ]
 

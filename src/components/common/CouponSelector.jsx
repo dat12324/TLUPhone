@@ -93,7 +93,7 @@ const CouponSelector = ({
                       <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary text-2xl text-white"><FiGift /></span>
                       <span className="min-w-0 flex-1">
                         <strong className="block text-sm text-secondary sm:text-base">{coupon.code}</strong>
-                        <span className="mt-1 block text-sm text-blue-600">{coupon.description}</span>
+                        <span className="mt-1 block text-sm font-medium text-rose-600">{coupon.description}</span>
                         <span className={`mt-2 block text-xs ${eligible ? 'text-gray-500' : 'text-amber-600'}`}>{eligible ? 'Có thể áp dụng cho đơn hàng' : `Đơn tối thiểu ${coupon.minOrder.toLocaleString('vi-VN')}₫`}</span>
                       </span>
                       <span className={`h-5 w-5 shrink-0 rounded-full border-2 ${selected ? 'border-primary bg-primary ring-4 ring-rose-100' : 'border-gray-300 bg-white'}`} />

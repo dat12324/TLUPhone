@@ -28,13 +28,13 @@ const BrandList = () => {
           <Link
             key={b.id}
             to={`/products?brand=${encodeURIComponent(b.name)}`}
-            className="group bg-white rounded-xl border border-gray-100 p-4 flex flex-col items-center justify-center text-center hover:border-primary hover:shadow-md transition-all duration-200"
+            className="group flex flex-col items-center justify-center rounded-xl border border-slate-200 bg-white p-4 text-center transition-colors duration-200 hover:border-primary"
           >
-            <div className="w-12 h-12 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+            <div className="mb-2 flex h-12 w-12 items-center justify-center">
               <img
                 src={b.logo}
                 alt={b.name}
-                className="max-w-full max-h-full object-contain filter grayscale group-hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100"
+                className="max-h-full max-w-full object-contain opacity-90 transition-opacity group-hover:opacity-100"
                 onError={(e) => {
                   e.target.style.display = 'none'
                 }}

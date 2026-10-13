@@ -25,7 +25,7 @@ const ProductsPromoHeader = () => {
         <BannerCarousel items={iphoneBanners} interval={7000} ariaLabel="Banner iPhone" renderSlide={(banner) => <PromoCard banner={banner} />} />
         <BannerCarousel items={androidBanners} interval={7000} ariaLabel="Banner Android" renderSlide={(banner) => <PromoCard banner={banner} android />} />
       </div>
-      <h1 className="mb-4 text-2xl font-bold text-secondary md:text-3xl">Hãng</h1>
+      <h2 className="mb-4 text-2xl font-bold text-secondary md:text-3xl">Hãng</h2>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-10">
         {productBrands.map((brand) => {
           const isSelected = selectedBrand?.toLowerCase() === brand.name.toLowerCase()
