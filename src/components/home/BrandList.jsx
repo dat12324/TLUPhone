@@ -1,8 +1,21 @@
 import { Link } from 'react-router-dom'
 import { homeBrands } from '../../data/banners'
 import { FiChevronRight } from 'react-icons/fi'
+import useActiveBrands from '../../hooks/useActiveBrands'
 
 const BrandList = () => {
+  const { activeBrands, loading } = useActiveBrands()
+  const activeByName = new Map(
+    activeBrands.map((brand) => [brand.name.toLocaleLowerCase('vi-VN'), brand]),
+  )
+  const visibleBrands = homeBrands
+    .filter((brand) => activeByName.has(brand.name.toLocaleLowerCase('vi-VN')))
+    .map((brand) => ({
+      ...brand,
+      ...activeByName.get(brand.name.toLocaleLowerCase('vi-VN')),
+      logo: activeByName.get(brand.name.toLocaleLowerCase('vi-VN'))?.logo || brand.logo,
+    }))
+
   return (
     <div className="my-8">
       <div className="flex items-center justify-between mb-4">
@@ -24,10 +37,12 @@ const BrandList = () => {
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-        {homeBrands.map((b) => (
+        {loading ? Array.from({ length: 6 }).map((_, index) => (
+          <div key={index} className="h-28 animate-pulse rounded-xl border border-slate-200 bg-white" aria-hidden="true" />
+        )) : visibleBrands.map((b) => (
           <Link
             key={b.id}
-            to={`/products?brand=${encodeURIComponent(b.name)}`}
+            to={`/products?brand=${encodeURIComponent(b.slug)}`}
             className="group flex flex-col items-center justify-center rounded-xl border border-slate-200 bg-white p-4 text-center transition-colors duration-200 hover:border-primary"
           >
             <div className="mb-2 flex h-12 w-12 items-center justify-center">

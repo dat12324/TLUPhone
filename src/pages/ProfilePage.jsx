@@ -1,32 +1,20 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import {
-  FiAward,
-  FiBox,
   FiCamera,
   FiCheckCircle,
   FiChevronRight,
-  FiClock,
   FiEdit2,
   FiGrid,
-  FiHeart,
-  FiLock,
   FiLogOut,
   FiMapPin,
-  FiPackage,
   FiPlus,
   FiSave,
   FiSettings,
-  FiShield,
   FiShoppingBag,
-  FiStar,
-  FiTag,
   FiTrash2,
-  FiUser,
 } from 'react-icons/fi'
-import PasswordInput from '../components/auth/PasswordInput'
 import { useAuth } from '../context/AuthContext'
-import coupons from '../data/coupons'
 import { buildDateOfBirth, isValidEmail } from '../helpers/auth'
 import { getAddresses, saveAddresses } from '../helpers/profile'
 
@@ -71,18 +59,12 @@ const Avatar = ({ user, preview, large = false }) => {
 const menuItems = [
   { id: 'overview', label: 'Tổng quan', icon: FiGrid },
   { id: 'orders', label: 'Lịch sử mua hàng', icon: FiShoppingBag, to: '/orders' },
-  { id: 'warranty', label: 'Tra cứu bảo hành', icon: FiShield },
-  { id: 'membership', label: 'Hạng thành viên', icon: FiAward },
-  { id: 'vouchers', label: 'Voucher của tôi', icon: FiTag },
-  { id: 'favorites', label: 'Sản phẩm yêu thích', icon: FiHeart },
-  { id: 'reviews', label: 'Đánh giá của tôi', icon: FiStar },
   { id: 'account', label: 'Thông tin tài khoản', icon: FiSettings },
 ]
 
 const quickItems = [
-  ...menuItems.filter((item) => ['membership', 'vouchers', 'orders'].includes(item.id)),
+  ...menuItems.filter((item) => ['orders', 'account'].includes(item.id)),
   { id: 'address-shortcut', view: 'account', label: 'Sổ địa chỉ', icon: FiMapPin },
-  ...menuItems.filter((item) => ['warranty', 'favorites'].includes(item.id)),
 ]
 
 const EmptyState = ({ icon: Icon, title, description, action }) => (
@@ -104,12 +86,6 @@ const Panel = ({ title, action, children, className = '' }) => (
   </section>
 )
 
-const ActionLink = ({ children, onClick }) => (
-  <button type="button" onClick={onClick} className="inline-flex items-center gap-1 text-sm font-semibold text-primary transition hover:text-rose-700">
-    {children}<FiChevronRight />
-  </button>
-)
-
 const ProfilePage = () => {
   const { user, isAuthenticated, updateProfile, logout } = useAuth()
   const navigate = useNavigate()
@@ -122,11 +98,7 @@ const ProfilePage = () => {
   const [addressForm, setAddressForm] = useState(() => emptyAddress(user))
   const [isAddressFormOpen, setIsAddressFormOpen] = useState(false)
   const [addressError, setAddressError] = useState('')
-  const [passwordForm, setPasswordForm] = useState({ current: '', next: '', confirm: '' })
-  const [passwordError, setPasswordError] = useState('')
-  const [passwordStatus, setPasswordStatus] = useState('')
-
-  const activeCoupons = useMemo(() => coupons.filter((coupon) => coupon.active), [])
+  const [pendingDeleteAddressId, setPendingDeleteAddressId] = useState(null)
 
   useEffect(() => {
     if (!user) return
@@ -192,6 +164,7 @@ const ProfilePage = () => {
   const openNewAddress = () => {
     setAddressForm({ ...emptyAddress(user), isDefault: addresses.length === 0 })
     setAddressError('')
+    setPendingDeleteAddressId(null)
     setIsAddressFormOpen(true)
   }
 
@@ -209,13 +182,15 @@ const ProfilePage = () => {
     saveAddresses(user.phone, next)
     setIsAddressFormOpen(false)
     setAddressError('')
+    setPendingDeleteAddressId(null)
   }
 
-  const deleteAddress = (id) => {
+  const confirmDeleteAddress = (id) => {
     let next = addresses.filter((item) => item.id !== id)
     if (next.length && !next.some((item) => item.isDefault)) next = next.map((item, index) => ({ ...item, isDefault: index === 0 }))
     setAddresses(next)
     saveAddresses(user.phone, next)
+    setPendingDeleteAddressId(null)
   }
 
   const setDefaultAddress = (id) => {
@@ -224,44 +199,40 @@ const ProfilePage = () => {
     saveAddresses(user.phone, next)
   }
 
-  const handlePasswordSubmit = (event) => {
-    event.preventDefault()
-    if (!passwordForm.current || !passwordForm.next || !passwordForm.confirm) setPasswordError('Vui lòng nhập đầy đủ các trường mật khẩu.')
-    else if (passwordForm.next.length < 8) setPasswordError('Mật khẩu mới phải có ít nhất 8 ký tự.')
-    else if (passwordForm.next !== passwordForm.confirm) setPasswordError('Xác nhận mật khẩu không trùng khớp.')
-    else {
-      setPasswordError('')
-      setPasswordStatus('Thông tin hợp lệ. Tính năng sẽ hoạt động khi kết nối Backend.')
-      setPasswordForm({ current: '', next: '', confirm: '' })
-    }
-  }
-
   const overview = (
     <div className="space-y-5">
       <h1 className="text-2xl font-bold text-secondary sm:text-3xl">Tổng quan</h1>
-      <div className="grid gap-3 sm:grid-cols-3">
-        {[
-          { icon: FiBox, value: 0, label: 'Đơn đang xử lý', color: 'bg-blue-50 text-blue-600' },
-          { icon: FiTag, value: activeCoupons.length, label: 'Voucher khả dụng', color: 'bg-violet-50 text-violet-600' },
-          { icon: FiStar, value: 0, label: 'Sản phẩm chờ đánh giá', color: 'bg-emerald-50 text-emerald-600' },
-        ].map(({ icon: Icon, value, label, color }) => (
-          <div key={label} className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-xl ${color}`}><Icon /></span>
-            <div><strong className="block text-2xl leading-none text-secondary">{value}</strong><span className="mt-1 block text-sm text-slate-500">{label}</span></div>
-          </div>
-        ))}
-      </div>
-      <Panel title="Đơn hàng gần đây" action={<Link to="/orders" className="inline-flex items-center gap-1 text-sm font-semibold text-primary">Xem tất cả <FiChevronRight /></Link>}>
-        <EmptyState icon={FiShoppingBag} title="Chưa có đơn hàng nào" description="Đơn hàng gần nhất của bạn sẽ xuất hiện tại đây." action={<Link to="/products" className="mt-4 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white">Mua sắm ngay</Link>} />
+      <Panel title="Quản lý tài khoản">
+        <p className="text-sm leading-6 text-slate-500">
+          Cập nhật thông tin nhận hàng, ảnh đại diện và các địa chỉ thường dùng của bạn.
+        </p>
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <button
+            type="button"
+            onClick={() => selectView('account')}
+            className="flex min-h-14 items-center justify-between rounded-xl border border-slate-200 px-4 text-left text-sm font-semibold text-secondary transition-colors hover:border-rose-200 hover:bg-rose-50"
+          >
+            Thông tin tài khoản
+            <FiChevronRight aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            onClick={() => handleMenuClick({ id: 'address-shortcut', view: 'account' })}
+            className="flex min-h-14 items-center justify-between rounded-xl border border-slate-200 px-4 text-left text-sm font-semibold text-secondary transition-colors hover:border-rose-200 hover:bg-rose-50"
+          >
+            Sổ địa chỉ
+            <FiChevronRight aria-hidden="true" />
+          </button>
+        </div>
       </Panel>
-      <div className="grid gap-5 md:grid-cols-2">
-        <Panel title="Voucher của tôi" action={<ActionLink onClick={() => selectView('vouchers')}>Xem tất cả</ActionLink>}>
-          <div className="flex items-center gap-3 text-sm text-slate-500"><FiTag /> Bạn có {activeCoupons.length} voucher đang khả dụng.</div>
-        </Panel>
-        <Panel title="Sản phẩm yêu thích" action={<ActionLink onClick={() => selectView('favorites')}>Xem tất cả</ActionLink>}>
-          <div className="flex items-center gap-3 text-sm text-slate-500"><FiHeart /> Chưa có sản phẩm yêu thích.</div>
-        </Panel>
-      </div>
+      <Panel
+        title="Lịch sử mua hàng"
+        action={<Link to="/orders" className="inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-primary">Xem đơn hàng <FiChevronRight aria-hidden="true" /></Link>}
+      >
+        <p className="text-sm leading-6 text-slate-500">
+          Theo dõi trạng thái các đơn hàng đã đặt tại TLUPhone.
+        </p>
+      </Panel>
     </div>
   )
 
@@ -269,7 +240,7 @@ const ProfilePage = () => {
     <div id="address-book" className="scroll-mt-24">
       <Panel
       title="Sổ địa chỉ"
-      action={<button onClick={openNewAddress} className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white"><FiPlus /> Thêm địa chỉ</button>}
+      action={<button type="button" onClick={openNewAddress} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-primary px-4 text-sm font-semibold text-white"><FiPlus aria-hidden="true" /> Thêm địa chỉ</button>}
     >
       <p className="-mt-3 mb-5 text-sm text-slate-500">{addresses.length} địa chỉ đã lưu</p>
       {isAddressFormOpen && (
@@ -286,7 +257,87 @@ const ProfilePage = () => {
         <EmptyState icon={FiMapPin} title="Chưa có địa chỉ giao hàng" description="Thêm địa chỉ để thanh toán nhanh hơn trong lần mua tiếp theo." />
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
-          {addresses.map((address) => <div key={address.id} className="rounded-xl border border-slate-200 p-4"><div className="flex justify-between gap-3"><div><div className="flex flex-wrap items-center gap-2"><strong>{address.receiverName}</strong>{address.isDefault && <span className="rounded-full bg-rose-50 px-2 py-0.5 text-xs font-semibold text-primary">Mặc định</span>}</div><p className="mt-1 text-sm text-slate-600">{address.phone}</p><p className="mt-2 text-sm leading-6 text-slate-500">{address.detailAddress}, {address.ward}, {address.district}, {address.province}</p></div><div className="flex shrink-0"><button onClick={() => { setAddressForm({ ...address }); setIsAddressFormOpen(true) }} className="h-9 w-9 text-slate-400 hover:text-primary" aria-label="Sửa"><FiEdit2 /></button><button onClick={() => deleteAddress(address.id)} className="h-9 w-9 text-slate-400 hover:text-red-600" aria-label="Xóa"><FiTrash2 /></button></div></div>{!address.isDefault && <button onClick={() => setDefaultAddress(address.id)} className="mt-4 text-xs font-semibold text-primary">Đặt làm mặc định</button>}</div>)}
+          {addresses.map((address) => (
+            <div key={address.id} className="rounded-xl border border-slate-200 p-4">
+              <div className="flex justify-between gap-3">
+                <div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <strong>{address.receiverName}</strong>
+                    {address.isDefault && (
+                      <span className="rounded-full bg-rose-50 px-2 py-0.5 text-xs font-semibold text-primary">
+                        Mặc định
+                      </span>
+                    )}
+                  </div>
+                  <p className="mt-1 text-sm text-slate-600">{address.phone}</p>
+                  <p className="mt-2 text-sm leading-6 text-slate-500">
+                    {address.detailAddress}, {address.ward}, {address.district}, {address.province}
+                  </p>
+                </div>
+                <div className="flex shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAddressForm({ ...address })
+                      setPendingDeleteAddressId(null)
+                      setIsAddressFormOpen(true)
+                    }}
+                    className="flex h-11 w-11 items-center justify-center text-slate-400 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                    aria-label={`Sửa địa chỉ của ${address.receiverName}`}
+                  >
+                    <FiEdit2 aria-hidden="true" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPendingDeleteAddressId(address.id)}
+                    className="flex h-11 w-11 items-center justify-center text-slate-400 transition-colors hover:text-red-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+                    aria-label={`Xóa địa chỉ của ${address.receiverName}`}
+                  >
+                    <FiTrash2 aria-hidden="true" />
+                  </button>
+                </div>
+              </div>
+
+              {pendingDeleteAddressId === address.id && (
+                <div
+                  role="alertdialog"
+                  aria-labelledby={`delete-address-${address.id}`}
+                  className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3"
+                >
+                  <p id={`delete-address-${address.id}`} className="text-sm font-semibold text-red-700">
+                    Bạn chắc chắn muốn xóa địa chỉ này?
+                  </p>
+                  <p className="mt-1 text-xs text-red-600">Thao tác này không thể hoàn tác.</p>
+                  <div className="mt-3 flex justify-end gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setPendingDeleteAddressId(null)}
+                      className="min-h-11 rounded-lg border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-600"
+                    >
+                      Giữ lại
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => confirmDeleteAddress(address.id)}
+                      className="min-h-11 rounded-lg bg-red-600 px-4 text-sm font-semibold text-white hover:bg-red-700"
+                    >
+                      Xóa địa chỉ
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {!address.isDefault && pendingDeleteAddressId !== address.id && (
+                <button
+                  type="button"
+                  onClick={() => setDefaultAddress(address.id)}
+                  className="mt-3 min-h-11 text-xs font-semibold text-primary"
+                >
+                  Đặt làm mặc định
+                </button>
+              )}
+            </div>
+          ))}
         </div>
       )}
       </Panel>
@@ -313,29 +364,10 @@ const ProfilePage = () => {
             <div className="mt-6 flex items-center gap-3"><button className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white hover:bg-rose-700"><FiSave /> Lưu thay đổi</button>{profileStatus && <span className="flex items-center gap-1 text-sm text-emerald-600"><FiCheckCircle /> {profileStatus}</span>}</div>
           </form>
         </Panel>
-        <Panel title="Đổi mật khẩu">
-          <form onSubmit={handlePasswordSubmit} className="grid gap-4 sm:grid-cols-2">
-            <PasswordInput id="current-password" name="current" label="Mật khẩu hiện tại" value={passwordForm.current} onChange={(e) => setPasswordForm({ ...passwordForm, current: e.target.value })} />
-            <PasswordInput id="new-password" name="next" label="Mật khẩu mới" value={passwordForm.next} onChange={(e) => setPasswordForm({ ...passwordForm, next: e.target.value })} />
-            <PasswordInput id="confirm-password" name="confirm" label="Xác nhận mật khẩu" value={passwordForm.confirm} onChange={(e) => setPasswordForm({ ...passwordForm, confirm: e.target.value })} />
-            <div className="flex items-end"><button className="rounded-xl border border-primary px-5 py-3 text-sm font-semibold text-primary hover:bg-rose-50">Đổi mật khẩu</button></div>
-            {passwordError && <p className="text-sm text-red-600 sm:col-span-2">{passwordError}</p>}{passwordStatus && <p className="text-sm text-emerald-600 sm:col-span-2">{passwordStatus}</p>}
-          </form>
-        </Panel>
         {addressBook}
       </div>
     )
-    if (activeView === 'vouchers') return (
-      <div className="space-y-5"><h1 className="text-2xl font-bold text-secondary sm:text-3xl">Voucher của tôi</h1><div className="grid gap-4 sm:grid-cols-2">{activeCoupons.map((coupon) => <div key={coupon.id} className="relative overflow-hidden rounded-2xl border border-rose-100 bg-white p-5 shadow-sm"><span className="absolute bottom-0 left-0 top-0 w-1.5 bg-primary" /><div className="flex gap-4"><span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-rose-50 text-xl text-primary"><FiTag /></span><div><strong className="text-lg text-secondary">{coupon.code}</strong><p className="mt-1 text-sm text-slate-600">{coupon.description}</p><p className="mt-2 text-xs text-slate-400">Đơn tối thiểu {coupon.minOrder.toLocaleString('vi-VN')}₫</p></div></div></div>)}</div></div>
-    )
-    const emptyViews = {
-      warranty: [FiShield, 'Tra cứu bảo hành', 'Chưa có sản phẩm bảo hành', 'Sản phẩm đã mua và còn thời hạn bảo hành sẽ hiển thị tại đây.'],
-      membership: [FiAward, 'Hạng thành viên', 'Bạn đang ở hạng New', 'Hoàn tất đơn hàng đầu tiên để bắt đầu tích điểm và lên hạng.'],
-      favorites: [FiHeart, 'Sản phẩm yêu thích', 'Chưa có sản phẩm yêu thích', 'Nhấn biểu tượng trái tim ở sản phẩm để lưu lại tại đây.'],
-      reviews: [FiStar, 'Đánh giá của tôi', 'Chưa có đánh giá nào', 'Sau khi nhận hàng, bạn có thể chia sẻ trải nghiệm về sản phẩm.'],
-    }
-    const [Icon, heading, title, description] = emptyViews[activeView]
-    return <div className="space-y-5"><h1 className="text-2xl font-bold text-secondary sm:text-3xl">{heading}</h1><Panel title={heading}><EmptyState icon={Icon} title={title} description={description} /></Panel></div>
+    return overview
   }
 
   return (
@@ -343,17 +375,33 @@ const ProfilePage = () => {
       <div className="container mx-auto max-w-7xl px-4">
         <section className="mb-5 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
           <div className="grid gap-6 p-5 sm:p-6 lg:grid-cols-[1.2fr_1fr] lg:items-center">
-            <div className="flex flex-wrap items-center gap-5">
+            <div className="flex items-center gap-4 sm:gap-5">
               <Avatar user={user} preview={avatarPreview} />
-              <div className="min-w-36"><p className="text-lg font-bold text-secondary">{user.fullName}</p><p className="text-sm text-slate-500">{user.phone}</p><span className="mt-2 inline-flex rounded-md bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-600">New</span></div>
-              <div className="border-l border-slate-100 pl-5"><p className="text-sm text-slate-500">Đơn đã mua</p><strong className="text-3xl text-secondary">0</strong></div>
-              <div><p className="text-sm text-slate-500">Điểm tích lũy</p><strong className="text-3xl text-secondary">0 <span className="text-sm font-normal text-slate-500">điểm</span></strong><p className="mt-1 flex items-center gap-1 text-xs text-slate-400"><FiClock /> Hết hạn 31/12/2027</p></div>
+              <div className="min-w-0">
+                <p className="truncate text-lg font-bold text-secondary">{user.fullName}</p>
+                <p className="mt-0.5 text-sm text-slate-500">{user.phone}</p>
+                <p className="mt-0.5 truncate text-sm text-slate-500">
+                  {user.email || 'Chưa cập nhật email'}
+                </p>
+              </div>
             </div>
-            <div className="rounded-xl bg-slate-50 p-4"><div className="h-2 overflow-hidden rounded-full bg-slate-200"><span className="block h-full w-[4%] rounded-full bg-primary" /></div><p className="mt-3 flex items-center gap-2 text-sm text-slate-500"><FiShoppingBag /> Mua đơn hàng đầu tiên để lên hạng <strong>Silver</strong></p></div>
+            <div className="flex flex-col items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm leading-6 text-slate-600">
+                Hoàn thiện thông tin để mua hàng và nhận hàng thuận tiện hơn.
+              </p>
+              <button
+                type="button"
+                onClick={() => selectView('account')}
+                className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-xl bg-primary px-4 text-sm font-semibold text-white transition-colors hover:bg-rose-700"
+              >
+                <FiSettings aria-hidden="true" />
+                Cập nhật
+              </button>
+            </div>
           </div>
         </section>
 
-        <nav className="mb-6 flex snap-x gap-2 overflow-x-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-sm lg:grid lg:grid-cols-6" aria-label="Truy cập nhanh">
+        <nav className="mb-6 flex snap-x gap-2 overflow-x-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-sm lg:grid lg:grid-cols-3" aria-label="Truy cập nhanh">
           {quickItems.map((item) => <button key={item.id} onClick={() => handleMenuClick(item)} className="flex min-w-max snap-start items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-secondary transition hover:bg-rose-50 hover:text-primary lg:justify-center"><span className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-50 text-primary"><item.icon /></span>{item.label}</button>)}
         </nav>
 

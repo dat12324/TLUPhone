@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FiZap, FiStar, FiAward, FiChevronRight } from 'react-icons/fi'
 import HeroBanner from '../components/home/HeroBanner'
@@ -8,47 +8,63 @@ import PromoBanners from '../components/home/PromoBanners'
 import BrandTabsSection from '../components/home/BrandTabsSection'
 import PromotionCountdown from '../components/home/PromotionCountdown'
 import ProductCard from '../components/ProductCard'
-import products from '../data/products'
 import { usePromotion } from '../context/PromotionContext'
+import { getProducts } from '../services/catalogService'
 
 const HomePage = () => {
   const {
     promotion,
     phase: promotionPhase,
     promotionItems,
-    applyPromotionToProduct,
   } = usePromotion()
+  const [catalog, setCatalog] = useState({
+    hotDeals: [],
+    featured: [],
+    newest: [],
+  })
+  const [catalogLoading, setCatalogLoading] = useState(true)
+  const [catalogError, setCatalogError] = useState('')
+  const [retryKey, setRetryKey] = useState(0)
 
-  // 1. Sản phẩm khuyến mãi hấp dẫn (có giảm giá hoặc isHotDeal)
-  const hotDealProducts = useMemo(() => {
-    if (promotionItems.length > 0) {
-      if (promotionPhase !== 'active') return []
+  useEffect(() => {
+    const controller = new AbortController()
 
-      return promotionItems
-        .map((item) => products.find((product) => String(product.id) === String(item.productId)))
-        .filter(Boolean)
-        .map(applyPromotionToProduct)
-        .slice(0, 5)
+    const loadCatalog = async () => {
+      setCatalogLoading(true)
+      setCatalogError('')
+
+      try {
+        const [hotDeals, featured, newest] = await Promise.all([
+          getProducts({ hotDeal: true, page: 1, limit: 5 }, { signal: controller.signal }),
+          getProducts(
+            { featured: true, page: 1, limit: 8, sort: 'rating_desc' },
+            { signal: controller.signal },
+          ),
+          getProducts({ isNew: true, page: 1, limit: 4, sort: 'newest' }, { signal: controller.signal }),
+        ])
+
+        setCatalog({
+          hotDeals: hotDeals.items,
+          featured: featured.items,
+          newest: newest.items,
+        })
+      } catch (error) {
+        if (error.name !== 'AbortError') {
+          setCatalogError(error.message || 'Không thể tải sản phẩm từ máy chủ.')
+        }
+      } finally {
+        if (!controller.signal.aborted) setCatalogLoading(false)
+      }
     }
 
-    return products
-      .filter((p) => p.isHotDeal || (p.originalPrice && p.originalPrice > p.price))
-      .slice(0, 5)
-  }, [promotionItems, promotionPhase, applyPromotionToProduct])
+    loadCatalog()
+    return () => controller.abort()
+  }, [retryKey])
 
-  // 2. Sản phẩm nổi bật (isFeatured)
-  const featuredProducts = useMemo(() => {
-    return products
-      .filter((p) => p.isFeatured || p.rating >= 4.6)
-      .slice(0, 8)
-  }, [])
-
-  // 3. Sản phẩm mới ra mắt (isNew)
-  const newProducts = useMemo(() => {
-    return products
-      .filter((p) => p.isNew || p.id <= 6)
-      .slice(0, 4)
-  }, [])
+  const hotDealProducts = catalog.hotDeals
+  const featuredProducts = catalog.featured
+  const newProducts = catalog.newest
+  const hasActivePromotion = promotionItems.length > 0 && promotionPhase === 'active'
 
   return (
     <div className="bg-slate-50 min-h-screen pb-16">
@@ -62,6 +78,27 @@ const HomePage = () => {
         {/* 3. Danh mục / Hãng điện thoại */}
         <BrandList />
 
+        {catalogLoading && (
+          <div className="my-10 grid grid-cols-2 gap-4 md:grid-cols-4" aria-label="Đang tải sản phẩm">
+            {[0, 1, 2, 3].map((item) => (
+              <div key={item} className="h-72 animate-pulse rounded-2xl bg-white" />
+            ))}
+          </div>
+        )}
+
+        {catalogError && (
+          <div className="my-10 rounded-2xl border border-rose-200 bg-white p-6 text-center">
+            <p className="text-sm text-gray-600">{catalogError}</p>
+            <button
+              type="button"
+              onClick={() => setRetryKey((value) => value + 1)}
+              className="mt-3 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white"
+            >
+              Thử lại
+            </button>
+          </div>
+        )}
+
         {/* 4. Section: Khuyến mãi hấp dẫn (Flash Sale / Hot Deals) */}
         {hotDealProducts.length > 0 && (
           <section className="my-10 rounded-2xl border border-rose-700 bg-primary p-5 text-white md:p-7">
@@ -73,20 +110,20 @@ const HomePage = () => {
                 <div>
                   <div className="flex items-center gap-2">
                     <h2 className="text-xl md:text-2xl font-extrabold tracking-tight">
-                      {promotionItems.length > 0 ? promotion.title : 'Khuyến Mãi Hấp Dẫn'}
+                      {hasActivePromotion ? promotion.title : 'Khuyến Mãi Hấp Dẫn'}
                     </h2>
                     <span className="bg-amber-400 text-secondary text-[11px] font-extrabold px-2 py-0.5 rounded-md uppercase">
                       HOT DEAL
                     </span>
                   </div>
                   <p className="text-xs md:text-sm text-white/80 mt-0.5">
-                    {promotionItems.length > 0
+                    {hasActivePromotion
                       ? promotion.description
                       : 'Các sản phẩm đang có giá thấp hơn giá niêm yết'}
                   </p>
                 </div>
               </div>
-              {promotionItems.length > 0 && (
+              {hasActivePromotion && (
                 <PromotionCountdown promotion={promotion} />
               )}
             </div>
@@ -94,7 +131,7 @@ const HomePage = () => {
             {/* Grid sản phẩm Khuyến mãi */}
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
               {hotDealProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product.databaseId || product.id} product={product} />
               ))}
             </div>
 
@@ -141,7 +178,7 @@ const HomePage = () => {
 
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {featuredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product.databaseId || product.id} product={product} />
               ))}
             </div>
           </section>
@@ -181,7 +218,7 @@ const HomePage = () => {
 
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {newProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product.databaseId || product.id} product={product} />
               ))}
             </div>
           </section>

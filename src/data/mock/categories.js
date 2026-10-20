@@ -1,0 +1,32 @@
+export const mockCategories = [
+  {
+    id: 'category_001',
+    name: 'Điện thoại thông minh',
+    code: 'SMARTPHONE',
+    slug: 'dien-thoai-thong-minh',
+    description: 'Các dòng điện thoại thông minh được kinh doanh tại TLUPhone.',
+    status: 'active',
+    createdAt: '2026-10-01T08:00:00.000Z',
+    updatedAt: '2026-10-01T08:00:00.000Z',
+  },
+  {
+    id: 'category_002',
+    name: 'Điện thoại phổ thông',
+    code: 'FEATURE_PHONE',
+    slug: 'dien-thoai-pho-thong',
+    description: 'Các dòng điện thoại cơ bản, tập trung vào nhu cầu nghe gọi và thời lượng pin.',
+    status: 'active',
+    createdAt: '2026-10-01T08:00:00.000Z',
+    updatedAt: '2026-10-01T08:00:00.000Z',
+  },
+  {
+    id: 'category_003',
+    name: 'Điện thoại gập',
+    code: 'FOLDABLE_PHONE',
+    slug: 'dien-thoai-gap',
+    description: 'Các dòng smartphone có thiết kế màn hình gập.',
+    status: 'active',
+    createdAt: '2026-10-01T08:00:00.000Z',
+    updatedAt: '2026-10-01T08:00:00.000Z',
+  },
+]

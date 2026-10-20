@@ -13,6 +13,9 @@ const authPaths = ['/login', '/register', '/forgot-password']
 const AppLayout = () => {
   const { pathname } = useLocation()
   const isAuthPage = authPaths.includes(pathname)
+  const isAdminPage = pathname === '/admin' || pathname.startsWith('/admin/')
+
+  if (isAdminPage) return <AppRoutes />
 
   return (
     <div className={isAuthPage ? 'min-h-screen' : 'min-h-screen flex flex-col'}>

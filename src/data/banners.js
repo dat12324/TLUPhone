@@ -8,7 +8,7 @@ export const homePromotion = {
   description: 'Ưu đãi có thời hạn trong 2 ngày',
   status: 'active',
   startsAt: '2026-10-13T12:32:36+07:00',
-  endsAt: '2026-10-15T12:32:36+07:00',
+  endsAt: '2026-10-16T12:32:36+07:00',
   products: [
     { productId: 1, price: 34990000, originalPrice: 39990000 },
     { productId: 2, price: 22990000, originalPrice: 24990000 },
@@ -21,14 +21,25 @@ export const homePromotion = {
 export const heroBanners = [
   {
     id: 1,
-    title: 'iPhone 15 Pro Max',
-    subtitle: 'Khung viền Titan hàng không vũ trụ • Chip A17 Pro đỉnh cao',
+    title: 'iPhone 18 Pro Max',
+    subtitle: 'Màn hình 6.9 inch • Chip Apple A20 Pro mạnh mẽ',
     tag: 'SIÊU PHẨM MỚI',
-    priceText: 'Chỉ từ 34.990.000₫',
-    image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15-pro-max_3.png',
-    link: '/products/1',
+    priceText: 'Chỉ từ 41.990.000₫',
+    image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:500:500/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-18-pro-01_4.png',
+    link: '/products/1003',
     bgColor: 'from-slate-900 via-slate-800 to-rose-950',
     btnText: 'Khám phá ngay',
+  },
+  {
+    id: 5,
+    title: 'iPhone Duo',
+    subtitle: 'Thiết kế gập 7.6 inch • Không gian hiển thị đột phá',
+    tag: 'SẮP VỀ HÀNG',
+    priceText: 'Dự kiến 64.990.000₫',
+    image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-duo-01.jpg',
+    link: '/products/1143',
+    bgColor: 'from-slate-950 via-indigo-950 to-violet-950',
+    btnText: 'Xem trước sản phẩm',
   },
   {
     id: 2,
@@ -36,7 +47,7 @@ export const heroBanners = [
     subtitle: 'Quyền năng Galaxy AI • Camera 200MP zoom siêu rõ nét',
     tag: 'GALAXY AI ĐỘT PHÁ',
     priceText: 'Chỉ từ 31.990.000₫',
-    image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-s24-ultra_-1_1.png',
+    image: 'https://cdn2.cellphones.com.vn/358x/media/catalog/product/g/a/galaxy-s24-ultra-den-1_1_3.png',
     link: '/products/3',
     bgColor: 'from-slate-950 via-zinc-900 to-blue-950',
     btnText: 'Mua ngay',
@@ -170,11 +181,11 @@ export const productBrands = [
 ]
 
 export const iphoneBanners = [
-  { title: 'iPhone 15 Pro Max', image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:600:600/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15-pro-max_3.png', link: '/products/1' },
-  { title: 'iPhone 15', image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:600:600/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15-plus_1_.png', link: '/products/2' },
+  { title: 'iPhone 15 Pro Max', image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:600:600/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15-pro-max_3.png', link: '/products/iphone-15-pro-max' },
+  { title: 'iPhone 15', image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:600:600/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-15-plus_1_.png', link: '/products/iphone-15' },
 ]
 
 export const androidBanners = [
-  { title: 'Xiaomi 14 Ultra', image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/x/i/xiaomi-14-ultra_1__1.png', link: '/products/6' },
-  { title: 'Galaxy S24 Ultra', image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-s24-ultra_-1_1.png', link: '/products/3' },
+  { title: 'Xiaomi 14 Ultra', image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/x/i/xiaomi-14-ultra_1__1.png', link: '/products?brand=xiaomi' },
+  { title: 'Galaxy S24 Ultra', image: 'https://cdn2.cellphones.com.vn/358x/media/catalog/product/g/a/galaxy-s24-ultra-den-1_1_3.png', link: '/products/samsung-galaxy-s24-ultra' },
 ]

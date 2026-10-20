@@ -134,7 +134,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-18-pro.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-18-pro.html",
+    "stockByCombination": {
+      "v1001_c141674": 17,
+      "v1001_c141681": 7,
+      "v1001_c141682": 20,
+      "v1001_c141671": 10
+    }
   },
   {
     "id": 1002,
@@ -258,7 +264,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-17-pro.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-17-pro.html",
+    "stockByCombination": {
+      "v1002_c112599": 11,
+      "v1002_c112597": 24,
+      "v1002_c112596": 14
+    }
   },
   {
     "id": 1003,
@@ -395,7 +406,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-18-pro-max.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-18-pro-max.html",
+    "stockByCombination": {
+      "v1003_c141687": 5,
+      "v1003_c141689": 18,
+      "v1003_c141693": 8,
+      "v1003_c141690": 0
+    }
   },
   {
     "id": 1004,
@@ -534,7 +551,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s26-ultra.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s26-ultra.html",
+    "stockByCombination": {
+      "v1004_c125129": 0,
+      "v1004_c125130": 12,
+      "v1004_c125134": 25,
+      "v1004_c125136": 15
+    }
   },
   {
     "id": 1005,
@@ -660,7 +683,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-17-pro-max.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-17-pro-max.html",
+    "stockByCombination": {
+      "v1005_c112617": 16,
+      "v1005_c112613": 6,
+      "v1005_c112615": 19
+    }
   },
   {
     "id": 1006,
@@ -808,7 +836,14 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-17-256gb.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-17-256gb.html",
+    "stockByCombination": {
+      "v1006_c112595": 10,
+      "v1006_c112602": 23,
+      "v1006_c112600": 13,
+      "v1006_c112601": 3,
+      "v1006_c112598": 16
+    }
   },
   {
     "id": 1007,
@@ -941,7 +976,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-18-pro-max-2tb.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-18-pro-max-2tb.html",
+    "stockByCombination": {
+      "v1007_c141709": 4,
+      "v1007_c141710": 17,
+      "v1007_c141711": 0,
+      "v1007_c141712": 20
+    }
   },
   {
     "id": 1008,
@@ -1070,7 +1111,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-reno16-f.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-reno16-f.html",
+    "stockByCombination": {
+      "v1008_c135066": 21,
+      "v1008_c135065": 11,
+      "v1008_c135067": 24
+    }
   },
   {
     "id": 1009,
@@ -1195,7 +1241,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s26-fe.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s26-fe.html",
+    "stockByCombination": {
+      "v1009_c140843": 15,
+      "v1009_c140841": 5,
+      "v1009_c140846": 18
+    }
   },
   {
     "id": 1010,
@@ -1323,7 +1374,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-z-fold-8-ultra.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-z-fold-8-ultra.html",
+    "stockByCombination": {
+      "v1010_c137053": 9,
+      "v1010_c137051": 22,
+      "v1010_c137052": 12
+    }
   },
   {
     "id": 1011,
@@ -1438,7 +1494,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-poco-f9-ultra.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-poco-f9-ultra.html",
+    "stockByCombination": {
+      "v1011_c141232": 3,
+      "v1011_c141233": 0
+    }
   },
   {
     "id": 1012,
@@ -1573,7 +1633,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-a57.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-a57.html",
+    "stockByCombination": {
+      "v1012_c127128": 20,
+      "v1012_c127132": 10,
+      "v1012_c127130": 23,
+      "v1012_c127129": 13
+    }
   },
   {
     "id": 1013,
@@ -1695,7 +1761,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-poco-x8-pro-max.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-poco-x8-pro-max.html",
+    "stockByCombination": {
+      "v1013_c126976": 14,
+      "v1013_c126975": 4,
+      "v1013_c126977": 17
+    }
   },
   {
     "id": 1014,
@@ -1830,7 +1901,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-a37.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-a37.html",
+    "stockByCombination": {
+      "v1014_c127140": 8,
+      "v1014_c127139": 21,
+      "v1014_c127136": 11,
+      "v1014_c127138": 0
+    }
   },
   {
     "id": 1015,
@@ -1971,7 +2048,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-air-256gb.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-air-256gb.html",
+    "stockByCombination": {
+      "v1015_c112636": 0,
+      "v1015_c112634": 15,
+      "v1015_c112638": 5,
+      "v1015_c112639": 18
+    }
   },
   {
     "id": 1016,
@@ -2095,7 +2178,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-17-pro-max-512gb.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-17-pro-max-512gb.html",
+    "stockByCombination": {
+      "v1016_c112623": 19,
+      "v1016_c112624": 9,
+      "v1016_c112621": 22
+    }
   },
   {
     "id": 1017,
@@ -2225,7 +2313,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-note-17.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-note-17.html",
+    "stockByCombination": {
+      "v1017_c139660": 13,
+      "v1017_c139661": 3,
+      "v1017_c139662": 16
+    }
   },
   {
     "id": 1018,
@@ -2358,7 +2451,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s25-ultra.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s25-ultra.html",
+    "stockByCombination": {
+      "v1018_c98491": 7,
+      "v1018_c98490": 20,
+      "v1018_c98489": 0,
+      "v1018_c98488": 23
+    }
   },
   {
     "id": 1019,
@@ -2495,7 +2594,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-18-pro-2tb.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-18-pro-2tb.html",
+    "stockByCombination": {
+      "v1019_c141691": 24,
+      "v1019_c141697": 14,
+      "v1019_c141695": 4,
+      "v1019_c141696": 17
+    }
   },
   {
     "id": 1020,
@@ -2634,7 +2739,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-16-pro-max.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-16-pro-max.html",
+    "stockByCombination": {
+      "v1020_c90171": 18,
+      "v1020_c90169": 8,
+      "v1020_c90170": 21,
+      "v1020_c90172": 11
+    }
   },
   {
     "id": 1021,
@@ -2767,7 +2878,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-find-x9s.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-find-x9s.html",
+    "stockByCombination": {
+      "v1021_c130010": 12,
+      "v1021_c130012": 25,
+      "v1021_c130011": 15
+    }
   },
   {
     "id": 1022,
@@ -2896,7 +3012,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-z-fold-8.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-z-fold-8.html",
+    "stockByCombination": {
+      "v1022_c137030": 6,
+      "v1022_c137028": 0,
+      "v1022_c137029": 9
+    }
   },
   {
     "id": 1023,
@@ -3025,7 +3146,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-note-17-pro-max-5g.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-note-17-pro-max-5g.html",
+    "stockByCombination": {
+      "v1023_c139659": 23,
+      "v1023_c139658": 13,
+      "v1023_c139657": 3
+    }
   },
   {
     "id": 1024,
@@ -3172,7 +3298,14 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-15.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-15.html",
+    "stockByCombination": {
+      "v1024_c68887": 17,
+      "v1024_c68894": 7,
+      "v1024_c68892": 20,
+      "v1024_c68889": 10,
+      "v1024_c68893": 23
+    }
   },
   {
     "id": 1025,
@@ -3292,7 +3425,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-neo-5-5g.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-neo-5-5g.html",
+    "stockByCombination": {
+      "v1025_c130168": 11,
+      "v1025_c130161": 24,
+      "v1025_c130165": 14
+    }
   },
   {
     "id": 1026,
@@ -3432,7 +3570,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s25-fe.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s25-fe.html",
+    "stockByCombination": {
+      "v1026_c112190": 0,
+      "v1026_c112191": 18,
+      "v1026_c112192": 8,
+      "v1026_c112193": 21
+    }
   },
   {
     "id": 1027,
@@ -3565,7 +3709,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-a17-5g.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-a17-5g.html",
+    "stockByCombination": {
+      "v1027_c111052": 22,
+      "v1027_c111054": 12,
+      "v1027_c111053": 25
+    }
   },
   {
     "id": 1028,
@@ -3690,7 +3839,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-17-pro-512gb.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-17-pro-512gb.html",
+    "stockByCombination": {
+      "v1028_c112605": 16,
+      "v1028_c112604": 6,
+      "v1028_c112603": 19
+    }
   },
   {
     "id": 1029,
@@ -3818,7 +3972,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-z-flip-8.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-z-flip-8.html",
+    "stockByCombination": {
+      "v1029_c137041": 10,
+      "v1029_c137042": 23,
+      "v1029_c137043": 0
+    }
   },
   {
     "id": 1030,
@@ -3931,7 +4090,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-neo-5-5g-8gb-256gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-neo-5-5g-8gb-256gb.html",
+    "stockByCombination": {
+      "v1030_c130167": 4,
+      "v1030_c130166": 17
+    }
   },
   {
     "id": 1031,
@@ -4062,7 +4225,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-note-17-5g.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-note-17-5g.html",
+    "stockByCombination": {
+      "v1031_c140395": 21,
+      "v1031_c140394": 11,
+      "v1031_c140393": 24
+    }
   },
   {
     "id": 1032,
@@ -4213,7 +4381,15 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-13.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-13.html",
+    "stockByCombination": {
+      "v1032_c44643": 15,
+      "v1032_c36522": 5,
+      "v1032_c36523": 18,
+      "v1032_c36520": 8,
+      "v1032_c36527": 0,
+      "v1032_c36524": 11
+    }
   },
   {
     "id": 1033,
@@ -4337,7 +4513,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-16e.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-16e.html",
+    "stockByCombination": {
+      "v1033_c100813": 9,
+      "v1033_c100814": 0
+    }
   },
   {
     "id": 1034,
@@ -4476,7 +4656,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s26.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s26.html",
+    "stockByCombination": {
+      "v1034_c125101": 3,
+      "v1034_c125105": 16,
+      "v1034_c125106": 6,
+      "v1034_c125104": 19
+    }
   },
   {
     "id": 1035,
@@ -4607,7 +4793,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-note-17-pro-5g.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-note-17-pro-5g.html",
+    "stockByCombination": {
+      "v1035_c139656": 20,
+      "v1035_c139654": 10,
+      "v1035_c139655": 23
+    }
   },
   {
     "id": 1036,
@@ -4752,7 +4943,14 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-16.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-16.html",
+    "stockByCombination": {
+      "v1036_c90124": 14,
+      "v1036_c90125": 4,
+      "v1036_c90123": 17,
+      "v1036_c90126": 0,
+      "v1036_c90122": 20
+    }
   },
   {
     "id": 1037,
@@ -4882,7 +5080,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-17e.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-17e.html",
+    "stockByCombination": {
+      "v1037_c125583": 0,
+      "v1037_c125584": 21,
+      "v1037_c125582": 11
+    }
   },
   {
     "id": 1038,
@@ -5010,7 +5213,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-17t.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-17t.html",
+    "stockByCombination": {
+      "v1038_c132225": 25,
+      "v1038_c132224": 15
+    }
   },
   {
     "id": 1039,
@@ -5134,7 +5341,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-17-ultra.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-17-ultra.html",
+    "stockByCombination": {
+      "v1039_c125471": 19,
+      "v1039_c125473": 9,
+      "v1039_c125472": 22
+    }
   },
   {
     "id": 1040,
@@ -5272,7 +5484,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-16-pro-max-512gb.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-16-pro-max-512gb.html",
+    "stockByCombination": {
+      "v1040_c90177": 13,
+      "v1040_c90174": 3,
+      "v1040_c90175": 0,
+      "v1040_c90176": 6
+    }
   },
   {
     "id": 1041,
@@ -5381,7 +5599,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-17t-pro.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-17t-pro.html",
+    "stockByCombination": {
+      "v1041_c132226": 7,
+      "v1041_c132227": 20
+    }
   },
   {
     "id": 1042,
@@ -5535,7 +5757,15 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-14.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-14.html",
+    "stockByCombination": {
+      "v1042_c52377": 24,
+      "v1042_c52379": 14,
+      "v1042_c52380": 4,
+      "v1042_c52376": 17,
+      "v1042_c60934": 7,
+      "v1042_c52353": 20
+    }
   },
   {
     "id": 1043,
@@ -5654,7 +5884,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-a27.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-a27.html",
+    "stockByCombination": {
+      "v1043_c134594": 18,
+      "v1043_c134593": 8,
+      "v1043_c134592": 21
+    }
   },
   {
     "id": 1044,
@@ -5802,7 +6037,14 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-15-256gb.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-15-256gb.html",
+    "stockByCombination": {
+      "v1044_c68911": 12,
+      "v1044_c68916": 0,
+      "v1044_c68913": 15,
+      "v1044_c68912": 5,
+      "v1044_c68915": 18
+    }
   },
   {
     "id": 1045,
@@ -5927,7 +6169,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-17-pro-max-1tb.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-17-pro-max-1tb.html",
+    "stockByCombination": {
+      "v1045_c112629": 6,
+      "v1045_c112632": 19,
+      "v1045_c112630": 9
+    }
   },
   {
     "id": 1046,
@@ -6058,7 +6305,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-poco-f8-pro-5g.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-poco-f8-pro-5g.html",
+    "stockByCombination": {
+      "v1046_c118521": 23,
+      "v1046_c118520": 13,
+      "v1046_c118522": 3
+    }
   },
   {
     "id": 1047,
@@ -6177,7 +6429,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-note-15.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-note-15.html",
+    "stockByCombination": {
+      "v1047_c121549": 17,
+      "v1047_c121550": 7,
+      "v1047_c121548": 20
+    }
   },
   {
     "id": 1048,
@@ -6323,7 +6580,14 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-17-512gb.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-17-512gb.html",
+    "stockByCombination": {
+      "v1048_c112619": 0,
+      "v1048_c112620": 24,
+      "v1048_c112616": 14,
+      "v1048_c112622": 4,
+      "v1048_c112614": 17
+    }
   },
   {
     "id": 1049,
@@ -6456,7 +6720,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-a07.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-a07.html",
+    "stockByCombination": {
+      "v1049_c111073": 5,
+      "v1049_c111075": 18,
+      "v1049_c111074": 8
+    }
   },
   {
     "id": 1050,
@@ -6581,7 +6850,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-find-n6.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-find-n6.html",
+    "stockByCombination": {
+      "v1050_c126179": 22,
+      "v1050_c126178": 12
+    }
   },
   {
     "id": 1051,
@@ -6713,7 +6986,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s25-plus.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s25-plus.html",
+    "stockByCombination": {
+      "v1051_c98495": 16,
+      "v1051_c98494": 6,
+      "v1051_c98497": 0,
+      "v1051_c98493": 9
+    }
   },
   {
     "id": 1052,
@@ -6858,7 +7137,14 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-16-plus.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-16-plus.html",
+    "stockByCombination": {
+      "v1052_c90142": 10,
+      "v1052_c90140": 23,
+      "v1052_c90144": 13,
+      "v1052_c90143": 3,
+      "v1052_c90141": 16
+    }
   },
   {
     "id": 1053,
@@ -6982,7 +7268,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-17-pro-max-2tb.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-17-pro-max-2tb.html",
+    "stockByCombination": {
+      "v1053_c112635": 4,
+      "v1053_c112637": 17,
+      "v1053_c112633": 7
+    }
   },
   {
     "id": 1054,
@@ -7119,7 +7410,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-18-pro-max-512gb.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-18-pro-max-512gb.html",
+    "stockByCombination": {
+      "v1054_c141673": 21,
+      "v1054_c141677": 11,
+      "v1054_c141675": 24,
+      "v1054_c141679": 14
+    }
   },
   {
     "id": 1055,
@@ -7245,7 +7542,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-find-x9-ultra.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-find-x9-ultra.html",
+    "stockByCombination": {
+      "v1055_c130015": 15,
+      "v1055_c130016": 0
+    }
   },
   {
     "id": 1056,
@@ -7379,7 +7680,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-a17.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-a17.html",
+    "stockByCombination": {
+      "v1056_c112252": 9,
+      "v1056_c112253": 22,
+      "v1056_c112251": 12
+    }
   },
   {
     "id": 1057,
@@ -7493,7 +7799,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-neo-5-gt.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-neo-5-gt.html",
+    "stockByCombination": {
+      "v1057_c130163": 3,
+      "v1057_c130162": 16
+    }
   },
   {
     "id": 1058,
@@ -7617,7 +7927,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-17-pro-1tb.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-17-pro-1tb.html",
+    "stockByCombination": {
+      "v1058_c112606": 20,
+      "v1058_c112607": 10,
+      "v1058_c112609": 23
+    }
   },
   {
     "id": 1059,
@@ -7733,7 +8048,10 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-x9d-12gb-256gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-x9d-12gb-256gb.html",
+    "stockByCombination": {
+      "v1059_c129977": 0
+    }
   },
   {
     "id": 1060,
@@ -7859,7 +8177,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-a7.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-a7.html",
+    "stockByCombination": {
+      "v1060_c135274": 8,
+      "v1060_c135276": 21,
+      "v1060_c135275": 11
+    }
   },
   {
     "id": 1061,
@@ -7994,7 +8317,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-note-14-pro-plus.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-note-14-pro-plus.html",
+    "stockByCombination": {
+      "v1061_c108171": 25,
+      "v1061_c97570": 15,
+      "v1061_c97571": 5,
+      "v1061_c97572": 18
+    }
   },
   {
     "id": 1062,
@@ -8126,7 +8455,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-600.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-600.html",
+    "stockByCombination": {
+      "v1062_c134263": 19,
+      "v1062_c134262": 9,
+      "v1062_c134261": 0
+    }
   },
   {
     "id": 1063,
@@ -8242,7 +8576,10 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-x9d-8gb-256gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-x9d-8gb-256gb.html",
+    "stockByCombination": {
+      "v1063_c137078": 13
+    }
   },
   {
     "id": 1064,
@@ -8362,7 +8699,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-note-15-5g.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-note-15-5g.html",
+    "stockByCombination": {
+      "v1064_c121551": 7,
+      "v1064_c121553": 20,
+      "v1064_c121552": 10
+    }
   },
   {
     "id": 1065,
@@ -8498,7 +8840,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-a56.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-a56.html",
+    "stockByCombination": {
+      "v1065_c107238": 24,
+      "v1065_c101922": 14,
+      "v1065_c101923": 4,
+      "v1065_c101924": 17
+    }
   },
   {
     "id": 1066,
@@ -8616,7 +8964,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-note-15-pro.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-note-15-pro.html",
+    "stockByCombination": {
+      "v1066_c121557": 18,
+      "v1066_c121555": 0,
+      "v1066_c121556": 21
+    }
   },
   {
     "id": 1067,
@@ -8745,7 +9098,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-note-15-pro-5g.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-note-15-pro-5g.html",
+    "stockByCombination": {
+      "v1067_c125192": 12,
+      "v1067_c125193": 25,
+      "v1067_c125194": 15
+    }
   },
   {
     "id": 1068,
@@ -8872,7 +9230,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-z-fold-8-ultra-512gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-z-fold-8-ultra-512gb.html",
+    "stockByCombination": {
+      "v1068_c137057": 6,
+      "v1068_c137058": 19,
+      "v1068_c137059": 9
+    }
   },
   {
     "id": 1069,
@@ -8996,7 +9359,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-16e-256gb.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-16e-256gb.html",
+    "stockByCombination": {
+      "v1069_c100817": 23,
+      "v1069_c100816": 13
+    }
   },
   {
     "id": 1070,
@@ -9140,7 +9507,14 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-16-plus-256gb.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-16-plus-256gb.html",
+    "stockByCombination": {
+      "v1070_c90153": 0,
+      "v1070_c90151": 7,
+      "v1070_c90152": 20,
+      "v1070_c90154": 10,
+      "v1070_c90150": 23
+    }
   },
   {
     "id": 1071,
@@ -9282,7 +9656,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/samsung-galaxy-s24-ultra.html"
+    "sourceUrl": "https://cellphones.com.vn/samsung-galaxy-s24-ultra.html",
+    "stockByCombination": {
+      "v1071_c74953": 11,
+      "v1071_c74954": 24,
+      "v1071_c74951": 14,
+      "v1071_c74952": 4
+    }
   },
   {
     "id": 1072,
@@ -9406,7 +9786,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-a07-5g.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-a07-5g.html",
+    "stockByCombination": {
+      "v1072_c122005": 5,
+      "v1072_c122003": 18,
+      "v1072_c122004": 8
+    }
   },
   {
     "id": 1073,
@@ -9531,7 +9916,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-reno15.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-reno15.html",
+    "stockByCombination": {
+      "v1073_c121081": 22,
+      "v1073_c121082": 12
+    }
   },
   {
     "id": 1074,
@@ -9661,7 +10050,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-z-fold-7.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-z-fold-7.html",
+    "stockByCombination": {
+      "v1074_c108372": 16,
+      "v1074_c108374": 6,
+      "v1074_c108373": 19
+    }
   },
   {
     "id": 1075,
@@ -9789,7 +10183,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-z-fold-8-512gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-z-fold-8-512gb.html",
+    "stockByCombination": {
+      "v1075_c137033": 10,
+      "v1075_c137034": 23,
+      "v1075_c137032": 13
+    }
   },
   {
     "id": 1076,
@@ -9911,7 +10310,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-poco-x8-pro-max-12gb-512gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-poco-x8-pro-max-12gb-512gb.html",
+    "stockByCombination": {
+      "v1076_c126980": 4,
+      "v1076_c126979": 17,
+      "v1076_c126982": 7
+    }
   },
   {
     "id": 1077,
@@ -10026,7 +10430,10 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-400-5g.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-400-5g.html",
+    "stockByCombination": {
+      "v1077_c111734": 21
+    }
   },
   {
     "id": 1078,
@@ -10159,7 +10566,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-reno15-f.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-reno15-f.html",
+    "stockByCombination": {
+      "v1078_c121077": 15,
+      "v1078_c121078": 5,
+      "v1078_c121079": 18
+    }
   },
   {
     "id": 1079,
@@ -10288,7 +10700,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-17e-512gb.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-17e-512gb.html",
+    "stockByCombination": {
+      "v1079_c125586": 9,
+      "v1079_c125587": 22,
+      "v1079_c125585": 12
+    }
   },
   {
     "id": 1080,
@@ -10416,7 +10833,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-x7d-8gb-128gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-x7d-8gb-128gb.html",
+    "stockByCombination": {
+      "v1080_c126923": 3,
+      "v1080_c126922": 16,
+      "v1080_c126921": 6
+    }
   },
   {
     "id": 1081,
@@ -10531,7 +10953,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-poco-f9-ultra-16gb-512gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-poco-f9-ultra-16gb-512gb.html",
+    "stockByCombination": {
+      "v1081_c141236": 0,
+      "v1081_c141237": 10
+    }
   },
   {
     "id": 1082,
@@ -10673,7 +11099,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/samsung-galaxy-s24-plus.html"
+    "sourceUrl": "https://cellphones.com.vn/samsung-galaxy-s24-plus.html",
+    "stockByCombination": {
+      "v1082_c74945": 14,
+      "v1082_c74944": 4,
+      "v1082_c74946": 17,
+      "v1082_c74943": 7
+    }
   },
   {
     "id": 1083,
@@ -10812,7 +11244,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s26-plus.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s26-plus.html",
+    "stockByCombination": {
+      "v1083_c125115": 8,
+      "v1083_c125116": 21,
+      "v1083_c125117": 11,
+      "v1083_c125114": 24
+    }
   },
   {
     "id": 1084,
@@ -10931,7 +11369,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-meizu-mblu-note-21-pro.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-meizu-mblu-note-21-pro.html",
+    "stockByCombination": {
+      "v1084_c115351": 25,
+      "v1084_c115349": 15,
+      "v1084_c115350": 0
+    }
   },
   {
     "id": 1085,
@@ -11051,7 +11494,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-neo-5-gt-special-edition.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-neo-5-gt-special-edition.html",
+    "stockByCombination": {
+      "v1085_c136055": 19,
+      "v1085_c136054": 9
+    }
   },
   {
     "id": 1086,
@@ -11168,7 +11615,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-neo-5-max.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-neo-5-max.html",
+    "stockByCombination": {
+      "v1086_c135279": 13,
+      "v1086_c135280": 3
+    }
   },
   {
     "id": 1087,
@@ -11286,7 +11737,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-tecno-camon-40.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-tecno-camon-40.html",
+    "stockByCombination": {
+      "v1087_c103051": 7,
+      "v1087_c103053": 20,
+      "v1087_c103052": 10
+    }
   },
   {
     "id": 1088,
@@ -11414,7 +11870,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-x8d.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-x8d.html",
+    "stockByCombination": {
+      "v1088_c126036": 24,
+      "v1088_c126035": 0,
+      "v1088_c126034": 4
+    }
   },
   {
     "id": 1089,
@@ -11538,7 +11999,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-17-ultra-16gb-1tb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-17-ultra-16gb-1tb.html",
+    "stockByCombination": {
+      "v1089_c125474": 18,
+      "v1089_c125475": 8,
+      "v1089_c125476": 21
+    }
   },
   {
     "id": 1090,
@@ -11657,7 +12123,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-neo-3-gt-12gb-256gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-neo-3-gt-12gb-256gb.html",
+    "stockByCombination": {
+      "v1090_c115578": 12,
+      "v1090_c104533": 25,
+      "v1090_c104441": 15
+    }
   },
   {
     "id": 1091,
@@ -11780,7 +12251,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-400-pro-5g.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-400-pro-5g.html",
+    "stockByCombination": {
+      "v1091_c111966": 6,
+      "v1091_c111967": 19
+    }
   },
   {
     "id": 1092,
@@ -11910,7 +12385,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-a36.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-a36.html",
+    "stockByCombination": {
+      "v1092_c101927": 0,
+      "v1092_c101926": 13,
+      "v1092_c101925": 3
+    }
   },
   {
     "id": 1093,
@@ -12020,7 +12500,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-v80-design.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-v80-design.html",
+    "stockByCombination": {
+      "v1093_c123770": 17,
+      "v1093_c121765": 7,
+      "v1093_c121766": 20
+    }
   },
   {
     "id": 1094,
@@ -12148,7 +12633,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-15-5g-8gb-256gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-15-5g-8gb-256gb.html",
+    "stockByCombination": {
+      "v1094_c119441": 11,
+      "v1094_c119442": 24,
+      "v1094_c119443": 14
+    }
   },
   {
     "id": 1095,
@@ -12264,7 +12754,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nothing-phone-2a-plus.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nothing-phone-2a-plus.html",
+    "stockByCombination": {
+      "v1095_c93992": 5,
+      "v1095_c93993": 18
+    }
   },
   {
     "id": 1096,
@@ -12380,7 +12874,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-17t-pro-12gb-1tb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-17t-pro-12gb-1tb.html",
+    "stockByCombination": {
+      "v1096_c132230": 22,
+      "v1096_c132229": 12,
+      "v1096_c132228": 25
+    }
   },
   {
     "id": 1097,
@@ -12493,7 +12992,10 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-15-ultra-1tb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-15-ultra-1tb.html",
+    "stockByCombination": {
+      "v1097_c104372": 16
+    }
   },
   {
     "id": 1098,
@@ -12632,7 +13134,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s26-ultra-12gb-512gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s26-ultra-12gb-512gb.html",
+    "stockByCombination": {
+      "v1098_c125141": 10,
+      "v1098_c125138": 23,
+      "v1098_c125139": 13,
+      "v1098_c125137": 3
+    }
   },
   {
     "id": 1099,
@@ -12751,7 +13259,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-18-pro-max-1tb.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-18-pro-max-1tb.html",
+    "stockByCombination": {
+      "v1099_c141705": 4,
+      "v1099_c141703": 0,
+      "v1099_c141704": 7,
+      "v1099_c141702": 20
+    }
   },
   {
     "id": 1100,
@@ -12856,7 +13370,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-reno12-5g.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-reno12-5g.html",
+    "stockByCombination": {
+      "v1100_c85221": 21,
+      "v1100_c85220": 11
+    }
   },
   {
     "id": 1101,
@@ -12969,7 +13487,10 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-z-fold-8-ultra-1tb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-z-fold-8-ultra-1tb.html",
+    "stockByCombination": {
+      "v1101_c137061": 15
+    }
   },
   {
     "id": 1102,
@@ -13108,7 +13629,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s26-12gb-512gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s26-12gb-512gb.html",
+    "stockByCombination": {
+      "v1102_c125109": 9,
+      "v1102_c125111": 22,
+      "v1102_c125112": 12,
+      "v1102_c125110": 0
+    }
   },
   {
     "id": 1103,
@@ -13223,7 +13750,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-poco-f9-ultra-16gb-1tb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-poco-f9-ultra-16gb-1tb.html",
+    "stockByCombination": {
+      "v1103_c141235": 0,
+      "v1103_c141234": 16
+    }
   },
   {
     "id": 1104,
@@ -13356,7 +13887,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s25.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s25.html",
+    "stockByCombination": {
+      "v1104_c98483": 20,
+      "v1104_c98480": 10,
+      "v1104_c98482": 23,
+      "v1104_c98481": 13
+    }
   },
   {
     "id": 1105,
@@ -13493,7 +14030,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-18-pro-512gb.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-18-pro-512gb.html",
+    "stockByCombination": {
+      "v1105_c141665": 14,
+      "v1105_c141668": 4,
+      "v1105_c141666": 17,
+      "v1105_c141667": 7
+    }
   },
   {
     "id": 1106,
@@ -13629,7 +14172,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-sony-xperia-1-viii.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-sony-xperia-1-viii.html",
+    "stockByCombination": {
+      "v1106_c138976": 8,
+      "v1106_c138977": 21,
+      "v1106_c138975": 0,
+      "v1106_c137103": 24
+    }
   },
   {
     "id": 1107,
@@ -13771,7 +14320,14 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/samsung-galaxy-z-fold-6.html"
+    "sourceUrl": "https://cellphones.com.vn/samsung-galaxy-z-fold-6.html",
+    "stockByCombination": {
+      "v1107_c95795": 25,
+      "v1107_c95796": 15,
+      "v1107_c85768": 5,
+      "v1107_c85767": 18,
+      "v1107_c85769": 8
+    }
   },
   {
     "id": 1108,
@@ -13894,7 +14450,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s25-edge.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s25-edge.html",
+    "stockByCombination": {
+      "v1108_c130623": 19,
+      "v1108_c130625": 9,
+      "v1108_c130624": 22
+    }
   },
   {
     "id": 1109,
@@ -14031,7 +14592,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-18-pro-1tb.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-18-pro-1tb.html",
+    "stockByCombination": {
+      "v1109_c141672": 13,
+      "v1109_c141678": 3,
+      "v1109_c141680": 16,
+      "v1109_c141676": 6
+    }
   },
   {
     "id": 1110,
@@ -14159,7 +14726,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-note-14.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-note-14.html",
+    "stockByCombination": {
+      "v1110_c97568": 7,
+      "v1110_c97566": 0,
+      "v1110_c97567": 10
+    }
   },
   {
     "id": 1111,
@@ -14282,7 +14854,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-note-14-5g.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-note-14-5g.html",
+    "stockByCombination": {
+      "v1111_c103370": 24,
+      "v1111_c103369": 14,
+      "v1111_c103384": 4
+    }
   },
   {
     "id": 1112,
@@ -14409,7 +14986,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s25-fe-8gb-512gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s25-fe-8gb-512gb.html",
+    "stockByCombination": {
+      "v1112_c112188": 18,
+      "v1112_c112187": 8
+    }
   },
   {
     "id": 1113,
@@ -14539,7 +15120,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-15c.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-15c.html",
+    "stockByCombination": {
+      "v1113_c116098": 12,
+      "v1113_c116100": 25,
+      "v1113_c116099": 15
+    }
   },
   {
     "id": 1114,
@@ -14674,7 +15260,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-17.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-17.html",
+    "stockByCombination": {
+      "v1114_c142921": 0,
+      "v1114_c138955": 19,
+      "v1114_c138956": 9,
+      "v1114_c138954": 22
+    }
   },
   {
     "id": 1115,
@@ -14799,7 +15391,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-a06-5g.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-a06-5g.html",
+    "stockByCombination": {
+      "v1115_c102718": 23,
+      "v1115_c102717": 13,
+      "v1115_c102719": 3
+    }
   },
   {
     "id": 1116,
@@ -14933,7 +15530,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s25-ultra-512gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s25-ultra-512gb.html",
+    "stockByCombination": {
+      "v1116_c98503": 17,
+      "v1116_c98502": 7,
+      "v1116_c98500": 20,
+      "v1116_c98501": 10
+    }
   },
   {
     "id": 1117,
@@ -15063,7 +15666,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-15c-8gb-256gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-15c-8gb-256gb.html",
+    "stockByCombination": {
+      "v1117_c124564": 11,
+      "v1117_c124565": 24,
+      "v1117_c124566": 0
+    }
   },
   {
     "id": 1118,
@@ -15172,7 +15780,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-a7-pro.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-a7-pro.html",
+    "stockByCombination": {
+      "v1118_c128384": 5,
+      "v1118_c128382": 18,
+      "v1118_c128383": 8
+    }
   },
   {
     "id": 1119,
@@ -15286,7 +15899,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-itel-p55-plus-8gb-256gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-itel-p55-plus-8gb-256gb.html",
+    "stockByCombination": {
+      "v1119_c103146": 22,
+      "v1119_c103147": 12,
+      "v1119_c103059": 25
+    }
   },
   {
     "id": 1120,
@@ -15407,7 +16025,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-find-x8.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-find-x8.html",
+    "stockByCombination": {
+      "v1120_c94891": 16,
+      "v1120_c94890": 6
+    }
   },
   {
     "id": 1121,
@@ -15525,7 +16147,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-magic-v5.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-magic-v5.html",
+    "stockByCombination": {
+      "v1121_c113351": 10,
+      "v1121_c113352": 0
+    }
   },
   {
     "id": 1122,
@@ -15642,7 +16268,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-x7d.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-x7d.html",
+    "stockByCombination": {
+      "v1122_c116450": 4,
+      "v1122_c116447": 17,
+      "v1122_c116448": 7
+    }
   },
   {
     "id": 1123,
@@ -15756,7 +16387,10 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-z-fold-8-1tb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-z-fold-8-1tb.html",
+    "stockByCombination": {
+      "v1123_c137038": 21
+    }
   },
   {
     "id": 1124,
@@ -15881,7 +16515,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-15-ultra.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-15-ultra.html",
+    "stockByCombination": {
+      "v1124_c101312": 15,
+      "v1124_c101311": 5
+    }
   },
   {
     "id": 1125,
@@ -16005,7 +16643,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-tecno-pova-curve-2-5g.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-tecno-pova-curve-2-5g.html",
+    "stockByCombination": {
+      "v1125_c139136": 0,
+      "v1125_c139135": 22,
+      "v1125_c139137": 12
+    }
   },
   {
     "id": 1126,
@@ -16132,7 +16775,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/oppo-reno10-pro-plus.html"
+    "sourceUrl": "https://cellphones.com.vn/oppo-reno10-pro-plus.html",
+    "stockByCombination": {
+      "v1126_c83556": 3,
+      "v1126_c82448": 16
+    }
   },
   {
     "id": 1127,
@@ -16246,7 +16893,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-neo-5-gt-12gb-256gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-neo-5-gt-12gb-256gb.html",
+    "stockByCombination": {
+      "v1127_c130158": 20,
+      "v1127_c130159": 10
+    }
   },
   {
     "id": 1128,
@@ -16369,7 +17020,14 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-v80-max.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-v80-max.html",
+    "stockByCombination": {
+      "v1128_c126377": 14,
+      "v1128_c126376": 4,
+      "v1128_c126378": 0,
+      "v1128_c121767": 7,
+      "v1128_c121763": 20
+    }
   },
   {
     "id": 1129,
@@ -16492,7 +17150,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-x9d.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-x9d.html",
+    "stockByCombination": {
+      "v1129_c118846": 8,
+      "v1129_c118845": 21
+    }
   },
   {
     "id": 1130,
@@ -16620,7 +17282,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-17-5g.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-redmi-17-5g.html",
+    "stockByCombination": {
+      "v1130_c138959": 25,
+      "v1130_c138958": 15,
+      "v1130_c138957": 5
+    }
   },
   {
     "id": 1131,
@@ -16759,7 +17426,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s26-ultra-16gb-1tb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s26-ultra-16gb-1tb.html",
+    "stockByCombination": {
+      "v1131_c125145": 19,
+      "v1131_c125142": 9,
+      "v1131_c125146": 22,
+      "v1131_c125143": 12
+    }
   },
   {
     "id": 1132,
@@ -16884,7 +17557,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-a6c-4gb-128gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-a6c-4gb-128gb.html",
+    "stockByCombination": {
+      "v1132_c133006": 13,
+      "v1132_c133007": 0
+    }
   },
   {
     "id": 1133,
@@ -17016,7 +17693,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-sony-xperia-1-vii.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-sony-xperia-1-vii.html",
+    "stockByCombination": {
+      "v1133_c112249": 7,
+      "v1133_c112248": 20,
+      "v1133_c112247": 10
+    }
   },
   {
     "id": 1134,
@@ -17148,7 +17830,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/samsung-galaxy-a55.html"
+    "sourceUrl": "https://cellphones.com.vn/samsung-galaxy-a55.html",
+    "stockByCombination": {
+      "v1134_c78219": 24,
+      "v1134_c78220": 14,
+      "v1134_c78221": 4
+    }
   },
   {
     "id": 1135,
@@ -17257,7 +17944,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-15t-pro-5g.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-15t-pro-5g.html",
+    "stockByCombination": {
+      "v1135_c114018": 18,
+      "v1135_c114017": 8
+    }
   },
   {
     "id": 1136,
@@ -17383,7 +18074,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-tecno-spark-40-pro-plus.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-tecno-spark-40-pro-plus.html",
+    "stockByCombination": {
+      "v1136_c113430": 0,
+      "v1136_c113429": 25,
+      "v1136_c113428": 15
+    }
   },
   {
     "id": 1137,
@@ -17508,7 +18204,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-a6t-pro.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-a6t-pro.html",
+    "stockByCombination": {
+      "v1137_c133013": 6,
+      "v1137_c133012": 19
+    }
   },
   {
     "id": 1138,
@@ -17634,7 +18334,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-sony-xperia-10-vii.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-sony-xperia-10-vii.html",
+    "stockByCombination": {
+      "v1138_c118050": 23,
+      "v1138_c118048": 13,
+      "v1138_c118049": 3
+    }
   },
   {
     "id": 1139,
@@ -17755,7 +18460,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-a6t-4gb-128gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-a6t-4gb-128gb.html",
+    "stockByCombination": {
+      "v1139_c121464": 17,
+      "v1139_c121462": 7
+    }
   },
   {
     "id": 1140,
@@ -17877,7 +18586,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-meizu-mblu-22-pro.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-meizu-mblu-22-pro.html",
+    "stockByCombination": {
+      "v1140_c127039": 11,
+      "v1140_c115332": 24,
+      "v1140_c115333": 14
+    }
   },
   {
     "id": 1141,
@@ -18002,7 +18716,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-a6c.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-a6c.html",
+    "stockByCombination": {
+      "v1141_c133010": 5,
+      "v1141_c133011": 18
+    }
   },
   {
     "id": 1142,
@@ -18126,7 +18844,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-zte-nubia-z60s-pro-16gb-512gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-zte-nubia-z60s-pro-16gb-512gb.html",
+    "stockByCombination": {
+      "v1142_c109712": 22,
+      "v1142_c107474": 12,
+      "v1142_c107475": 25
+    }
   },
   {
     "id": 1143,
@@ -18165,7 +18888,10 @@
       }
     ],
     "specifications": {},
-    "sourceUrl": "https://cellphones.com.vn/iphone-duo-256gb.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-duo-256gb.html",
+    "stockByCombination": {
+      "v1143_c1": 16
+    }
   },
   {
     "id": 1144,
@@ -18290,7 +19016,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-reno14.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-reno14.html",
+    "stockByCombination": {
+      "v1144_c107795": 10,
+      "v1144_c107794": 23
+    }
   },
   {
     "id": 1145,
@@ -18406,7 +19136,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nothing-phone-3a.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nothing-phone-3a.html",
+    "stockByCombination": {
+      "v1145_c107419": 4,
+      "v1145_c107418": 17
+    }
   },
   {
     "id": 1146,
@@ -18526,7 +19260,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-a6t-6gb-256gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-a6t-6gb-256gb.html",
+    "stockByCombination": {
+      "v1146_c121466": 21,
+      "v1146_c121467": 11
+    }
   },
   {
     "id": 1147,
@@ -18664,7 +19402,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/iphone-16-pro-1tb.html"
+    "sourceUrl": "https://cellphones.com.vn/iphone-16-pro-1tb.html",
+    "stockByCombination": {
+      "v1147_c90167": 0,
+      "v1147_c90164": 5,
+      "v1147_c90165": 18,
+      "v1147_c90166": 8
+    }
   },
   {
     "id": 1148,
@@ -18789,7 +19533,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-find-x9-16gb-512gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-find-x9-16gb-512gb.html",
+    "stockByCombination": {
+      "v1148_c116825": 9,
+      "v1148_c116824": 22
+    }
   },
   {
     "id": 1149,
@@ -18915,7 +19663,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/oppo-a79.html"
+    "sourceUrl": "https://cellphones.com.vn/oppo-a79.html",
+    "stockByCombination": {
+      "v1149_c84906": 3,
+      "v1149_c82451": 16
+    }
   },
   {
     "id": 1150,
@@ -19035,7 +19787,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-a6t.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-a6t.html",
+    "stockByCombination": {
+      "v1150_c121459": 20,
+      "v1150_c121458": 10
+    }
   },
   {
     "id": 1151,
@@ -19162,7 +19918,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/oppo-find-x5-pro.html"
+    "sourceUrl": "https://cellphones.com.vn/oppo-find-x5-pro.html",
+    "stockByCombination": {
+      "v1151_c80743": 14,
+      "v1151_c80742": 4
+    }
   },
   {
     "id": 1152,
@@ -19294,7 +20054,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-15-12gb-512gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-xiaomi-15-12gb-512gb.html",
+    "stockByCombination": {
+      "v1152_c114047": 8,
+      "v1152_c114044": 21,
+      "v1152_c114045": 11
+    }
   },
   {
     "id": 1153,
@@ -19398,7 +20163,10 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/samsung-galaxy-note-10-plus.html"
+    "sourceUrl": "https://cellphones.com.vn/samsung-galaxy-note-10-plus.html",
+    "stockByCombination": {
+      "v1153_c1": 25
+    }
   },
   {
     "id": 1154,
@@ -19500,7 +20268,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-v80-max-6gb-128gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-v80-max-6gb-128gb.html",
+    "stockByCombination": {
+      "v1154_c133967": 19,
+      "v1154_c133968": 0
+    }
   },
   {
     "id": 1155,
@@ -19611,7 +20383,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-tecno-spark-50.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-tecno-spark-50.html",
+    "stockByCombination": {
+      "v1155_c131940": 13,
+      "v1155_c131939": 3
+    }
   },
   {
     "id": 1156,
@@ -19737,7 +20513,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/oppo-find-n3.html"
+    "sourceUrl": "https://cellphones.com.vn/oppo-find-n3.html",
+    "stockByCombination": {
+      "v1156_c71012": 7,
+      "v1156_c71011": 20
+    }
   },
   {
     "id": 1157,
@@ -19864,7 +20644,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-meizu-lucky-08-8gb-256gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-meizu-lucky-08-8gb-256gb.html",
+    "stockByCombination": {
+      "v1157_c139179": 24,
+      "v1157_c139181": 14,
+      "v1157_c139180": 4
+    }
   },
   {
     "id": 1158,
@@ -19994,7 +20779,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-a6.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-a6.html",
+    "stockByCombination": {
+      "v1158_c139924": 0,
+      "v1158_c139923": 8,
+      "v1158_c139922": 21
+    }
   },
   {
     "id": 1159,
@@ -20097,7 +20887,10 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/samsung-galaxy-s20.html"
+    "sourceUrl": "https://cellphones.com.vn/samsung-galaxy-s20.html",
+    "stockByCombination": {
+      "v1159_c1": 12
+    }
   },
   {
     "id": 1160,
@@ -20217,7 +21010,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-neo-3-4g.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-neo-3-4g.html",
+    "stockByCombination": {
+      "v1160_c102964": 6,
+      "v1160_c102965": 19,
+      "v1160_c102963": 9
+    }
   },
   {
     "id": 1161,
@@ -20333,7 +21131,10 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-x7d-5g-8gb-256gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-x7d-5g-8gb-256gb.html",
+    "stockByCombination": {
+      "v1161_c129981": 23
+    }
   },
   {
     "id": 1162,
@@ -20462,7 +21263,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-v80-design-4gb-128gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-v80-design-4gb-128gb.html",
+    "stockByCombination": {
+      "v1162_c129246": 17,
+      "v1162_c129248": 7,
+      "v1162_c129247": 20,
+      "v1162_c129249": 10
+    }
   },
   {
     "id": 1163,
@@ -20568,7 +21375,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-reno12-f.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-reno12-f.html",
+    "stockByCombination": {
+      "v1163_c85219": 11,
+      "v1163_c85218": 24
+    }
   },
   {
     "id": 1164,
@@ -20707,7 +21518,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s26-plus-12gb-512gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s26-plus-12gb-512gb.html",
+    "stockByCombination": {
+      "v1164_c125122": 5,
+      "v1164_c125123": 18,
+      "v1164_c125118": 8,
+      "v1164_c125120": 21
+    }
   },
   {
     "id": 1165,
@@ -20815,7 +21632,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-air-5g.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-air-5g.html",
+    "stockByCombination": {
+      "v1165_c116375": 22,
+      "v1165_c116374": 0
+    }
   },
   {
     "id": 1166,
@@ -20944,7 +21765,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-a6-pro-8gb-128gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-a6-pro-8gb-128gb.html",
+    "stockByCombination": {
+      "v1166_c120164": 16,
+      "v1166_c120165": 6,
+      "v1166_c120163": 19
+    }
   },
   {
     "id": 1167,
@@ -21069,7 +21895,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-neo-3-5g.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-neo-3-5g.html",
+    "stockByCombination": {
+      "v1167_c104531": 10,
+      "v1167_c104532": 23,
+      "v1167_c104442": 13
+    }
   },
   {
     "id": 1168,
@@ -21188,7 +22019,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-meizu-mblu-22-pro-6gb-256gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-meizu-mblu-22-pro-6gb-256gb.html",
+    "stockByCombination": {
+      "v1168_c115334": 4,
+      "v1168_c115337": 17
+    }
   },
   {
     "id": 1169,
@@ -21285,7 +22120,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/nokia-220-4g.html"
+    "sourceUrl": "https://cellphones.com.vn/nokia-220-4g.html",
+    "stockByCombination": {
+      "v1169_c83860": 0,
+      "v1169_c83861": 11
+    }
   },
   {
     "id": 1170,
@@ -21418,7 +22257,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s25-plus-512gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-s25-plus-512gb.html",
+    "stockByCombination": {
+      "v1170_c98512": 15,
+      "v1170_c98515": 5,
+      "v1170_c98513": 18,
+      "v1170_c98514": 8
+    }
   },
   {
     "id": 1171,
@@ -21534,7 +22379,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nothing-phone-2a.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nothing-phone-2a.html",
+    "stockByCombination": {
+      "v1171_c93823": 9,
+      "v1171_c93825": 22
+    }
   },
   {
     "id": 1172,
@@ -21658,7 +22507,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-tecno-camon-40-pro.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-tecno-camon-40-pro.html",
+    "stockByCombination": {
+      "v1172_c125540": 3,
+      "v1172_c103054": 16,
+      "v1172_c103055": 0,
+      "v1172_c103056": 19
+    }
   },
   {
     "id": 1173,
@@ -21768,7 +22623,10 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-neo-5-max-8gb-512gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-neo-5-max-8gb-512gb.html",
+    "stockByCombination": {
+      "v1173_c135281": 20
+    }
   },
   {
     "id": 1174,
@@ -21890,7 +22748,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-x6c.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-x6c.html",
+    "stockByCombination": {
+      "v1174_c111745": 14,
+      "v1174_c111746": 4
+    }
   },
   {
     "id": 1175,
@@ -22011,7 +22873,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-reno13f-5g.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-reno13f-5g.html",
+    "stockByCombination": {
+      "v1175_c97370": 8,
+      "v1175_c97369": 21
+    }
   },
   {
     "id": 1176,
@@ -22138,7 +23004,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-a08.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-a08.html",
+    "stockByCombination": {
+      "v1176_c143967": 25,
+      "v1176_c143968": 0,
+      "v1176_c143966": 5
+    }
   },
   {
     "id": 1177,
@@ -22262,7 +23133,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-m55.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-m55.html",
+    "stockByCombination": {
+      "v1177_c85093": 19,
+      "v1177_c85094": 9
+    }
   },
   {
     "id": 1178,
@@ -22405,7 +23280,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/samsung-galaxy-s24-512gb.html"
+    "sourceUrl": "https://cellphones.com.vn/samsung-galaxy-s24-512gb.html",
+    "stockByCombination": {
+      "v1178_c74939": 13,
+      "v1178_c74938": 3,
+      "v1178_c74940": 16,
+      "v1178_c74941": 6
+    }
   },
   {
     "id": 1179,
@@ -22527,7 +23408,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-400-5g-12gb-512gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-400-5g-12gb-512gb.html",
+    "stockByCombination": {
+      "v1179_c111765": 7,
+      "v1179_c111766": 20
+    }
   },
   {
     "id": 1180,
@@ -22623,7 +23508,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/nokia-hmd-105-4g.html"
+    "sourceUrl": "https://cellphones.com.vn/nokia-hmd-105-4g.html",
+    "stockByCombination": {
+      "v1180_c89973": 0,
+      "v1180_c89974": 14,
+      "v1180_c89971": 4
+    }
   },
   {
     "id": 1181,
@@ -22753,7 +23643,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-z-fold-7-12gb-512gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-z-fold-7-12gb-512gb.html",
+    "stockByCombination": {
+      "v1181_c108375": 18,
+      "v1181_c108376": 8,
+      "v1181_c108377": 21
+    }
   },
   {
     "id": 1182,
@@ -22879,7 +23774,13 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-tecno-camon-40-8gb-256gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-tecno-camon-40-8gb-256gb.html",
+    "stockByCombination": {
+      "v1182_c125539": 12,
+      "v1182_c103048": 25,
+      "v1182_c103049": 15,
+      "v1182_c103050": 5
+    }
   },
   {
     "id": 1183,
@@ -23006,7 +23907,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-tecno-spark-go-3.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-tecno-spark-go-3.html",
+    "stockByCombination": {
+      "v1183_c130169": 6,
+      "v1183_c130170": 19,
+      "v1183_c130171": 0
+    }
   },
   {
     "id": 1184,
@@ -23122,7 +24028,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nothing-phone-2a-12gb-256gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nothing-phone-2a-12gb-256gb.html",
+    "stockByCombination": {
+      "v1184_c93827": 23,
+      "v1184_c93826": 13
+    }
   },
   {
     "id": 1185,
@@ -23253,7 +24163,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-z-flip-7-12gb-512gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-z-flip-7-12gb-512gb.html",
+    "stockByCombination": {
+      "v1185_c108370": 17,
+      "v1185_c108369": 7,
+      "v1185_c108371": 20
+    }
   },
   {
     "id": 1186,
@@ -23356,7 +24271,10 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/samsung-galaxy-note-10-chinh-hang.html"
+    "sourceUrl": "https://cellphones.com.vn/samsung-galaxy-note-10-chinh-hang.html",
+    "stockByCombination": {
+      "v1186_c1": 11
+    }
   },
   {
     "id": 1187,
@@ -23468,7 +24386,10 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-meizu-mblu-22-pro-8gb-256gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-meizu-mblu-22-pro-8gb-256gb.html",
+    "stockByCombination": {
+      "v1187_c135910": 5
+    }
   },
   {
     "id": 1188,
@@ -23596,7 +24517,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-realme-13-plus-5g.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-realme-13-plus-5g.html",
+    "stockByCombination": {
+      "v1188_c96539": 22,
+      "v1188_c92960": 12
+    }
   },
   {
     "id": 1189,
@@ -23722,7 +24647,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-a06.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-samsung-galaxy-a06.html",
+    "stockByCombination": {
+      "v1189_c91894": 16,
+      "v1189_c91893": 6,
+      "v1189_c91892": 19
+    }
   },
   {
     "id": 1190,
@@ -23858,7 +24788,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/xiaomi-redmi-note-11.html"
+    "sourceUrl": "https://cellphones.com.vn/xiaomi-redmi-note-11.html",
+    "stockByCombination": {
+      "v1190_c42904": 10,
+      "v1190_c42905": 23,
+      "v1190_c42897": 13
+    }
   },
   {
     "id": 1191,
@@ -23962,7 +24897,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/nokia-3210-4g.html"
+    "sourceUrl": "https://cellphones.com.vn/nokia-3210-4g.html",
+    "stockByCombination": {
+      "v1191_c83858": 0,
+      "v1191_c83857": 17,
+      "v1191_c83859": 7
+    }
   },
   {
     "id": 1192,
@@ -24086,7 +25026,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/oppo-a58.html"
+    "sourceUrl": "https://cellphones.com.vn/oppo-a58.html",
+    "stockByCombination": {
+      "v1192_c66895": 21,
+      "v1192_c66837": 11
+    }
   },
   {
     "id": 1193,
@@ -24210,7 +25154,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-tecno-pova-curve-2-5g-8gb-256gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-tecno-pova-curve-2-5g-8gb-256gb.html",
+    "stockByCombination": {
+      "v1193_c138071": 15,
+      "v1193_c138072": 5,
+      "v1193_c138070": 18
+    }
   },
   {
     "id": 1194,
@@ -24335,7 +25284,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-vivo-y28-8gb-256gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-vivo-y28-8gb-256gb.html",
+    "stockByCombination": {
+      "v1194_c105541": 9,
+      "v1194_c105542": 22
+    }
   },
   {
     "id": 1195,
@@ -24454,7 +25407,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-a3-8gb-256gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-a3-8gb-256gb.html",
+    "stockByCombination": {
+      "v1195_c87800": 3,
+      "v1195_c87799": 16
+    }
   },
   {
     "id": 1196,
@@ -24545,7 +25502,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/nokia-105-4g-pro.html"
+    "sourceUrl": "https://cellphones.com.vn/nokia-105-4g-pro.html",
+    "stockByCombination": {
+      "v1196_c65150": 20,
+      "v1196_c65151": 10
+    }
   },
   {
     "id": 1197,
@@ -24645,7 +25606,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/nokia-110-4g-pro.html"
+    "sourceUrl": "https://cellphones.com.vn/nokia-110-4g-pro.html",
+    "stockByCombination": {
+      "v1197_c65152": 14,
+      "v1197_c65153": 4
+    }
   },
   {
     "id": 1198,
@@ -24766,7 +25731,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-a5i-pro.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-a5i-pro.html",
+    "stockByCombination": {
+      "v1198_c108832": 8,
+      "v1198_c108831": 0
+    }
   },
   {
     "id": 1199,
@@ -24885,7 +25854,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-a3.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-oppo-a3.html",
+    "stockByCombination": {
+      "v1199_c87895": 25,
+      "v1199_c87896": 15
+    }
   },
   {
     "id": 1200,
@@ -25005,7 +25978,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/xiaomi-13-pro.html"
+    "sourceUrl": "https://cellphones.com.vn/xiaomi-13-pro.html",
+    "stockByCombination": {
+      "v1200_c60111": 19,
+      "v1200_c60101": 9
+    }
   },
   {
     "id": 1201,
@@ -25131,7 +26108,12 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-v70-max-6gb-128gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-v70-max-6gb-128gb.html",
+    "stockByCombination": {
+      "v1201_c102427": 13,
+      "v1201_c102425": 3,
+      "v1201_c102426": 16
+    }
   },
   {
     "id": 1202,
@@ -25233,7 +26215,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-v80-max-8gb-128gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-nubia-v80-max-8gb-128gb.html",
+    "stockByCombination": {
+      "v1202_c122358": 0,
+      "v1202_c122357": 20
+    }
   },
   {
     "id": 1203,
@@ -25358,7 +26344,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/oppo-a58-8gb-128gb.html"
+    "sourceUrl": "https://cellphones.com.vn/oppo-a58-8gb-128gb.html",
+    "stockByCombination": {
+      "v1203_c84904": 24,
+      "v1203_c84905": 14
+    }
   },
   {
     "id": 1204,
@@ -25479,7 +26469,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-x5c-plus.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-x5c-plus.html",
+    "stockByCombination": {
+      "v1204_c122354": 18,
+      "v1204_c122355": 8
+    }
   },
   {
     "id": 1205,
@@ -25605,7 +26599,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/vivo-y16.html"
+    "sourceUrl": "https://cellphones.com.vn/vivo-y16.html",
+    "stockByCombination": {
+      "v1205_c51676": 12,
+      "v1205_c51677": 25
+    }
   },
   {
     "id": 1206,
@@ -25722,7 +26720,11 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-play-10-4gb-128gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-play-10-4gb-128gb.html",
+    "stockByCombination": {
+      "v1206_c118068": 6,
+      "v1206_c118069": 19
+    }
   },
   {
     "id": 1207,
@@ -25843,6 +26845,10 @@
         }
       }
     },
-    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-x5c-plus-4gb-128gb.html"
+    "sourceUrl": "https://cellphones.com.vn/dien-thoai-honor-x5c-plus-4gb-128gb.html",
+    "stockByCombination": {
+      "v1207_c122353": 23,
+      "v1207_c122356": 13
+    }
   }
 ]

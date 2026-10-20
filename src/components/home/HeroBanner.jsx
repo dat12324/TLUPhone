@@ -5,31 +5,87 @@ import BannerCarousel from '../common/BannerCarousel'
 
 const PLACEHOLDER_IMAGE = '/images/products/placeholder.svg'
 
-const HeroSlide = ({ banner }) => (
-  <div className="flex min-h-[360px] items-center bg-secondary p-6 text-white md:min-h-[420px] md:p-10 lg:p-12">
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center w-full">
-      <div className="md:col-span-7 space-y-3 md:space-y-4 text-center md:text-left z-10">
-        {banner.tag && <span className="inline-block rounded-md bg-primary px-3 py-1 text-xs font-bold uppercase tracking-wider text-white md:text-sm">{banner.tag}</span>}
-        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">{banner.title}</h2>
-        <p className="text-sm md:text-base text-gray-300 max-w-lg mx-auto md:mx-0">{banner.subtitle}</p>
-        <div className="text-lg md:text-2xl font-bold text-amber-400">{banner.priceText}</div>
-        <div className="pt-2 flex items-center justify-center md:justify-start gap-3">
-          <Link to={banner.link} className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-rose-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white md:text-base">{banner.btnText}<FiArrowRight aria-hidden="true" /></Link>
-          <Link to="/products" className="hidden sm:inline-flex items-center text-sm font-medium text-gray-300 hover:text-white px-4 py-3 rounded-xl border border-white/20 hover:bg-white/10 transition-colors">Xem tất cả máy</Link>
-        </div>
-      </div>
-      <div className="md:col-span-5 flex justify-center items-center relative">
-        <div className="flex h-48 w-48 items-center justify-center sm:h-60 sm:w-60 md:h-72 md:w-72 lg:h-80 lg:w-80">
-          <img src={banner.image} alt={banner.title} onError={(e) => { e.currentTarget.src = PLACEHOLDER_IMAGE }} className="h-full w-full object-contain" />
-        </div>
-      </div>
+const HeroContent = ({ banner }) => (
+  <div className="relative z-10 space-y-4 text-center md:col-span-7 md:text-left lg:space-y-5">
+    {banner.tag && (
+      <span className="inline-flex min-h-8 items-center rounded-lg bg-primary px-3.5 py-1.5 text-xs font-extrabold uppercase tracking-[0.08em] text-white shadow-sm sm:text-sm">
+        {banner.tag}
+      </span>
+    )}
+
+    <div className="space-y-2.5 lg:space-y-3">
+      <h2 className="text-3xl font-black leading-[1.08] tracking-[-0.035em] text-white sm:text-4xl lg:text-5xl xl:text-6xl">
+        {banner.title}
+      </h2>
+      <p className="mx-auto max-w-xl text-sm leading-relaxed text-slate-300 sm:text-base md:mx-0 lg:text-lg">
+        {banner.subtitle}
+      </p>
+    </div>
+
+    <p className="text-xl font-extrabold tracking-tight text-amber-400 no-underline decoration-transparent sm:text-2xl lg:text-3xl">
+      {banner.priceText}
+    </p>
+
+    <div className="flex flex-wrap items-center justify-center gap-3 pt-1 md:justify-start">
+      <Link
+        to={banner.link}
+        className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-[background-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:bg-rose-700 hover:shadow-primary/30 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 sm:px-6 sm:text-base motion-reduce:transform-none"
+      >
+        {banner.btnText}
+        <FiArrowRight aria-hidden="true" />
+      </Link>
+      <Link
+        to="/products"
+        className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/25 bg-white/5 px-5 py-3 text-sm font-semibold text-slate-200 transition-[background-color,border-color,color] duration-200 hover:border-white/45 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white sm:px-6 sm:text-base"
+      >
+        Xem tất cả máy
+      </Link>
     </div>
   </div>
 )
 
+const ProductVisual = ({ banner }) => {
+  return (
+    <div className="relative z-10 flex items-center justify-center md:col-span-5">
+      <div aria-hidden="true" className="absolute h-40 w-40 rounded-full bg-primary/20 blur-3xl sm:h-56 sm:w-56 lg:h-72 lg:w-72" />
+      <div aria-hidden="true" className="absolute h-28 w-52 rounded-full bg-white/10 blur-3xl sm:h-36 sm:w-64" />
+
+      <div className="relative flex h-44 w-44 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-2xl sm:h-56 sm:w-56 md:h-72 md:w-72 lg:h-[22rem] lg:w-[22rem]">
+        <img
+          src={banner.image}
+          alt={banner.title}
+          draggable="false"
+          decoding="async"
+          onError={(event) => {
+            event.currentTarget.onerror = null
+            event.currentTarget.src = PLACEHOLDER_IMAGE
+          }}
+          className="h-full w-full object-contain drop-shadow-2xl"
+        />
+      </div>
+    </div>
+  )
+}
+
+const HeroSlide = ({ banner }) => (
+  <article className={`relative isolate overflow-hidden bg-gradient-to-br ${banner.bgColor || 'from-slate-950 via-slate-900 to-slate-800'} text-white`}>
+    <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-slate-950/30 via-transparent to-white/[0.03]" />
+    <div className="relative grid min-h-[560px] w-full grid-cols-1 items-center gap-5 px-6 pb-16 pt-8 sm:min-h-[540px] sm:px-20 sm:pb-16 sm:pt-12 md:min-h-[440px] md:grid-cols-12 md:gap-8 md:px-20 md:py-12 lg:min-h-[440px] lg:px-24 lg:py-10 xl:px-28">
+      <HeroContent banner={banner} />
+      <ProductVisual banner={banner} />
+    </div>
+  </article>
+)
+
 const HeroBanner = () => (
-  <div className="overflow-hidden rounded-2xl border border-slate-200 md:rounded-3xl">
-    <BannerCarousel items={heroBanners} interval={15000} ariaLabel="Banner trang chủ" renderSlide={(banner) => <HeroSlide banner={banner} />} />
+  <div className="overflow-hidden rounded-2xl border border-slate-200 bg-secondary shadow-sm md:rounded-3xl">
+    <BannerCarousel
+      items={heroBanners}
+      interval={15000}
+      ariaLabel="Banner trang chủ"
+      variant="hero"
+      renderSlide={(banner) => <HeroSlide banner={banner} />}
+    />
   </div>
 )
 

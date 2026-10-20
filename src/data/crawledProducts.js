@@ -40,6 +40,14 @@ const normalizePrice = (value, fallback = 0) => {
   return Number.isFinite(price) && price > 0 ? price : fallback
 }
 
+// Stable mock inventory for crawled products. The source site does not expose
+// real stock quantities, so the same product/variant/color always gets the
+// same demo value instead of changing on every page load.
+const getMockStock = (productIndex, variantIndex, colorIndex) => {
+  const seed = ((productIndex + 1) * 17) + ((variantIndex + 1) * 7) + ((colorIndex + 1) * 13)
+  return seed % 11 === 0 ? 0 : 3 + (seed % 23)
+}
+
 const normalizeSpecKey = (value = '') =>
   value
     .toLowerCase()
@@ -103,6 +111,13 @@ const crawledProducts = rawProducts.map((raw, index) => {
   const normalizedColors = colors.length > 0
     ? colors
     : [{ id: 'c1', name: 'Mặc định', colorCode: '#94a3b8', image: PLACEHOLDER_IMAGE }]
+  const variantId = `v${index + 1001}`
+  const stockByCombination = Object.fromEntries(
+    normalizedColors.map((color, colorIndex) => [
+      `${variantId}_${color.id}`,
+      getMockStock(index, 0, colorIndex),
+    ])
+  )
 
   return {
     id: index + 1001,
@@ -122,13 +137,14 @@ const crawledProducts = rawProducts.map((raw, index) => {
     description: `${raw.name} với cấu hình ${specs || 'đa dạng'}, giá bán ${price.toLocaleString('vi-VN')}₫. Sản phẩm chính hãng, hỗ trợ giao hàng và bảo hành theo chính sách của TLUPhone.`,
     highlights: Object.entries(technicalItems).slice(0, 6).map(([key, value]) => `${key}: ${value}`),
     variants: [{
-      id: `v${index + 1001}`,
+      id: variantId,
       ram: raw.ram_gb ? `${raw.ram_gb}GB` : '',
       storage: raw.storage || 'Tiêu chuẩn',
       price,
       originalPrice,
     }],
     colors: normalizedColors,
+    stockByCombination,
     specifications: groupTechnicalSpecifications(technicalItems),
     sourceUrl: raw.url,
   }

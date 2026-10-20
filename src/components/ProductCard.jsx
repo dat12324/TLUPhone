@@ -7,11 +7,12 @@ const PLACEHOLDER_IMAGE = '/images/products/placeholder.svg'
 
 // Format giá tiền VND
 const formatPrice = (price) => {
-  return price.toLocaleString('vi-VN') + '₫'
+  return (Number(price) || 0).toLocaleString('vi-VN') + '₫'
 }
 
 // Tính phần trăm giảm giá
 const getDiscountPercent = (originalPrice, price) => {
+  if (!originalPrice || originalPrice <= price) return 0
   return Math.round(((originalPrice - price) / originalPrice) * 100)
 }
 
@@ -20,6 +21,7 @@ const ProductCard = ({ product }) => {
   const { applyPromotionToProduct } = usePromotion()
   const displayedProduct = applyPromotionToProduct(product)
   const discount = getDiscountPercent(displayedProduct.originalPrice, displayedProduct.price)
+  const detailPath = `/products/${displayedProduct.slug || displayedProduct.id}`
 
   const handleImageError = (e) => {
     e.target.src = PLACEHOLDER_IMAGE
@@ -38,7 +40,7 @@ const ProductCard = ({ product }) => {
       className="group relative flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white transition-[border-color,box-shadow] duration-200 hover:border-rose-200 hover:shadow-sm"
     >
       <Link
-        to={`/products/${displayedProduct.id}`}
+        to={detailPath}
         className="flex flex-col flex-1 cursor-pointer"
         aria-label={displayedProduct.name}
       >
@@ -107,7 +109,7 @@ const ProductCard = ({ product }) => {
       {/* Thao tác phụ đặt ngoài Link sản phẩm */}
       <div className="px-3.5 pb-3.5 sm:px-4 sm:pb-4 pt-3 mt-auto flex items-center justify-between">
         <Link
-          to={`/products/${displayedProduct.id}`}
+          to={detailPath}
           className="inline-flex min-h-8 items-center gap-1 text-xs font-semibold text-primary transition-colors hover:text-rose-700"
         >
           <span>Xem chi tiết</span>

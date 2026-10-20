@@ -2,6 +2,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { FiArrowRight } from 'react-icons/fi'
 import BannerCarousel from '../common/BannerCarousel'
 import { productBrands, iphoneBanners, androidBanners } from '../../data/banners'
+import useActiveBrands from '../../hooks/useActiveBrands'
 
 const PromoCard = ({ banner, android = false }) => (
   <Link to={banner.link} className={`group relative block w-full min-h-[126px] overflow-hidden rounded-xl border px-6 py-5 shadow-sm ${android ? 'border-rose-200 bg-gradient-to-r from-rose-50 via-pink-50 to-red-100' : 'border-slate-700 bg-gradient-to-r from-slate-950 via-slate-800 to-indigo-950'}`}>
@@ -18,6 +19,20 @@ const PromoCard = ({ banner, android = false }) => (
 const ProductsPromoHeader = () => {
   const [searchParams] = useSearchParams()
   const selectedBrand = searchParams.get('brand')
+  const { activeBrands, loading } = useActiveBrands()
+  const activeByName = new Map(
+    activeBrands.map((brand) => [brand.name.toLocaleLowerCase('vi-VN'), brand]),
+  )
+  const visibleBrands = productBrands
+    .filter((brand) => activeByName.has(brand.name.toLocaleLowerCase('vi-VN')))
+    .map((brand) => {
+      const apiBrand = activeByName.get(brand.name.toLocaleLowerCase('vi-VN'))
+      return {
+        ...apiBrand,
+        // Khu vực này dùng wordmark dạng chữ; không thay nó bằng URL logo từ API.
+        logo: brand.logo,
+      }
+    })
 
   return (
     <section className="mb-8">
@@ -27,13 +42,15 @@ const ProductsPromoHeader = () => {
       </div>
       <h2 className="mb-4 text-2xl font-bold text-secondary md:text-3xl">Hãng</h2>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-10">
-        {productBrands.map((brand) => {
-          const isSelected = selectedBrand?.toLowerCase() === brand.name.toLowerCase()
+        {loading ? Array.from({ length: 10 }).map((_, index) => (
+          <span key={index} className="h-14 animate-pulse rounded-lg border border-slate-200 bg-white" aria-hidden="true" />
+        )) : visibleBrands.map((brand) => {
+          const isSelected = selectedBrand?.toLowerCase() === brand.slug.toLowerCase()
 
           return (
             <Link
               key={brand.name}
-              to={isSelected ? '/products' : `/products?brand=${encodeURIComponent(brand.name)}`}
+              to={isSelected ? '/products' : `/products?brand=${encodeURIComponent(brand.slug)}`}
               aria-current={isSelected ? 'true' : undefined}
               className={`flex h-14 items-center justify-center rounded-lg border px-2 text-center text-sm font-bold transition-all duration-200 active:scale-95 ${
                 isSelected
