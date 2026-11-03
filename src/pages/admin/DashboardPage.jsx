@@ -6,8 +6,8 @@ import RecentOrders from '../../components/admin/dashboard/RecentOrders'
 import RevenueChart from '../../components/admin/dashboard/RevenueChart'
 import StatCard from '../../components/admin/dashboard/StatCard'
 import TopProducts from '../../components/admin/dashboard/TopProducts'
-import { DASHBOARD_PERIODS } from '../../helpers/dashboardAnalytics'
-import { getDashboardData } from '../../services/dashboardService'
+import { DASHBOARD_PERIODS, calculateDashboardData } from '../../helpers/dashboardAnalytics'
+import { dashboardMockData, LOW_STOCK_THRESHOLD } from '../../data/mock/dashboard'
 import { formatAdminDate, formatVnd } from '../../utils/adminFormatters'
 
 const DashboardSkeleton = () => (
@@ -31,28 +31,14 @@ const DashboardPage = () => {
   const [reloadKey, setReloadKey] = useState(0)
 
   useEffect(() => {
-    let active = true
-    const controller = new AbortController()
     setLoading(true)
     setError('')
-
-    getDashboardData({ period, signal: controller.signal })
-      .then((data) => {
-        if (active) setDashboard(data)
-      })
-      .catch((requestError) => {
-        if (active && requestError.name !== 'AbortError') {
-          setError('Không thể tải dữ liệu Dashboard. Vui lòng thử lại.')
-        }
-      })
-      .finally(() => {
-        if (active) setLoading(false)
-      })
-
-    return () => {
-      active = false
-      controller.abort()
-    }
+    const timer = setTimeout(() => {
+      try { setDashboard(calculateDashboardData(dashboardMockData, period, LOW_STOCK_THRESHOLD)) }
+      catch { setError('Không thể tải dữ liệu Dashboard. Vui lòng thử lại.') }
+      finally { setLoading(false) }
+    }, 280)
+    return () => clearTimeout(timer)
   }, [period, reloadKey])
 
   return (

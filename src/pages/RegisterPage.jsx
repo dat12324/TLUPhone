@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import AuthLayout from '../components/auth/AuthLayout'
 import PasswordInput from '../components/auth/PasswordInput'
@@ -25,11 +25,9 @@ const RegisterPage = () => {
     acceptedTerms: false,
   })
   const [errors, setErrors] = useState({})
+  const [submitting, setSubmitting] = useState(false)
 
-  const dateOfBirth = useMemo(
-    () => buildDateOfBirth(form.day, form.month, form.year),
-    [form.day, form.month, form.year]
-  )
+  const dateOfBirth = buildDateOfBirth(form.day, form.month, form.year)
 
   const updateField = (event) => {
     const { name, value, checked, type } = event.target
@@ -41,15 +39,14 @@ const RegisterPage = () => {
     }))
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
+    if (submitting) return
     const nextErrors = {}
 
     if (!form.fullName.trim()) nextErrors.fullName = 'Vui lòng nhập họ và tên.'
 
-    if (!form.phone.trim()) {
-      nextErrors.phone = 'Vui lòng nhập số điện thoại.'
-    } else if (!isValidPhone(form.phone)) {
+    if (form.phone.trim() && !isValidPhone(form.phone)) {
       nextErrors.phone = 'Số điện thoại chưa đúng định dạng.'
     }
 
@@ -59,7 +56,7 @@ const RegisterPage = () => {
       nextErrors.email = 'Email chưa đúng định dạng.'
     }
 
-    if (!dateOfBirth) {
+    if ((form.day || form.month || form.year) && !dateOfBirth) {
       nextErrors.dateOfBirth = 'Vui lòng chọn ngày sinh hợp lệ và không ở tương lai.'
     }
 
@@ -82,14 +79,18 @@ const RegisterPage = () => {
       return
     }
 
-    register({
+    setSubmitting(true)
+    const result = await register({
       fullName: form.fullName.trim(),
       phone: normalizePhone(form.phone),
       email: form.email.trim(),
       dateOfBirth,
       password: form.password,
+      confirmPassword: form.confirmPassword,
     })
-    navigate('/', { replace: true })
+    setSubmitting(false)
+    if (!result.success) { setErrors({ form: result.message }); return }
+    navigate('/login', { replace: true, state: { registered: true, email: form.email.trim() } })
   }
 
   const inputClass = (hasError) =>
@@ -100,9 +101,10 @@ const RegisterPage = () => {
   return (
     <AuthLayout
       title="Tạo tài khoản"
-      subtitle="Đăng ký bằng số điện thoại. Email chỉ được dùng làm thông tin liên hệ."
+      subtitle="Đăng ký bằng email và mật khẩu. Số điện thoại và ngày sinh không bắt buộc."
     >
       <form onSubmit={handleSubmit} noValidate className="space-y-4">
+        {errors.form && <p role="alert" className="rounded-lg bg-red-50 p-3 text-sm text-red-600">{errors.form}</p>}
         <div>
           <label htmlFor="register-name" className="mb-1.5 block text-sm font-medium text-slate-700">Họ và tên</label>
           <input
@@ -208,9 +210,10 @@ const RegisterPage = () => {
 
         <button
           type="submit"
+          disabled={submitting}
           className="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
         >
-          Đăng ký
+          {submitting ? 'Đang đăng ký…' : 'Đăng ký'}
         </button>
       </form>
 

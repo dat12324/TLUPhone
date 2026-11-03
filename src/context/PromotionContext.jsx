@@ -72,6 +72,7 @@ export const PromotionProvider = ({ children }) => {
   )
 
   const applyPromotionToProduct = useCallback((product) => {
+    if (product?.source === 'api') return product
     if (!product || phase !== 'active') return product
 
     const promotionItem = getPromotionItem(product.id)

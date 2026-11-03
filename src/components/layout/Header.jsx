@@ -73,7 +73,7 @@ const Header = () => {
   const accountMenuRef = useRef(null)
   const navigate = useNavigate()
   const { totalCartCount } = useCart()
-  const { user, isAuthenticated, logout } = useAuth()
+  const { user, isAuthenticated, logout, authLoading } = useAuth()
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -91,12 +91,13 @@ const Header = () => {
     setIsAccountMenuOpen(false)
   }
 
-  const handleLogout = () => {
-    logout()
+  const handleLogout = async () => {
+    await logout()
     setIsAccountMenuOpen(false)
     navigate('/')
   }
 
+  const [failedAvatar, setFailedAvatar] = useState(null)
   const avatarText = user?.fullName
     ?.split(' ')
     .filter(Boolean)
@@ -157,7 +158,7 @@ const Header = () => {
           </Link>
 
           <div className="relative shrink-0" ref={accountMenuRef}>
-            {isAuthenticated ? (
+            {authLoading ? <div role="status" className="flex h-11 w-28 items-center gap-2 rounded-lg px-2"><span className="h-8 w-8 animate-pulse rounded-full bg-slate-100" aria-hidden="true" /><span className="h-3 w-16 animate-pulse rounded bg-slate-100" aria-hidden="true" /><span className="sr-only">Đang khôi phục phiên đăng nhập…</span></div> : isAuthenticated ? (
               <>
                 <button
                   type="button"
@@ -166,9 +167,11 @@ const Header = () => {
                   aria-expanded={isAccountMenuOpen}
                   aria-haspopup="menu"
                 >
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
-                    {avatarText}
-                  </span>
+                  {user.avatar && user.avatar !== failedAvatar ? (
+                    <img src={user.avatar} alt={`Ảnh đại diện của ${user.fullName}`} referrerPolicy="no-referrer" onError={() => setFailedAvatar(user.avatar)} className="h-8 w-8 shrink-0 rounded-full object-cover" />
+                  ) : (
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">{avatarText}</span>
+                  )}
                   <span className="max-w-20 truncate text-xs font-medium sm:max-w-28 sm:text-sm">
                     {user.fullName}
                   </span>

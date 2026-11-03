@@ -1,45 +1,45 @@
 import { useEffect, useRef, useState } from 'react'
 import { FiImage, FiTrash2, FiUpload } from 'react-icons/fi'
-import { ALLOWED_BRAND_LOGO_TYPES, validateBrandLogoFile } from '../../../helpers/brandValidation'
+import { ALLOWED_BRAND_LOGO_TYPES as ALLOWED_IMAGE_TYPES, validateBrandLogoFile as validateImageFile } from '../../helpers/brandValidation'
 
-const BrandLogoInput = ({ id, brandName, logo, file, error, onSelect, onRemove }) => {
+const ImageUploadInput = ({ id, imageName, imageUrl, file, error, onSelect, onRemove, label = 'Ảnh' }) => {
   const inputRef = useRef(null)
-  const [previewUrl, setPreviewUrl] = useState(logo || '')
+  const [previewUrl, setPreviewUrl] = useState(imageUrl || '')
   const [imageError, setImageError] = useState(false)
 
   useEffect(() => {
     setImageError(false)
     if (!file) {
-      setPreviewUrl(logo || '')
+      setPreviewUrl(imageUrl || '')
       return undefined
     }
 
     const objectUrl = URL.createObjectURL(file)
     setPreviewUrl(objectUrl)
     return () => URL.revokeObjectURL(objectUrl)
-  }, [file, logo])
+  }, [file, imageUrl])
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files?.[0] || null
-    const fileError = validateBrandLogoFile(selectedFile)
+    const fileError = validateImageFile(selectedFile)
     onSelect(fileError ? null : selectedFile, fileError)
     if (fileError) event.target.value = ''
   }
 
-  const removeLogo = () => {
+  const removeImage = () => {
     if (inputRef.current) inputRef.current.value = ''
     onRemove()
   }
 
   return (
     <div>
-      <span className="mb-2 block text-sm font-semibold text-secondary">Logo</span>
+      <span className="mb-2 block text-sm font-semibold text-secondary">{label}</span>
       <div className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:flex-row sm:items-center">
         <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-white">
           {previewUrl && !imageError ? (
-            <img src={previewUrl} alt={`Xem trước logo ${brandName || 'thương hiệu'}`} className="h-full w-full object-contain p-2" onError={() => setImageError(true)} />
-          ) : brandName ? (
-            <span className="text-lg font-bold text-slate-500">{brandName.slice(0, 2).toUpperCase()}</span>
+            <img src={previewUrl} alt={`Xem trước ảnh ${imageName || ''}`} className="h-full w-full object-contain p-2" onError={() => setImageError(true)} />
+          ) : imageName ? (
+            <span className="text-lg font-bold text-slate-500">{imageName.slice(0, 2).toUpperCase()}</span>
           ) : (
             <FiImage className="text-2xl text-slate-300" aria-hidden="true" />
           )}
@@ -50,13 +50,13 @@ const BrandLogoInput = ({ id, brandName, logo, file, error, onSelect, onRemove }
               <FiUpload aria-hidden="true" /> Chọn ảnh
             </label>
             {(previewUrl || file) && (
-              <button type="button" onClick={removeLogo} className="inline-flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm font-semibold text-red-600 hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500">
+              <button type="button" onClick={removeImage} className="inline-flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm font-semibold text-red-600 hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500">
                 <FiTrash2 aria-hidden="true" /> Bỏ ảnh
               </button>
             )}
           </div>
-          <input ref={inputRef} id={id} type="file" accept={ALLOWED_BRAND_LOGO_TYPES.join(',')} onChange={handleFileChange} className="sr-only" aria-describedby={`${id}-hint${error ? ` ${id}-error` : ''}`} />
-          <p id={`${id}-hint`} className="mt-2 text-xs leading-5 text-slate-500">PNG, JPG, JPEG hoặc WebP; tối đa 2MB.</p>
+          <input ref={inputRef} id={id} type="file" accept={ALLOWED_IMAGE_TYPES.join(',')} onChange={handleFileChange} className="sr-only" aria-describedby={`${id}-hint${error ? ` ${id}-error` : ''}`} />
+          <p id={`${id}-hint`} className="mt-2 text-xs leading-5 text-slate-500">PNG, JPG, JPEG hoặc WebP; tối đa 5MB.</p>
           {error && <p id={`${id}-error`} className="mt-1 text-xs font-medium text-red-600" role="alert">{error}</p>}
         </div>
       </div>
@@ -64,4 +64,4 @@ const BrandLogoInput = ({ id, brandName, logo, file, error, onSelect, onRemove }
   )
 }
 
-export default BrandLogoInput
+export default ImageUploadInput

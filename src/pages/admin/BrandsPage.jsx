@@ -1,10 +1,11 @@
+import api from '../../lib/api.js'
+import { catalogBody, paginateCatalog, mapBrand } from '../../helpers/catalog.js'
 import { useDeferredValue, useEffect, useState } from 'react'
-import { FiBox, FiEyeOff, FiPlus, FiRefreshCw, FiSearch, FiTag } from 'react-icons/fi'
+import { FiRefreshCw, FiSearch } from 'react-icons/fi'
 import BrandsTable, { BrandsEmptyState } from '../../components/admin/brands/BrandsTable'
-import BrandFormModal from '../../components/admin/brands/BrandFormModal'
-import BrandStatusDialog from '../../components/admin/brands/BrandStatusDialog'
-import StatCard from '../../components/admin/dashboard/StatCard'
-import { createBrand, getBrands, updateBrand, updateBrandStatus } from '../../services/brandService'
+import CatalogFormModal from '../../components/admin/shared/CatalogFormModal'
+import CatalogStatusDialog from '../../components/admin/shared/CatalogStatusDialog'
+import { CatalogHeader, CatalogStats } from '../../components/admin/shared/CatalogOverview'
 
 const PAGE_LIMIT = 10
 
@@ -38,53 +39,62 @@ const BrandsPage = () => {
   }, [notice])
 
   useEffect(() => {
-    let active = true
     const controller = new AbortController()
     setLoading(true)
     setError('')
 
-    getBrands({ search: deferredSearch, status, sortBy, page, limit: PAGE_LIMIT, signal: controller.signal })
+    const load = async () => {
+      const items = []
+      let nextPage = 1
+      let totalPages = 1
+      do {
+        const { data } = await api.get('/brands', { params: { page: nextPage, limit: 100 }, signal: controller.signal })
+        items.push(...data.data.map(mapBrand))
+        totalPages = data.pagination.totalPages
+        nextPage += 1
+      } while (nextPage <= totalPages)
+      return paginateCatalog(items, { search: deferredSearch, status, sortBy, page, limit: PAGE_LIMIT })
+    }
+    load()
       .then((data) => {
-        if (active) {
+        if (!controller.signal.aborted) {
           setResult(data)
           if (data.page !== page) setPage(data.page)
         }
       })
       .catch((requestError) => {
-        if (active && requestError.name !== 'AbortError') {
-          setError('Không thể tải danh sách thương hiệu. Vui lòng thử lại.')
+        if (!controller.signal.aborted && requestError.name !== 'AbortError') {
+          setError(requestError.message || 'Không thể tải danh sách thương hiệu. Vui lòng thử lại.')
         }
       })
       .finally(() => {
-        if (active) setLoading(false)
+        if (!controller.signal.aborted) setLoading(false)
       })
 
     return () => {
-      active = false
       controller.abort()
     }
   }, [deferredSearch, status, sortBy, page, reloadKey])
 
-  const updateSearch = (event) => {
-    setSearch(event.target.value)
-    setPage(1)
-  }
-
-  const updateStatus = (event) => {
-    setStatus(event.target.value)
-    setPage(1)
-  }
-
-  const updateSort = (event) => {
-    setSortBy(event.target.value)
+  const updateFilter = (event) => {
+    const setters = { search: setSearch, status: setStatus, sortBy: setSortBy }
+    setters[event.target.name](event.target.value)
     setPage(1)
   }
 
   const isInitialLoading = loading && !result
 
-  const saveBrand = (data) => formState.mode === 'edit'
-    ? updateBrand(formState.brand.id, data)
-    : createBrand(data)
+  const saveBrand = async input => {
+    const body = catalogBody(input, 'logo')
+    const response = formState.mode === 'edit'
+      ? await api.patch(`/brands/${encodeURIComponent(formState.brand.id)}`, body)
+      : await api.post('/brands', body)
+    return mapBrand(response.data.data)
+  }
+  const updateBrandStatus = async (id, status) => {
+    const { data } = await api.patch(`/brands/${encodeURIComponent(id)}`, { status })
+    return mapBrand(data.data)
+  }
 
   const handleBrandSaved = (savedBrand) => {
     const wasEdit = formState.mode === 'edit'
@@ -107,18 +117,7 @@ const BrandsPage = () => {
 
   return (
     <section className="mx-auto max-w-[1600px]" aria-labelledby="brands-title" aria-busy={loading}>
-      <div className="mb-6 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-primary">Danh mục sản phẩm</p>
-          <h1 id="brands-title" className="mt-1 text-2xl font-bold tracking-tight text-secondary sm:text-3xl">Quản lý thương hiệu</h1>
-          <p className="mt-2 text-sm text-slate-500 sm:text-base">Quản lý các thương hiệu điện thoại được kinh doanh tại TLUPhone.</p>
-        </div>
-        <div className="shrink-0">
-          <button type="button" onClick={() => setFormState({ mode: 'create', brand: null })} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-primary px-4 text-sm font-semibold text-white hover:bg-rose-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
-            <FiPlus aria-hidden="true" /> Thêm thương hiệu
-          </button>
-        </div>
-      </div>
+      <CatalogHeader type="brand" titleId="brands-title" onCreate={() => setFormState({ mode: 'create', brand: null })} />
 
       {notice && (
         <div className={`mb-6 rounded-xl border px-4 py-3 text-sm font-medium ${notice.type === 'success' ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : 'border-red-200 bg-red-50 text-red-700'}`} role={notice.type === 'success' ? 'status' : 'alert'} aria-atomic="true">
@@ -146,11 +145,7 @@ const BrandsPage = () => {
             </div>
           )}
 
-          <div className="grid gap-4 sm:grid-cols-3">
-            <StatCard icon={FiTag} label="Tổng thương hiệu" value={result.summary.total.toLocaleString('vi-VN')} note="Tất cả thương hiệu trong hệ thống" tone="blue" />
-            <StatCard icon={FiBox} label="Đang hoạt động" value={result.summary.active.toLocaleString('vi-VN')} note="Thương hiệu đang được kinh doanh" tone="emerald" />
-            <StatCard icon={FiEyeOff} label="Đã ẩn" value={result.summary.inactive.toLocaleString('vi-VN')} note="Thương hiệu tạm thời không hiển thị" tone="amber" />
-          </div>
+          <CatalogStats type="brand" summary={result.summary} />
 
           <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm" aria-labelledby="brand-list-title">
             <div className="border-b border-slate-100 p-4 sm:p-5">
@@ -163,11 +158,11 @@ const BrandsPage = () => {
                   <label className="relative block md:min-w-72">
                     <span className="sr-only">Tìm thương hiệu</span>
                     <FiSearch className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true" />
-                    <input value={search} onChange={updateSearch} placeholder="Tìm theo tên hoặc mã..." className="min-h-11 w-full rounded-xl border border-slate-300 bg-white py-2 pl-10 pr-4 text-sm text-secondary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/15" />
+                    <input value={search} name="search" onChange={updateFilter} placeholder="Tìm theo tên hoặc slug..." className="min-h-11 w-full rounded-xl border border-slate-300 bg-white py-2 pl-10 pr-4 text-sm text-secondary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/15" />
                   </label>
                   <label>
                     <span className="sr-only">Lọc trạng thái</span>
-                    <select value={status} onChange={updateStatus} className="min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3 text-sm text-slate-700 outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 md:w-auto">
+                    <select value={status} name="status" onChange={updateFilter} className="min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3 text-sm text-slate-700 outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 md:w-auto">
                       <option value="all">Tất cả trạng thái</option>
                       <option value="active">Đang hoạt động</option>
                       <option value="inactive">Đã ẩn</option>
@@ -175,7 +170,7 @@ const BrandsPage = () => {
                   </label>
                   <label>
                     <span className="sr-only">Sắp xếp thương hiệu</span>
-                    <select value={sortBy} onChange={updateSort} className="min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3 text-sm text-slate-700 outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 md:w-auto">
+                    <select value={sortBy} name="sortBy" onChange={updateFilter} className="min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3 text-sm text-slate-700 outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 md:w-auto">
                       <option value="nameAsc">Tên A–Z</option>
                       <option value="nameDesc">Tên Z–A</option>
                       <option value="newest">Ngày tạo mới nhất</option>
@@ -190,6 +185,7 @@ const BrandsPage = () => {
               {result.items.length > 0 ? (
                 <BrandsTable
                   brands={result.items}
+
                   onEdit={(brand) => setFormState({ mode: 'edit', brand })}
                   onStatusChange={setStatusBrand}
                 />
@@ -208,9 +204,10 @@ const BrandsPage = () => {
         </div>
       )}
 
+
       {formState && (
-        <BrandFormModal
-          brand={formState.brand}
+        <CatalogFormModal type="brand"
+          item={formState.brand}
           onClose={() => setFormState(null)}
           onSave={saveBrand}
           onSaved={handleBrandSaved}
@@ -218,8 +215,8 @@ const BrandsPage = () => {
       )}
 
       {statusBrand && (
-        <BrandStatusDialog
-          brand={statusBrand}
+        <CatalogStatusDialog type="brand"
+          item={statusBrand}
           onClose={() => setStatusBrand(null)}
           onConfirm={(nextStatus) => updateBrandStatus(statusBrand.id, nextStatus)}
           onCompleted={handleStatusCompleted}

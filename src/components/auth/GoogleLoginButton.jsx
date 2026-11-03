@@ -1,21 +1,62 @@
-const GoogleIcon = () => (
-  <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
-    <path fill="#4285F4" d="M21.6 12.23c0-.71-.06-1.4-.18-2.07H12v3.92h5.38a4.6 4.6 0 0 1-2 3.02v2.54h3.24c1.9-1.75 2.98-4.33 2.98-7.4Z" />
-    <path fill="#34A853" d="M12 22c2.7 0 4.98-.9 6.63-2.36l-3.24-2.54c-.9.6-2.05.96-3.39.96-2.61 0-4.82-1.76-5.61-4.13H3.04v2.62A10 10 0 0 0 12 22Z" />
-    <path fill="#FBBC05" d="M6.39 13.93A6 6 0 0 1 6.07 12c0-.67.12-1.32.32-1.93V7.45H3.04A10 10 0 0 0 2 12c0 1.62.39 3.15 1.04 4.55l3.35-2.62Z" />
-    <path fill="#EA4335" d="M12 5.94c1.47 0 2.79.5 3.83 1.5l2.87-2.87A9.64 9.64 0 0 0 12 2a10 10 0 0 0-8.96 5.45l3.35 2.62C7.18 7.7 9.39 5.94 12 5.94Z" />
-  </svg>
-)
+import { useEffect, useRef, useState } from 'react'
 
-const GoogleLoginButton = ({ onClick }) => (
-  <button
-    type="button"
-    onClick={onClick}
-    className="flex w-full items-center justify-center gap-3 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-primary/20"
-  >
-    <GoogleIcon />
-    Tiếp tục với Google
-  </button>
-)
+let googleScriptPromise
+const loadGoogleIdentity = () => {
+  if (window.google?.accounts?.id) return Promise.resolve(window.google.accounts.id)
+  if (!googleScriptPromise) {
+    googleScriptPromise = new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = 'https://accounts.google.com/gsi/client'
+      script.async = true
+      script.onload = () => {
+        if (window.google?.accounts?.id) resolve(window.google.accounts.id)
+        else reject(new Error('Không thể tải đăng nhập Google. Vui lòng tải lại trang.'))
+      }
+      script.onerror = () => { script.remove(); reject(new Error('Không thể kết nối Google. Vui lòng tải lại trang.')) }
+      document.head.appendChild(script)
+    }).catch(error => { googleScriptPromise = null; throw error })
+  }
+  return googleScriptPromise
+}
+
+const GoogleLoginButton = ({ onCredential, onError, disabled = false }) => {
+  const container = useRef(null)
+  const callbacks = useRef({ onCredential, onError, disabled })
+  callbacks.current = { onCredential, onError, disabled }
+  const [ready, setReady] = useState(false)
+  const [loadError, setLoadError] = useState('')
+  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
+
+  useEffect(() => {
+    let active = true
+    if (!clientId) {
+      setLoadError('Đăng nhập Google chưa được cấu hình.')
+      return
+    }
+    loadGoogleIdentity().then(google => {
+      if (!active) return
+      google.initialize({
+        client_id: clientId,
+        auto_select: false,
+        callback: response => {
+          if (!active || callbacks.current.disabled) return
+          if (!response.credential) { callbacks.current.onError?.('Chưa nhận được thông tin đăng nhập Google.'); return }
+          callbacks.current.onCredential(response.credential)
+        },
+      })
+      google.renderButton(container.current, {
+        theme: 'outline', size: 'large', text: 'continue_with', shape: 'rectangular', locale: 'vi',
+        width: Math.min(400, container.current.clientWidth || 400),
+      })
+      setReady(true)
+    }).catch(error => { if (active) setLoadError(error.message) })
+    return () => { active = false }
+  }, [clientId])
+
+  return <div aria-label="Đăng nhập bằng Google" aria-disabled={disabled} aria-busy={!ready && !loadError} inert={disabled || undefined} className={disabled ? 'pointer-events-none opacity-60' : ''}>
+    <div ref={container} className="mx-auto w-full max-w-[400px]" />
+    {!ready && <p role={loadError ? 'alert' : 'status'} className="py-2 text-center text-sm text-slate-500">{loadError || (clientId ? 'Đang tải đăng nhập Google…' : 'Đăng nhập Google chưa được cấu hình.')}</p>}
+  </div>
+}
 
 export default GoogleLoginButton

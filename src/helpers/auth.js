@@ -35,3 +35,11 @@ export const buildDateOfBirth = (day, month, year) => {
 
   return `${numericYear}-${String(numericMonth).padStart(2, '0')}-${String(numericDay).padStart(2, '0')}`
 }
+
+export const mapAuthUser = user => ({
+  ...user,
+  phone: user.phoneNumber || '',
+  dateOfBirth: user.dateOfBirth?.slice(0, 10) || '',
+  avatar: typeof user.avatar === 'string' ? user.avatar : user.avatar?.url || '',
+  authProvider: 'email',
+})

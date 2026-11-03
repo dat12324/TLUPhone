@@ -2,7 +2,88 @@ import { useDeferredValue, useEffect, useState } from 'react'
 import { FiActivity, FiCheckCircle, FiClock, FiPlus, FiRefreshCw, FiSearch, FiZap } from 'react-icons/fi'
 import FlashSalesTable, { FlashSalesEmptyState } from '../../components/admin/flash-sales/FlashSalesTable'
 import StatCard from '../../components/admin/dashboard/StatCard'
-import { getFlashSales } from '../../services/flashSaleService'
+import { mockFlashSales } from '../../data/mock/flashSales'
+
+const normalizeText = (value = '') => String(value).trim().toLocaleLowerCase('vi-VN')
+const parseTime = (value) => {
+  const timestamp = new Date(value).getTime()
+  return Number.isFinite(timestamp) ? timestamp : null
+}
+
+const getFlashSaleStatus = (flashSale, now = Date.now()) => {
+  if (!flashSale?.isEnabled) return 'disabled'
+  const startAt = parseTime(flashSale.startAt)
+  const endAt = parseTime(flashSale.endAt)
+  if (startAt === null || endAt === null || endAt <= startAt) return 'disabled'
+  if (now < startAt) return 'upcoming'
+  if (now >= endAt) return 'ended'
+  return 'active'
+}
+
+const sortFlashSales = (items, sortBy) => {
+  const compareDate = (a, b, field, direction) => {
+    const first = parseTime(a[field])
+    const second = parseTime(b[field])
+    if (first === null && second === null) return 0
+    if (first === null) return 1
+    if (second === null) return -1
+    return direction === 'asc' ? first - second : second - first
+  }
+  const sorted = [...items]
+  if (sortBy === 'startOldest') return sorted.sort((a, b) => compareDate(a, b, 'startAt', 'asc'))
+  if (sortBy === 'createdNewest') return sorted.sort((a, b) => compareDate(a, b, 'createdAt', 'desc'))
+  if (sortBy === 'createdOldest') return sorted.sort((a, b) => compareDate(a, b, 'createdAt', 'asc'))
+  return sorted.sort((a, b) => compareDate(a, b, 'startAt', 'desc'))
+}
+
+const getFlashSales = ({
+  search = '',
+  status = 'all',
+  sortBy = 'startNewest',
+  page = 1,
+  limit = 10,
+  now = Date.now(),
+} = {}) => {
+  const allFlashSales = mockFlashSales.map((flashSale) => ({
+    ...flashSale,
+    items: Array.isArray(flashSale.items) ? flashSale.items : [],
+    skuCount: Array.isArray(flashSale.items) ? flashSale.items.length : 0,
+    computedStatus: getFlashSaleStatus(flashSale, now),
+  }))
+  const normalizedSearch = normalizeText(search)
+  const filtered = allFlashSales.filter((flashSale) => {
+    const matchesSearch = !normalizedSearch || normalizeText(flashSale.name).includes(normalizedSearch)
+    const matchesStatus = status === 'all' || flashSale.computedStatus === status
+    return matchesSearch && matchesStatus
+  })
+  const sorted = sortFlashSales(filtered, sortBy)
+  const safeLimit = Math.min(10, Math.max(1, Number(limit) || 10))
+  const totalPages = Math.ceil(sorted.length / safeLimit)
+  const requestedPage = Math.max(1, Number(page) || 1)
+  const safePage = totalPages ? Math.min(requestedPage, totalPages) : 1
+  const startIndex = (safePage - 1) * safeLimit
+  const nextBoundaryAt = allFlashSales
+    .filter((flashSale) => flashSale.isEnabled)
+    .flatMap((flashSale) => [parseTime(flashSale.startAt), parseTime(flashSale.endAt)])
+    .filter((timestamp) => timestamp !== null && timestamp > now)
+    .sort((a, b) => a - b)[0] || null
+
+  return {
+    items: sorted.slice(startIndex, startIndex + safeLimit),
+    total: sorted.length,
+    page: safePage,
+    limit: safeLimit,
+    totalPages,
+    summary: {
+      total: allFlashSales.length,
+      active: allFlashSales.filter((item) => item.computedStatus === 'active').length,
+      upcoming: allFlashSales.filter((item) => item.computedStatus === 'upcoming').length,
+      ended: allFlashSales.filter((item) => item.computedStatus === 'ended').length,
+    },
+    meta: { nextBoundaryAt },
+  }
+}
+
 
 const PAGE_LIMIT = 10
 const MAX_TIMEOUT = 2_147_483_647
@@ -28,28 +109,17 @@ const FlashSalesPage = () => {
   const [reloadKey, setReloadKey] = useState(0)
 
   useEffect(() => {
-    let active = true
-    const controller = new AbortController()
     setLoading(true)
     setError('')
-
-    getFlashSales({ search: deferredSearch, status, sortBy, page, limit: PAGE_LIMIT, signal: controller.signal })
-      .then((data) => {
-        if (!active) return
+    const timer = setTimeout(() => {
+      try {
+        const data = getFlashSales({ search: deferredSearch, status, sortBy, page, limit: PAGE_LIMIT })
         setResult(data)
         if (data.page !== page) setPage(data.page)
-      })
-      .catch((requestError) => {
-        if (active && requestError.name !== 'AbortError') setError('Không thể tải danh sách Flash Sale. Vui lòng thử lại.')
-      })
-      .finally(() => {
-        if (active) setLoading(false)
-      })
-
-    return () => {
-      active = false
-      controller.abort()
-    }
+      } catch { setError('Không thể tải danh sách Flash Sale. Vui lòng thử lại.') }
+      finally { setLoading(false) }
+    }, 280)
+    return () => clearTimeout(timer)
   }, [deferredSearch, status, sortBy, page, reloadKey])
 
   useEffect(() => {

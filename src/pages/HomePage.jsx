@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FiZap, FiStar, FiAward, FiChevronRight } from 'react-icons/fi'
 import HeroBanner from '../components/home/HeroBanner'
@@ -9,7 +9,27 @@ import BrandTabsSection from '../components/home/BrandTabsSection'
 import PromotionCountdown from '../components/home/PromotionCountdown'
 import ProductCard from '../components/ProductCard'
 import { usePromotion } from '../context/PromotionContext'
-import { getProducts } from '../services/catalogService'
+import useCatalog from '../hooks/useCatalog.js'
+
+const ProductSection = ({ products, title, description, icon: Icon, tone }) => products.length > 0 && (
+  <section className="my-10">
+    <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center gap-2.5">
+        <div className={`w-8 h-8 rounded-lg ${tone} flex items-center justify-center text-lg`}><Icon /></div>
+        <div>
+          <h2 className="text-xl md:text-2xl font-bold text-secondary">{title}</h2>
+          <p className="text-xs md:text-sm text-gray-500 mt-0.5">{description}</p>
+        </div>
+      </div>
+      <Link to="/products" className="inline-flex items-center gap-1 text-xs md:text-sm font-semibold text-primary hover:underline">
+        <span>Xem tất cả</span><FiChevronRight className="text-sm" />
+      </Link>
+    </div>
+    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {products.map(product => <ProductCard key={product.databaseId || product.id} product={product} />)}
+    </div>
+  </section>
+)
 
 const HomePage = () => {
   const {
@@ -17,53 +37,15 @@ const HomePage = () => {
     phase: promotionPhase,
     promotionItems,
   } = usePromotion()
-  const [catalog, setCatalog] = useState({
-    hotDeals: [],
-    featured: [],
-    newest: [],
-  })
-  const [catalogLoading, setCatalogLoading] = useState(true)
-  const [catalogError, setCatalogError] = useState('')
   const [retryKey, setRetryKey] = useState(0)
-
-  useEffect(() => {
-    const controller = new AbortController()
-
-    const loadCatalog = async () => {
-      setCatalogLoading(true)
-      setCatalogError('')
-
-      try {
-        const [hotDeals, featured, newest] = await Promise.all([
-          getProducts({ hotDeal: true, page: 1, limit: 5 }, { signal: controller.signal }),
-          getProducts(
-            { featured: true, page: 1, limit: 8, sort: 'rating_desc' },
-            { signal: controller.signal },
-          ),
-          getProducts({ isNew: true, page: 1, limit: 4, sort: 'newest' }, { signal: controller.signal }),
-        ])
-
-        setCatalog({
-          hotDeals: hotDeals.items,
-          featured: featured.items,
-          newest: newest.items,
-        })
-      } catch (error) {
-        if (error.name !== 'AbortError') {
-          setCatalogError(error.message || 'Không thể tải sản phẩm từ máy chủ.')
-        }
-      } finally {
-        if (!controller.signal.aborted) setCatalogLoading(false)
-      }
-    }
-
-    loadCatalog()
-    return () => controller.abort()
-  }, [retryKey])
-
-  const hotDealProducts = catalog.hotDeals
-  const featuredProducts = catalog.featured
-  const newProducts = catalog.newest
+  const hotDeals = useCatalog({ isHotDeal: true, limit: 5 }, retryKey)
+  const featured = useCatalog({ isFeatured: true, sort: 'rating_desc', limit: 8 }, retryKey)
+  const newest = useCatalog({ isNew: true, sort: 'newest', limit: 4 }, retryKey)
+  const catalogLoading = hotDeals.loading || featured.loading || newest.loading
+  const catalogError = hotDeals.error || featured.error || newest.error
+  const hotDealProducts = hotDeals.products
+  const featuredProducts = featured.products
+  const newProducts = newest.products
   const hasActivePromotion = promotionItems.length > 0 && promotionPhase === 'active'
 
   return (
@@ -151,38 +133,7 @@ const HomePage = () => {
         <PromoBanners startIndex={0} count={2} />
 
         {/* 6. Section: Sản phẩm nổi bật */}
-        {featuredProducts.length > 0 && (
-          <section className="my-10">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-rose-100 text-primary flex items-center justify-center text-lg">
-                  <FiStar />
-                </div>
-                <div>
-                  <h2 className="text-xl md:text-2xl font-bold text-secondary">
-                    Sản phẩm nổi bật
-                  </h2>
-                  <p className="text-xs md:text-sm text-gray-500 mt-0.5">
-                    Những mẫu smartphone được yêu thích và đánh giá cao nhất
-                  </p>
-                </div>
-              </div>
-              <Link
-                to="/products"
-                className="inline-flex items-center gap-1 text-xs md:text-sm font-semibold text-primary hover:underline"
-              >
-                <span>Xem tất cả</span>
-                <FiChevronRight className="text-sm" />
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {featuredProducts.map((product) => (
-                <ProductCard key={product.databaseId || product.id} product={product} />
-              ))}
-            </div>
-          </section>
-        )}
+        <ProductSection products={featuredProducts} icon={FiStar} tone="bg-rose-100 text-primary" title="Sản phẩm nổi bật" description="Những mẫu smartphone được yêu thích và đánh giá cao nhất" />
 
         {/* 7. Section: Sản phẩm theo hãng (Tabs Apple / Samsung / Xiaomi / OPPO) */}
         <BrandTabsSection />
@@ -191,38 +142,7 @@ const HomePage = () => {
         <PromoBanners startIndex={2} count={1} />
 
         {/* 9. Section: Điện thoại mới */}
-        {newProducts.length > 0 && (
-          <section className="my-10">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center text-lg">
-                  <FiAward />
-                </div>
-                <div>
-                  <h2 className="text-xl md:text-2xl font-bold text-secondary">
-                    Điện thoại mới
-                  </h2>
-                  <p className="text-xs md:text-sm text-gray-500 mt-0.5">
-                    Các dòng smartphone công nghệ mới nhất vừa cập bến
-                  </p>
-                </div>
-              </div>
-              <Link
-                to="/products"
-                className="inline-flex items-center gap-1 text-xs md:text-sm font-semibold text-primary hover:underline"
-              >
-                <span>Xem tất cả</span>
-                <FiChevronRight className="text-sm" />
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {newProducts.map((product) => (
-                <ProductCard key={product.databaseId || product.id} product={product} />
-              ))}
-            </div>
-          </section>
-        )}
+        <ProductSection products={newProducts} icon={FiAward} tone="bg-amber-100 text-amber-700" title="Điện thoại mới" description="Các dòng smartphone công nghệ mới nhất vừa cập bến" />
       </div>
     </div>
   )

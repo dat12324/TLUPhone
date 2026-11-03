@@ -2,7 +2,6 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { FiArrowRight } from 'react-icons/fi'
 import BannerCarousel from '../common/BannerCarousel'
 import { productBrands, iphoneBanners, androidBanners } from '../../data/banners'
-import useActiveBrands from '../../hooks/useActiveBrands'
 
 const PromoCard = ({ banner, android = false }) => (
   <Link to={banner.link} className={`group relative block w-full min-h-[126px] overflow-hidden rounded-xl border px-6 py-5 shadow-sm ${android ? 'border-rose-200 bg-gradient-to-r from-rose-50 via-pink-50 to-red-100' : 'border-slate-700 bg-gradient-to-r from-slate-950 via-slate-800 to-indigo-950'}`}>
@@ -16,23 +15,13 @@ const PromoCard = ({ banner, android = false }) => (
   </Link>
 )
 
-const ProductsPromoHeader = () => {
+const ProductsPromoHeader = ({ activeBrands, loading }) => {
   const [searchParams] = useSearchParams()
   const selectedBrand = searchParams.get('brand')
-  const { activeBrands, loading } = useActiveBrands()
-  const activeByName = new Map(
-    activeBrands.map((brand) => [brand.name.toLocaleLowerCase('vi-VN'), brand]),
-  )
-  const visibleBrands = productBrands
-    .filter((brand) => activeByName.has(brand.name.toLocaleLowerCase('vi-VN')))
-    .map((brand) => {
-      const apiBrand = activeByName.get(brand.name.toLocaleLowerCase('vi-VN'))
-      return {
-        ...apiBrand,
-        // Khu vực này dùng wordmark dạng chữ; không thay nó bằng URL logo từ API.
-        logo: brand.logo,
-      }
-    })
+  const visibleBrands = activeBrands.map(brand => ({
+    ...brand,
+    wordmark: productBrands.find(item => item.name.toLocaleLowerCase('vi-VN') === brand.name.toLocaleLowerCase('vi-VN'))?.logo || brand.name,
+  }))
 
   return (
     <section className="mb-8">
@@ -59,7 +48,7 @@ const ProductsPromoHeader = () => {
               }`}
             >
               <span className={brand.name === 'OPPO' || brand.name === 'realme' ? 'text-xl font-medium' : ''}>
-                {brand.logo}
+                {brand.wordmark}
               </span>
             </Link>
           )

@@ -2,14 +2,28 @@ import { useEffect, useId, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { FiEye, FiEyeOff, FiLoader, FiX } from 'react-icons/fi'
 
-const BrandStatusDialog = ({ brand, onClose, onConfirm, onCompleted }) => {
+const descriptions = {
+  brand: {
+    label: 'thương hiệu', subject: 'Thương hiệu',
+    hidden: 'Thương hiệu sẽ không còn nằm trong danh sách có thể chọn khi tạo sản phẩm mới. Các sản phẩm đã liên kết vẫn được giữ nguyên và không bị ẩn hoặc xóa.',
+    active: 'Thương hiệu sẽ trở lại danh sách có thể chọn khi tạo sản phẩm mới. Các liên kết sản phẩm hiện có không thay đổi.',
+  },
+  category: {
+    label: 'danh mục', subject: 'Danh mục',
+    hidden: 'Danh mục sẽ không còn xuất hiện trong danh sách có thể chọn khi tạo sản phẩm mới hoặc trên bộ chọn danh mục phía khách hàng. Sản phẩm và đơn hàng đã liên kết vẫn được giữ nguyên.',
+    active: 'Danh mục sẽ trở lại danh sách có thể chọn. Các sản phẩm và liên kết hiện có không thay đổi.',
+  },
+}
+
+const CatalogStatusDialog = ({ item, type, onClose, onConfirm, onCompleted }) => {
+  const { label, subject, hidden, active } = descriptions[type]
   const titleId = useId()
   const dialogRef = useRef(null)
   const cancelRef = useRef(null)
   const savingRef = useRef(false)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
-  const isHiding = brand.status === 'active'
+  const isHiding = item.status === 'active'
   const nextStatus = isHiding ? 'inactive' : 'active'
 
   useEffect(() => {
@@ -48,15 +62,13 @@ const BrandStatusDialog = ({ brand, onClose, onConfirm, onCompleted }) => {
   }, [onClose])
 
   const confirmStatus = async () => {
-    if (saving) return
+    if (savingRef.current) return
     savingRef.current = true
     setSaving(true)
     setError('')
     try {
-      const updatedBrand = await onConfirm(nextStatus)
-      savingRef.current = false
-      setSaving(false)
-      onCompleted(updatedBrand)
+      const updatedItem = await onConfirm(nextStatus)
+      onCompleted(updatedItem)
     } catch (requestError) {
       setError(requestError.message || 'Không thể cập nhật trạng thái. Vui lòng thử lại.')
       savingRef.current = false
@@ -80,17 +92,11 @@ const BrandStatusDialog = ({ brand, onClose, onConfirm, onCompleted }) => {
 
         <div className="px-5 pb-5 pt-4 sm:px-6 sm:pb-6">
           <h2 id={titleId} className="text-xl font-bold text-secondary">
-            {isHiding ? 'Ẩn thương hiệu' : 'Kích hoạt thương hiệu'} {brand.name}?
+            {`${isHiding ? 'Ẩn' : 'Kích hoạt'} ${label}`} {item.name}?
           </h2>
           <div id={`${titleId}-description`} className="mt-3 space-y-3 text-sm leading-6 text-slate-600">
-            <p>
-              Thương hiệu này hiện có <strong className="text-secondary">{brand.productCount.toLocaleString('vi-VN')} sản phẩm</strong> liên kết.
-            </p>
-            {isHiding ? (
-              <p>Thương hiệu sẽ không còn nằm trong danh sách có thể chọn khi tạo sản phẩm mới. Các sản phẩm đã liên kết vẫn được giữ nguyên và không bị ẩn hoặc xóa.</p>
-            ) : (
-              <p>Thương hiệu sẽ trở lại danh sách có thể chọn khi tạo sản phẩm mới. Các liên kết sản phẩm hiện có không thay đổi.</p>
-            )}
+            <p>{subject} này hiện có <strong className="text-secondary">{item.productCount?.toLocaleString('vi-VN') ?? '—'} sản phẩm</strong> liên kết.</p>
+            <p>{isHiding ? hidden : active}</p>
           </div>
 
           {error && <p className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700" role="alert">{error}</p>}
@@ -99,7 +105,7 @@ const BrandStatusDialog = ({ brand, onClose, onConfirm, onCompleted }) => {
             <button ref={cancelRef} type="button" onClick={onClose} disabled={saving} className="min-h-11 rounded-xl border border-slate-300 px-5 text-sm font-semibold text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-40">Hủy</button>
             <button type="button" onClick={confirmStatus} disabled={saving} className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-5 text-sm font-semibold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 ${isHiding ? 'bg-amber-600 hover:bg-amber-700 focus-visible:ring-amber-600' : 'bg-emerald-600 hover:bg-emerald-700 focus-visible:ring-emerald-600'}`}>
               {saving && <FiLoader className="animate-spin" aria-hidden="true" />}
-              {saving ? 'Đang cập nhật...' : isHiding ? 'Ẩn thương hiệu' : 'Kích hoạt'}
+              {saving ? 'Đang cập nhật...' : isHiding ? `Ẩn ${label}` : 'Kích hoạt'}
             </button>
           </div>
         </div>
@@ -109,4 +115,4 @@ const BrandStatusDialog = ({ brand, onClose, onConfirm, onCompleted }) => {
   )
 }
 
-export default BrandStatusDialog
+export default CatalogStatusDialog

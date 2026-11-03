@@ -147,11 +147,10 @@ const CartPage = () => {
                 return (
                   <div
                     key={item.id}
-                    className={`bg-white rounded-2xl border p-4 sm:p-5 transition-all shadow-xs ${
-                      item.selected
+                    className={`bg-white rounded-2xl border p-4 sm:p-5 transition-all shadow-xs ${item.selected
                         ? 'border-rose-200 bg-white'
                         : 'border-gray-100 bg-slate-50/60 opacity-80'
-                    }`}
+                      }`}
                   >
                     <div className="flex items-start gap-3 sm:gap-4">
                       {/* Checkbox chọn sản phẩm */}
@@ -302,33 +301,17 @@ const CartPage = () => {
 
               {/* Chi tiết tính tiền */}
               <div className="space-y-2.5 text-sm">
-                <div className="flex items-center justify-between text-gray-600">
-                  <span>Số lượng sản phẩm</span>
-                  <span className="font-semibold text-secondary">
-                    {selectedTotalQuantity}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between text-gray-600">
-                  <span>Tạm tính:</span>
-                  <span className="font-semibold text-secondary">
-                    {formatPrice(selectedSubtotal)}
-                  </span>
-                </div>
-
-                {selectedDiscount > 0 && (
-                  <div className="flex items-center justify-between text-emerald-600">
-                    <span>Khuyến mãi giảm:</span>
-                    <span className="font-semibold">
-                      - {formatPrice(selectedDiscount)}
-                    </span>
+                {[
+                  { label: 'Số lượng sản phẩm', value: selectedTotalQuantity },
+                  { label: 'Tạm tính:', value: formatPrice(selectedSubtotal) },
+                  ...(selectedDiscount > 0 ? [{ label: 'Khuyến mãi giảm:', value: '- ' + formatPrice(selectedDiscount), discount: true }] : []),
+                  { label: 'Phí vận chuyển:', value: 'Miễn phí', freeShipping: true },
+                ].map(({ label, value, discount, freeShipping }) => (
+                  <div key={label} className={`flex items-center justify-between ${discount ? 'text-emerald-600' : 'text-gray-600'}`}>
+                    <span>{label}</span>
+                    <span className={`font-semibold${discount ? '' : freeShipping ? ' text-emerald-600' : ' text-secondary'}`}>{value}</span>
                   </div>
-                )}
-
-                <div className="flex items-center justify-between text-gray-600">
-                  <span>Phí vận chuyển:</span>
-                  <span className="font-semibold text-emerald-600">Miễn phí</span>
-                </div>
+                ))}
               </div>
 
               {/* Mã giảm giá */}
@@ -377,11 +360,10 @@ const CartPage = () => {
                 type="button"
                 onClick={handleProceedToCheckout}
                 disabled={selectedItems.length === 0}
-                className={`w-full py-3.5 px-6 rounded-xl font-bold text-sm transition-all shadow-md flex items-center justify-center gap-2 ${
-                  selectedItems.length === 0
+                className={`w-full py-3.5 px-6 rounded-xl font-bold text-sm transition-all shadow-md flex items-center justify-center gap-2 ${selectedItems.length === 0
                     ? 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'
                     : 'bg-primary hover:bg-rose-700 text-white hover:scale-[1.02] active:scale-[0.98]'
-                }`}
+                  }`}
               >
                 <span>Tiến hành thanh toán ({selectedTotalQuantity})</span>
                 <FiChevronRight className="text-base" />
@@ -408,115 +390,6 @@ const CartPage = () => {
           </div>
         </div>
       </div>
-
-      {false && showCouponInput && !appliedCoupon && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/55 p-4"
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) setShowCouponInput(false)
-          }}
-        >
-          <div className="w-full max-w-4xl overflow-hidden rounded-2xl bg-white shadow-2xl">
-            <div className="relative border-b border-gray-100 px-6 py-5 text-center">
-              <h2 className="text-xl font-bold text-secondary sm:text-2xl">
-                Nhập hoặc chọn mã khuyến mãi
-              </h2>
-              <button
-                type="button"
-                aria-label="Đóng"
-                onClick={() => setShowCouponInput(false)}
-                className="absolute right-4 top-4 rounded-full bg-gray-100 p-2 text-gray-500 hover:bg-gray-200"
-              >
-                <FiX className="text-xl" />
-              </button>
-            </div>
-
-            <div className="p-5 sm:p-7">
-              <div className="flex overflow-hidden rounded-xl border border-gray-300 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
-                <input
-                  type="text"
-                  value={couponCode}
-                  onChange={(event) => {
-                    setCouponCode(event.target.value.toUpperCase())
-                    setSelectedCouponCode('')
-                    setCouponError('')
-                  }}
-                  onKeyDown={(event) => event.key === 'Enter' && couponCode.trim() && handleApplyCoupon()}
-                  placeholder="Nhập mã khuyến mãi"
-                  autoFocus
-                  className="min-w-0 flex-1 px-4 py-3 text-sm uppercase outline-none placeholder:normal-case placeholder:text-gray-400 sm:text-base"
-                />
-                <button
-                  type="button"
-                  onClick={() => handleApplyCoupon()}
-                  disabled={!couponCode.trim()}
-                  className="border-l border-gray-200 px-5 font-semibold text-primary disabled:cursor-not-allowed disabled:text-gray-300"
-                >
-                  Áp dụng
-                </button>
-              </div>
-
-              {couponError && <p className="mt-2 text-sm font-medium text-rose-500">{couponError}</p>}
-
-              <p className="mb-3 mt-5 text-sm font-semibold uppercase text-gray-600">Khả dụng</p>
-              <div className="grid max-h-[42vh] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2">
-                {coupons.filter((coupon) => coupon.active).map((coupon) => {
-                  const eligible = selectedSubtotal >= coupon.minOrder
-                  const selected = selectedCouponCode === coupon.code
-                  return (
-                    <button
-                      type="button"
-                      key={coupon.id}
-                      onClick={() => {
-                        setSelectedCouponCode(coupon.code)
-                        setCouponCode(coupon.code)
-                        setCouponError('')
-                      }}
-                      className={`flex min-h-32 items-center gap-4 rounded-xl border p-4 text-left transition ${
-                        selected
-                          ? 'border-primary bg-rose-50 ring-1 ring-primary'
-                          : 'border-gray-200 bg-gray-50 hover:border-rose-300'
-                      }`}
-                    >
-                      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary text-2xl text-white">
-                        <FiGift />
-                      </span>
-                      <span className="min-w-0 flex-1">
-                        <strong className="block text-sm text-secondary sm:text-base">{coupon.code}</strong>
-                        <span className="mt-1 block text-sm font-medium text-rose-600">{coupon.description}</span>
-                        <span className={`mt-2 block text-xs ${eligible ? 'text-gray-500' : 'text-amber-600'}`}>
-                          {eligible
-                            ? 'Có thể áp dụng cho đơn hàng'
-                            : `Đơn tối thiểu ${formatPrice(coupon.minOrder)}`}
-                        </span>
-                      </span>
-                      <span className={`h-5 w-5 shrink-0 rounded-full border-2 ${
-                        selected
-                          ? 'border-primary bg-primary ring-4 ring-rose-100'
-                          : 'border-gray-300 bg-white'
-                      }`} />
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between gap-4 border-t border-gray-100 px-5 py-4 sm:px-7">
-              <span className="text-sm text-gray-500">
-                {selectedCouponCode ? `Đã chọn: ${selectedCouponCode}` : 'Chưa chọn ưu đãi nào.'}
-              </span>
-              <button
-                type="button"
-                disabled={!selectedCouponCode}
-                onClick={() => handleApplyCoupon(selectedCouponCode)}
-                className="min-w-40 rounded-xl bg-primary px-8 py-3 font-bold text-white hover:bg-rose-700 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400"
-              >
-                Xác nhận
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

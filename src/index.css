@@ -9,6 +9,14 @@
   box-sizing: border-box;
 }
 
+/* Keep storefront content centered at the same desktop width. */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 body {
   font-family: 'Inter', sans-serif;
   color: #1e293b;
@@ -24,4 +32,9 @@ a {
 img {
   max-width: 100%;
   height: auto;
+}
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
 }

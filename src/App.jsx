@@ -8,7 +8,7 @@ import { AuthProvider } from './context/AuthContext'
 import { PromotionProvider } from './context/PromotionContext'
 import ChatbotWidget from './components/common/ChatbotWidget'
 
-const authPaths = ['/login', '/register', '/forgot-password']
+const authPaths = ['/login', '/register', '/forgot-password', '/change-password', '/verify-email']
 
 const AppLayout = () => {
   const { pathname } = useLocation()

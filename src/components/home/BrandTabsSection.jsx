@@ -1,21 +1,19 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FiChevronRight } from 'react-icons/fi'
 import ProductCard from '../ProductCard'
 import useActiveBrands from '../../hooks/useActiveBrands'
-import { getProducts } from '../../services/catalogService'
+import useCatalog from '../../hooks/useCatalog.js'
 
 const BrandTabsSection = () => {
   const { activeBrands, loading: brandsLoading } = useActiveBrands()
-  const availableBrands = useMemo(
-    () => activeBrands.filter((brand) => brand.productCount > 0),
-    [activeBrands],
-  )
+  const availableBrands = activeBrands
   const [activeBrandSlug, setActiveBrandSlug] = useState('')
-  const [brandProducts, setBrandProducts] = useState([])
-  const [productsLoading, setProductsLoading] = useState(false)
-  const [error, setError] = useState('')
   const [retryKey, setRetryKey] = useState(0)
+  const { products: brandProducts, loading: productsLoading, error } = useCatalog(
+    activeBrandSlug ? { brand: activeBrandSlug, limit: 8, sort: 'newest' } : null,
+    retryKey,
+  )
 
   const activeBrand = availableBrands.find(
     (brand) => brand.slug === activeBrandSlug,
@@ -26,34 +24,6 @@ const BrandTabsSection = () => {
       setActiveBrandSlug(availableBrands[0]?.slug || '')
     }
   }, [activeBrandSlug, availableBrands])
-
-  useEffect(() => {
-    if (!activeBrandSlug) {
-      setBrandProducts([])
-      return undefined
-    }
-
-    const controller = new AbortController()
-    setProductsLoading(true)
-    setError('')
-
-    getProducts(
-      { brand: activeBrandSlug, page: 1, limit: 8, sort: 'newest' },
-      { signal: controller.signal },
-    )
-      .then(({ items }) => setBrandProducts(items))
-      .catch((requestError) => {
-        if (requestError.name !== 'AbortError') {
-          setBrandProducts([])
-          setError(requestError.message)
-        }
-      })
-      .finally(() => {
-        if (!controller.signal.aborted) setProductsLoading(false)
-      })
-
-    return () => controller.abort()
-  }, [activeBrandSlug, retryKey])
 
   return (
     <div className="my-10 bg-white rounded-2xl border border-gray-100 p-5 md:p-7 shadow-xs">

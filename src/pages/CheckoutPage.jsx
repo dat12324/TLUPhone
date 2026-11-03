@@ -1,20 +1,6 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import {
-  FiArrowLeft,
-  FiCheckCircle,
-  FiClock,
-  FiCreditCard,
-  FiDollarSign,
-  FiHome,
-  FiMail,
-  FiMapPin,
-  FiPackage,
-  FiPhone,
-  FiShield,
-  FiShoppingBag,
-  FiTruck,
-  FiUser,
+import {FiArrowLeft,FiCheckCircle,FiClock,FiCreditCard,FiDollarSign,FiHome,FiMail,FiMapPin,FiPackage,FiPhone,FiShield,FiShoppingBag,FiTruck,FiUser,
 } from 'react-icons/fi'
 import { useCart } from '../context/CartContext'
 import CouponSelector from '../components/common/CouponSelector'
@@ -45,11 +31,10 @@ const initialForm = {
   note: '',
 }
 
-const inputClass = (error) => `w-full rounded-xl border bg-white px-4 py-3 text-sm text-secondary outline-none transition placeholder:text-gray-400 ${
-  error
+const inputClass = (error) => `w-full rounded-xl border bg-white px-4 py-3 text-sm text-secondary outline-none transition placeholder:text-gray-400 ${error
     ? 'border-rose-400 focus:border-rose-500 focus:ring-2 focus:ring-rose-100'
     : 'border-gray-200 focus:border-primary focus:ring-2 focus:ring-rose-100'
-}`
+  }`
 
 const FormField = ({ label, required, error, children }) => (
   <label className="block">
@@ -59,6 +44,28 @@ const FormField = ({ label, required, error, children }) => (
     {children}
     {error && <span className="mt-1.5 block text-xs font-medium text-rose-600">{error}</span>}
   </label>
+)
+
+const IconField = ({ name, label, icon: Icon, form, errors, onChange, type, placeholder }) => (
+  <FormField label={label} required error={errors[name]}>
+    <div className="relative">
+      <Icon className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+      <input type={type} value={form[name]} onChange={(event) => onChange(name, event.target.value)} placeholder={placeholder} className={`${inputClass(errors[name])} pl-10`} />
+    </div>
+  </FormField>
+)
+
+const CheckoutSection = ({ icon: Icon, tone, title, description, children }) => (
+  <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm md:p-6">
+    <div className="mb-5 flex items-center gap-3">
+      <span className={`flex h-10 w-10 items-center justify-center rounded-xl ${tone}`}><Icon /></span>
+      <div>
+        <h2 className="font-bold text-secondary">{title}</h2>
+        <p className="text-xs text-gray-500">{description}</p>
+      </div>
+    </div>
+    {children}
+  </section>
 )
 
 const CheckoutPage = () => {
@@ -88,10 +95,7 @@ const CheckoutPage = () => {
   const wardOptions = selectedDistrict?.wards || []
   const selectedStore = storeLocations.find((store) => store.id === selectedStoreId) || null
 
-  const shippingFee = useMemo(
-    () => calculateShippingFee(shippingMethod, selectedSubtotal),
-    [shippingMethod, selectedSubtotal]
-  )
+  const shippingFee = calculateShippingFee(shippingMethod, selectedSubtotal)
   const total = Math.max(0, selectedSubtotal - couponDiscount + shippingFee)
   const selectedTotalQuantity = selectedItems.reduce(
     (sum, item) => sum + item.quantity,
@@ -104,24 +108,15 @@ const CheckoutPage = () => {
     setSubmitError('')
   }
 
-  const handleProvinceChange = (value) => {
-    setForm((current) => ({
-      ...current,
-      province: value,
-      district: '',
-      ward: '',
+  const updateAddress = (field, value) => {
+    setForm(current => ({
+      ...current, [field]: value, ward: '',
+      ...(field === 'province' ? { district: '' } : {}),
     }))
-    setErrors((current) => ({
-      ...current,
-      province: undefined,
-      district: undefined,
-      ward: undefined,
+    setErrors(current => ({
+      ...current, [field]: undefined, ward: undefined,
+      ...(field === 'province' ? { district: undefined } : {}),
     }))
-  }
-
-  const handleDistrictChange = (value) => {
-    setForm((current) => ({ ...current, district: value, ward: '' }))
-    setErrors((current) => ({ ...current, district: undefined, ward: undefined }))
   }
 
   const handleSubmit = (event) => {
@@ -217,47 +212,18 @@ const CheckoutPage = () => {
 
         <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-12">
           <div className="space-y-6 lg:col-span-7">
-            <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm md:p-6">
-              <div className="mb-5 flex items-center gap-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-50 text-primary"><FiUser /></span>
-                <div>
-                  <h2 className="font-bold text-secondary">Thông tin người nhận</h2>
-                  <p className="text-xs text-gray-500">Dùng để liên hệ và xác nhận giao nhận.</p>
-                </div>
-              </div>
+            <CheckoutSection icon={FiUser} tone="bg-rose-50 text-primary" title="Thông tin người nhận" description="Dùng để liên hệ và xác nhận giao nhận.">
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <FormField label="Họ và tên" required error={errors.fullName}>
-                  <div className="relative">
-                    <FiUser className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
-                    <input value={form.fullName} onChange={(e) => updateField('fullName', e.target.value)} placeholder="Nguyễn Văn A" className={`${inputClass(errors.fullName)} pl-10`} />
-                  </div>
-                </FormField>
-                <FormField label="Số điện thoại" required error={errors.phone}>
-                  <div className="relative">
-                    <FiPhone className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
-                    <input type="tel" value={form.phone} onChange={(e) => updateField('phone', e.target.value)} placeholder="0912345678" className={`${inputClass(errors.phone)} pl-10`} />
-                  </div>
-                </FormField>
+                <IconField name="fullName" label="Họ và tên" icon={FiUser} placeholder="Nguyễn Văn A" form={form} errors={errors} onChange={updateField} />
+                <IconField name="phone" label="Số điện thoại" icon={FiPhone} type="tel" placeholder="0912345678" form={form} errors={errors} onChange={updateField} />
                 <div className="sm:col-span-2">
-                  <FormField label="Email" required error={errors.email}>
-                    <div className="relative">
-                      <FiMail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
-                      <input type="email" value={form.email} onChange={(e) => updateField('email', e.target.value)} placeholder="email@example.com" className={`${inputClass(errors.email)} pl-10`} />
-                    </div>
-                  </FormField>
+                  <IconField name="email" label="Email" icon={FiMail} type="email" placeholder="email@example.com" form={form} errors={errors} onChange={updateField} />
                 </div>
               </div>
-            </section>
+            </CheckoutSection>
 
-            <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm md:p-6">
-              <div className="mb-5 flex items-center gap-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600"><FiTruck /></span>
-                <div>
-                  <h2 className="font-bold text-secondary">Phương thức nhận hàng</h2>
-                  <p className="text-xs text-gray-500">Chọn cách bạn muốn nhận sản phẩm.</p>
-                </div>
-              </div>
+            <CheckoutSection icon={FiTruck} tone="bg-blue-50 text-blue-600" title="Phương thức nhận hàng" description="Chọn cách bạn muốn nhận sản phẩm.">
 
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {shippingMethods.map((method) => (
@@ -280,13 +246,13 @@ const CheckoutPage = () => {
               {shippingMethod === 'delivery' && (
                 <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <FormField label="Tỉnh/Thành phố" required error={errors.province}>
-                    <select value={form.province} onChange={(e) => handleProvinceChange(e.target.value)} className={inputClass(errors.province)}>
+                    <select value={form.province} onChange={(e) => updateAddress('province', e.target.value)} className={inputClass(errors.province)}>
                       <option value="">Chọn Tỉnh/Thành phố</option>
                       {addressOptions.map((province) => <option key={province.name} value={province.name}>{province.name}</option>)}
                     </select>
                   </FormField>
                   <FormField label="Quận/Huyện" required error={errors.district}>
-                    <select value={form.district} disabled={!form.province} onChange={(e) => handleDistrictChange(e.target.value)} className={`${inputClass(errors.district)} disabled:cursor-not-allowed disabled:bg-gray-50`}>
+                    <select value={form.district} disabled={!form.province} onChange={(e) => updateAddress('district', e.target.value)} className={`${inputClass(errors.district)} disabled:cursor-not-allowed disabled:bg-gray-50`}>
                       <option value="">Chọn Quận/Huyện</option>
                       {districtOptions.map((district) => <option key={district.name} value={district.name}>{district.name}</option>)}
                     </select>
@@ -297,12 +263,7 @@ const CheckoutPage = () => {
                       {wardOptions.map((ward) => <option key={ward} value={ward}>{ward}</option>)}
                     </select>
                   </FormField>
-                  <FormField label="Địa chỉ cụ thể" required error={errors.addressLine}>
-                    <div className="relative">
-                      <FiHome className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
-                      <input value={form.addressLine} onChange={(e) => updateField('addressLine', e.target.value)} placeholder="Số nhà, tên đường" className={`${inputClass(errors.addressLine)} pl-10`} />
-                    </div>
-                  </FormField>
+                  <IconField name="addressLine" label="Địa chỉ cụ thể" icon={FiHome} placeholder="Số nhà, tên đường" form={form} errors={errors} onChange={updateField} />
                   <label className="flex cursor-pointer items-start gap-3 sm:col-span-2">
                     <input
                       type="checkbox"
@@ -336,16 +297,9 @@ const CheckoutPage = () => {
                   {errors.selectedStoreId && <p className="text-xs font-medium text-rose-600">{errors.selectedStoreId}</p>}
                 </div>
               )}
-            </section>
+            </CheckoutSection>
 
-            <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm md:p-6">
-              <div className="mb-5 flex items-center gap-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-600"><FiCreditCard /></span>
-                <div>
-                  <h2 className="font-bold text-secondary">Phương thức thanh toán</h2>
-                  <p className="text-xs text-gray-500">Không thực hiện giao dịch thật ở phiên bản hiện tại.</p>
-                </div>
-              </div>
+            <CheckoutSection icon={FiCreditCard} tone="bg-amber-50 text-amber-600" title="Phương thức thanh toán" description="Không thực hiện giao dịch thật ở phiên bản hiện tại.">
               <div className="space-y-3">
                 {paymentMethods.map((method) => (
                   <label key={method.id} className={`block cursor-pointer rounded-xl border p-4 transition ${paymentMethod === method.id ? 'border-primary bg-rose-50 ring-1 ring-primary' : 'border-gray-200 hover:border-rose-300'}`}>
@@ -367,7 +321,7 @@ const CheckoutPage = () => {
                 ))}
               </div>
               {errors.paymentMethod && <p className="mt-2 text-xs font-medium text-rose-600">{errors.paymentMethod}</p>}
-            </section>
+            </CheckoutSection>
 
             <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm md:p-6">
               <FormField label="Ghi chú đơn hàng">

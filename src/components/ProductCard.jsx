@@ -94,7 +94,7 @@ const ProductCard = ({ product }) => {
           <div className="mt-2 pt-2 border-t border-gray-50">
             <div className="flex items-baseline gap-1.5">
               <span className="text-base sm:text-lg font-extrabold text-primary">
-                {formatPrice(displayedProduct.price)}
+                {displayedProduct.price == null ? 'Chưa có giá' : formatPrice(displayedProduct.price)}
               </span>
             </div>
             {discount > 0 && (

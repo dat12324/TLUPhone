@@ -79,6 +79,7 @@ const AdminHeader = ({ admin, collapsed, onToggleSidebar, onOpenMobile }) => {
           {admin.avatarUrl ? (
             <img
               src={admin.avatarUrl}
+              referrerPolicy="no-referrer"
               alt=""
               className="h-9 w-9 rounded-full object-cover"
             />
@@ -100,9 +101,10 @@ const AdminHeader = ({ admin, collapsed, onToggleSidebar, onOpenMobile }) => {
               <FiUser className="text-lg text-slate-400" aria-hidden="true" />
               <div>
                 <p className="text-sm font-semibold text-secondary">Thông tin tài khoản</p>
-                <p className="text-xs text-slate-500">Tài khoản quản trị mẫu</p>
+                <p className="text-xs text-slate-500">Tài khoản quản trị</p>
               </div>
             </div>
+            <Link to="/change-password" onClick={() => setAccountOpen(false)} role="menuitem" className="flex min-h-11 items-center rounded-lg px-3 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-primary">Đổi mật khẩu</Link>
             <Link
               to="/"
               onClick={() => setAccountOpen(false)}
