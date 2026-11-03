@@ -8,6 +8,7 @@ import {
   FiSearch,
   FiShoppingCart,
   FiSmartphone,
+  FiTruck,
   FiUser,
 } from 'react-icons/fi'
 import { useCart } from '../../context/CartContext'
@@ -54,7 +55,7 @@ const SearchBar = ({ mobile = false }) => {
         value={keyword}
         onChange={(event) => setKeyword(event.target.value)}
         placeholder="Tìm kiếm điện thoại..."
-        className="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-4 pr-10 text-sm text-secondary outline-none transition placeholder:text-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/15"
+        className="w-full rounded-xl border border-slate-200 bg-white py-2 pl-4 pr-10 text-sm text-secondary outline-none transition placeholder:text-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/15"
         aria-label="Tìm kiếm điện thoại"
       />
       <button
@@ -109,13 +110,16 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm">
       {/* Topbar */}
-      <div className="bg-secondary py-1.5 text-sm text-white">
+      <div className="bg-secondary py-1.5 text-xs text-slate-200 sm:text-sm">
         <div className="container mx-auto flex items-center justify-between px-4">
-          <span className="flex items-center gap-1.5">
+          <span className="flex items-center gap-1.5 font-medium">
             <FiPhone className="text-xs" />
             Hotline: 1900 1234
           </span>
-          <span className="hidden sm:block">Miễn phí vận chuyển đơn từ 500K</span>
+          <span className="flex items-center gap-1.5 font-medium">
+            <FiTruck className="text-sm" />
+            Miễn phí vận chuyển đơn từ 500K
+          </span>
         </div>
       </div>
 
@@ -136,26 +140,33 @@ const Header = () => {
           <Link
             to="/products"
             onClick={handleNavClick}
-            className="flex shrink-0 items-center gap-1.5 rounded-lg px-2 py-2 text-sm font-semibold text-secondary transition hover:bg-rose-50 hover:text-primary sm:px-3"
+            className="flex shrink-0 items-center gap-1.5 rounded-lg px-2 py-2 text-sm font-semibold text-secondary transition hover:text-primary sm:px-2.5"
             aria-label="Sản phẩm"
           >
             <FiSmartphone className="text-lg" />
             <span className="hidden sm:inline">Sản phẩm</span>
           </Link>
 
+          <span className="hidden h-5 w-px bg-slate-200 sm:block" aria-hidden="true" />
+
           <Link
             to="/cart"
             onClick={handleNavClick}
-            className="relative flex shrink-0 items-center rounded-lg p-2 text-secondary transition hover:bg-rose-50 hover:text-primary"
+            className="flex shrink-0 items-center gap-2 rounded-lg px-2 py-2 text-sm font-semibold text-secondary transition hover:text-primary sm:px-2.5"
             aria-label="Giỏ hàng"
           >
-            <FiShoppingCart className="text-xl" />
-            {totalCartCount > 0 && (
-              <span className="absolute -right-0.5 -top-0.5 flex min-h-[18px] min-w-[18px] items-center justify-center rounded-full bg-primary px-1 text-[11px] font-bold text-white shadow-sm">
-                {totalCartCount > 99 ? '99+' : totalCartCount}
-              </span>
-            )}
+            <div className="relative flex items-center">
+              <FiShoppingCart className="text-xl" />
+              {totalCartCount > 0 && (
+                <span className="absolute -right-2 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-white shadow-xs">
+                  {totalCartCount > 99 ? '99+' : totalCartCount}
+                </span>
+              )}
+            </div>
+            <span className="hidden sm:inline">Giỏ hàng</span>
           </Link>
+
+          <span className="hidden h-5 w-px bg-slate-200 sm:block" aria-hidden="true" />
 
           <div className="relative shrink-0" ref={accountMenuRef}>
             {authLoading ? <div role="status" className="flex h-11 w-28 items-center gap-2 rounded-lg px-2"><span className="h-8 w-8 animate-pulse rounded-full bg-slate-100" aria-hidden="true" /><span className="h-3 w-16 animate-pulse rounded bg-slate-100" aria-hidden="true" /><span className="sr-only">Đang khôi phục phiên đăng nhập…</span></div> : isAuthenticated ? (
@@ -218,10 +229,10 @@ const Header = () => {
               <Link
                 to="/login"
                 onClick={handleNavClick}
-                className="flex items-center gap-1.5 rounded-lg p-2 text-secondary transition hover:bg-rose-50 hover:text-primary"
+                className="flex items-center gap-1.5 rounded-lg px-2 py-2 text-sm font-semibold text-secondary transition hover:text-primary sm:px-2.5"
               >
                 <FiUser className="text-xl" />
-                <span className="hidden text-sm font-medium sm:inline">Đăng nhập</span>
+                <span className="hidden sm:inline">Đăng nhập</span>
               </Link>
             )}
           </div>

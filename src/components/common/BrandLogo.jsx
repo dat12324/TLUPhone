@@ -55,7 +55,7 @@ const BrandLogo = ({
         src={brand.logo.mark}
         alt=""
         aria-hidden="true"
-        className={`${styles.mark} shrink-0`}
+        className={`${styles.mark} shrink-0 object-contain ${variant === 'dark' ? 'rounded-lg bg-white p-0.5 shadow-xs' : ''}`}
       />
       {!compact && (
         <span className={`${responsive ? 'hidden sm:block' : 'block'} ${styles.text} font-extrabold tracking-tight ${textColor}`}>

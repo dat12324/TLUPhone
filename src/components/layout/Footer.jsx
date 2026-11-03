@@ -64,7 +64,6 @@ const Footer = () => {
             <ul className="space-y-2">
               {[
                 'Chính sách bảo hành',
-                'Chính sách đổi trả',
                 'Chính sách vận chuyển',
                 'Chính sách bảo mật',
               ].map((item) => (

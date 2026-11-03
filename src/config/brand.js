@@ -6,7 +6,7 @@ const brand = {
   namePrefix: 'TLU',
   nameAccent: 'Phone',
   logo: {
-    mark: '/brand/logo-mark.svg',
+    mark: '/brand/logo-mark.jpg',
     light: '',
     dark: '',
   },
