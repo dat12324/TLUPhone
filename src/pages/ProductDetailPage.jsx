@@ -123,7 +123,7 @@ const ProductDetailPage = () => {
       setSelectedVariant(initialVariant)
       setSelectedColor(initialColor)
       setSelectedImage(
-        initialColor?.image || product.images?.[0] || product.image || PLACEHOLDER_IMAGE
+        product.images?.includes(product.image) ? product.image : product.images?.[0] || PLACEHOLDER_IMAGE
       )
       setQuantity(1)
       window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -133,9 +133,7 @@ const ProductDetailPage = () => {
   // Khi đổi màu sắc -> cập nhật ảnh nếu màu có ảnh riêng
   const handleSelectColor = (color) => {
     setSelectedColor(color)
-    if (color.image) {
-      setSelectedImage(color.image)
-    }
+    setSelectedImage(color.image || (product.images?.includes(product.image) ? product.image : product.images?.[0]) || PLACEHOLDER_IMAGE)
     setQuantity(1)
   }
 
@@ -145,7 +143,7 @@ const ProductDetailPage = () => {
     if (!product.skuByCombination?.[`${variant.id}_${selectedColor?.id}`]) {
       const color = product.colors.find(item => product.skuByCombination?.[`${variant.id}_${item.id}`])
       setSelectedColor(color || null)
-      setSelectedImage(color?.image || product.image || PLACEHOLDER_IMAGE)
+      setSelectedImage((product.images?.includes(product.image) ? product.image : product.images?.[0]) || PLACEHOLDER_IMAGE)
     }
     setQuantity(1)
   }

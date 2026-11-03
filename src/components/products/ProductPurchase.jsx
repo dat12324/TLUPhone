@@ -11,7 +11,7 @@ const ProductPurchase = ({
 }) => {
   const { currentSku, currentStock, currentPrice, currentOriginalPrice, discountPercent,
     isInventoryUnknown, isOutOfStock, isPurchaseUnavailable, purchaseLimit } = purchase
-  const galleryImages = useMemo(() => getProductGallery(product, selectedColor), [product, selectedColor])
+  const galleryImages = useMemo(() => getProductGallery(product), [product])
   const handleImageError = event => {
     if (!event.currentTarget.src.endsWith(PLACEHOLDER_IMAGE)) event.currentTarget.src = PLACEHOLDER_IMAGE
   }
@@ -33,7 +33,7 @@ const ProductPurchase = ({
               </span>
             )}
           </div>
-          {galleryImages.length > 1 && (
+          {galleryImages.length > 0 && (
             <div className="flex items-center gap-3 overflow-x-auto pb-2">
               {galleryImages.map((imgUrl, idx) => (
                 <button

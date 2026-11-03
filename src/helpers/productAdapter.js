@@ -124,13 +124,4 @@ export const summarizeAdminProduct = (product, variants) => {
 }
 
 
-export const getProductGallery = (product, selectedColor) => {
-  if (!product) return []
-  const variantUrls = new Set((product.skus || []).flatMap(sku => [sku.color?.image?.url, ...(sku.images || []).map(image => image.url)]).filter(Boolean))
-  const images = [...new Set([
-    ...(selectedColor?.images || []),
-    ...(product.colors || []).flatMap(color => color.images || []),
-    ...(product.images || []).filter(url => !variantUrls.has(url)),
-  ].filter(Boolean))]
-  return images.length ? images : [product.image || placeholder]
-}
+export const getProductGallery = product => [...new Set((product?.images || []).filter(Boolean))]
