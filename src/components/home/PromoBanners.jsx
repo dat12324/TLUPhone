@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom'
+import BannerLink from '../common/BannerLink'
 import { FiArrowRight, FiGrid, FiSmartphone, FiTruck } from 'react-icons/fi'
-import { promoBanners } from '../../data/banners'
+import useBanners from '../../hooks/useBanners'
 
 const bannerStyles = {
   rose: {
@@ -27,7 +27,10 @@ const bannerIcons = {
 }
 
 const PromoBanners = ({ startIndex = 0, count = 2 }) => {
-  const selectedBanners = promoBanners.slice(startIndex, startIndex + count)
+  const { banners, loading, error } = useBanners('promo')
+  const selectedBanners = banners.slice(startIndex, startIndex + count)
+  if (loading) return <div className="my-8 h-36 animate-pulse rounded-2xl bg-slate-200" aria-label="Đang tải banner phụ" />
+  if (error || !selectedBanners.length) return null
 
   return (
     <div className={`my-8 grid grid-cols-1 gap-4 ${count === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'}`}>
@@ -36,9 +39,9 @@ const PromoBanners = ({ startIndex = 0, count = 2 }) => {
         const Icon = bannerIcons[banner.icon] || FiSmartphone
 
         return (
-          <Link
+          <BannerLink
             key={banner.id}
-            to={banner.link}
+            to={banner.link || '/products'}
             className={`group flex flex-col justify-between rounded-2xl border p-5 transition-colors hover:border-primary sm:p-6 ${styles.card}`}
           >
             <div className="flex items-start justify-between gap-4">
@@ -51,16 +54,18 @@ const PromoBanners = ({ startIndex = 0, count = 2 }) => {
                 </h3>
                 <p className="text-xs text-slate-600 sm:text-sm">{banner.subtitle}</p>
               </div>
-              <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-xl ring-1 ${styles.icon}`}>
-                <Icon aria-hidden="true" />
-              </span>
+              {banner.image?.url ? <img src={banner.image.url} alt="" className="h-16 w-20 shrink-0 rounded-lg object-contain" /> : (
+                <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-xl ring-1 ${styles.icon}`}>
+                  <Icon aria-hidden="true" />
+                </span>
+              )}
             </div>
 
             <div className="flex items-center gap-1.5 pt-4 text-xs font-semibold text-primary transition-colors group-hover:text-rose-700">
-              <span>Khám phá ngay</span>
+              <span>{banner.btnText || 'Khám phá ngay'}</span>
               <FiArrowRight className="text-sm" aria-hidden="true" />
             </div>
-          </Link>
+          </BannerLink>
         )
       })}
     </div>

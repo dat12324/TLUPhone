@@ -36,7 +36,8 @@ const ProductsPage = () => {
   const [retryKey, setRetryKey] = useState(0)
   const requestRef = useRef(null)
   const productResultsRef = useRef(null)
-  const hasHandledInitialBrand = useRef(false)
+  const previousBrand = useRef(brandQuery)
+  const previousSearch = useRef(searchQueryFromUrl)
 
   const scrollToResults = useCallback(() => {
     if (productResultsRef.current) {
@@ -61,8 +62,10 @@ const ProductsPage = () => {
   }, [scrollToResults])
 
   useEffect(() => {
+    const changed = previousSearch.current !== searchQueryFromUrl
+    previousSearch.current = searchQueryFromUrl
     setSearchQuery(searchQueryFromUrl)
-    if (searchQueryFromUrl) {
+    if (changed && searchQueryFromUrl) {
       const timer = setTimeout(scrollToResults, 120)
       return () => clearTimeout(timer)
     }
@@ -89,13 +92,12 @@ const ProductsPage = () => {
 
   // Đồng bộ hãng khi URL thay đổi
   useEffect(() => {
-    if (hasHandledInitialBrand.current || brandQuery) {
+    const changed = previousBrand.current !== brandQuery
+    previousBrand.current = brandQuery
+    if (changed) {
       const timer = setTimeout(scrollAfterFilterChange, 80)
-      hasHandledInitialBrand.current = true
       return () => clearTimeout(timer)
     }
-
-    hasHandledInitialBrand.current = true
   }, [brandQuery, scrollAfterFilterChange])
 
   const handleSortChange = (value) => {

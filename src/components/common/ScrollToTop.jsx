@@ -1,23 +1,17 @@
-import { useEffect } from 'react'
+import { useLayoutEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
-// Tự động cuộn mượt lên đầu trang mỗi khi chuyển trang (route change)
+// Chuyển trang lên đầu ngay; đổi bộ lọc trong cùng trang do Page xử lý.
 const ScrollToTop = () => {
-  const { pathname, search } = useLocation()
+  const { pathname } = useLocation()
 
-  useEffect(() => {
-    const params = new URLSearchParams(search)
-    // Nếu có truy vấn tìm kiếm, không ép cuộn lên đỉnh (0) để trang đích tự động cuộn/focus vào kết quả
-    if (params.has('search')) {
-      return
-    }
-
+  useLayoutEffect(() => {
     window.scrollTo({
       top: 0,
       left: 0,
-      behavior: 'smooth',
+      behavior: 'instant',
     })
-  }, [pathname, search])
+  }, [pathname])
 
   return null
 }

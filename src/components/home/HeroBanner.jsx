@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom'
 import { FiArrowRight } from 'react-icons/fi'
-import { heroBanners } from '../../data/banners'
+import useBanners from '../../hooks/useBanners'
+import { bannerThemes } from '../../helpers/banner.js'
 import BannerCarousel from '../common/BannerCarousel'
+import BannerLink from '../common/BannerLink'
 
 const PLACEHOLDER_IMAGE = '/images/products/placeholder.svg'
 
@@ -27,13 +29,13 @@ const HeroContent = ({ banner }) => (
     </p>
 
     <div className="flex flex-wrap items-center justify-center gap-3 pt-1 md:justify-start">
-      <Link
-        to={banner.link}
+      <BannerLink
+        to={banner.link || '/products'}
         className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-[background-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:bg-rose-700 hover:shadow-primary/30 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 sm:px-6 sm:text-base motion-reduce:transform-none"
       >
-        {banner.btnText}
+        {banner.btnText || 'Xem ngay'}
         <FiArrowRight aria-hidden="true" />
-      </Link>
+      </BannerLink>
       <Link
         to="/products"
         className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/25 bg-white/5 px-5 py-3 text-sm font-semibold text-slate-200 transition-[background-color,border-color,color] duration-200 hover:border-white/45 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white sm:px-6 sm:text-base"
@@ -52,7 +54,7 @@ const ProductVisual = ({ banner }) => {
 
       <div className="relative flex h-44 w-44 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-2xl sm:h-56 sm:w-56 md:h-72 md:w-72 lg:h-[22rem] lg:w-[22rem]">
         <img
-          src={banner.image}
+          src={banner.image?.url}
           alt={banner.title}
           draggable="false"
           decoding="async"
@@ -68,7 +70,7 @@ const ProductVisual = ({ banner }) => {
 }
 
 const HeroSlide = ({ banner }) => (
-  <article className={`relative isolate overflow-hidden bg-gradient-to-br ${banner.bgColor || 'from-slate-950 via-slate-900 to-slate-800'} text-white`}>
+  <article className={`relative isolate overflow-hidden bg-gradient-to-br ${bannerThemes[banner.theme] || bannerThemes.slate} text-white`}>
     <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-slate-950/30 via-transparent to-white/[0.03]" />
     <div className="relative grid min-h-[560px] w-full grid-cols-1 items-center gap-5 px-6 pb-16 pt-8 sm:min-h-[540px] sm:px-20 sm:pb-16 sm:pt-12 md:min-h-[440px] md:grid-cols-12 md:gap-8 md:px-20 md:py-12 lg:min-h-[440px] lg:px-24 lg:py-10 xl:px-28">
       <HeroContent banner={banner} />
@@ -77,16 +79,22 @@ const HeroSlide = ({ banner }) => (
   </article>
 )
 
-const HeroBanner = () => (
+const HeroBanner = () => {
+  const { banners, loading, error } = useBanners('hero')
+  if (loading) return <div className="h-[440px] animate-pulse rounded-3xl bg-slate-200" aria-label="Đang tải banner" />
+  if (error) return <p role="status" className="py-4 text-sm text-slate-500">Chưa tải được banner quảng cáo.</p>
+  if (!banners.length) return null
+  return (
   <div className="overflow-hidden rounded-2xl border border-slate-200 bg-secondary shadow-sm md:rounded-3xl">
     <BannerCarousel
-      items={heroBanners}
+      items={banners}
       interval={15000}
       ariaLabel="Banner trang chủ"
       variant="hero"
       renderSlide={(banner) => <HeroSlide banner={banner} />}
     />
   </div>
-)
+  )
+}
 
 export default HeroBanner

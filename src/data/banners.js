@@ -26,7 +26,7 @@ export const heroBanners = [
     tag: 'SIÊU PHẨM MỚI',
     priceText: 'Chỉ từ 41.990.000₫',
     image: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:500:500/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-18-pro-01_4.png',
-    link: '/products/1003',
+    link: '/products/iphone-18-pro-max-256gb',
     bgColor: 'from-slate-900 via-slate-800 to-rose-950',
     btnText: 'Khám phá ngay',
   },

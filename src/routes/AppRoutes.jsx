@@ -19,6 +19,7 @@ import BrandsPage from '../pages/admin/BrandsPage'
 import CategoriesPage from '../pages/admin/CategoriesPage'
 import FlashSalesPage from '../pages/admin/FlashSalesPage'
 import ProductsAdminPage from '../pages/admin/ProductsAdminPage'
+import BannersPage from '../pages/admin/BannersPage'
 import { adminPages } from '../config/adminNavigation'
 
 const AppRoutes = () => (
@@ -42,7 +43,8 @@ const AppRoutes = () => (
       <Route path="products" element={<ProductsAdminPage />} />
       <Route path="categories" element={<CategoriesPage />} />
       <Route path="flash-sales" element={<FlashSalesPage />} />
-      {adminPages.filter((page) => !['dashboard', 'brands', 'categories', 'flash-sales', 'products'].includes(page.segment)).map((page) => (
+      <Route path="banners" element={<BannersPage />} />
+      {adminPages.filter((page) => !['dashboard', 'brands', 'categories', 'flash-sales', 'products', 'banners'].includes(page.segment)).map((page) => (
         <Route
           key={page.path}
           path={page.segment}
