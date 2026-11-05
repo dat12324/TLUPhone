@@ -60,7 +60,8 @@ const VariantEditor = ({ product, variant, variants = [], onClose, onSaved }) =>
         <ColorPicker name={form.colorName} code={form.colorCode} options={getProductColorOptions(variants, product._id)} disabled={busy} onChange={next => {
           const nameChanged = colorKey(next.name) !== colorKey(form.colorName)
           if (nameChanged || usingShared) { setColorImages([]); setColorFiles([]); setUsingShared(false) }
-          setForm(current => ({ ...current, colorName: next.name, colorCode: next.code,
+          setForm(current => ({
+            ...current, colorName: next.name, colorCode: next.code,
             ...(nameChanged ? { sku: [normalizeBrandSlug(product.name), formatSkuCapacity(current.ram), formatSkuCapacity(current.storage), normalizeBrandSlug(next.name)].join('-').toUpperCase() } : {}),
           }))
         }} />
@@ -70,7 +71,7 @@ const VariantEditor = ({ product, variant, variants = [], onClose, onSaved }) =>
         <ImagePicker label="Ảnh đại diện màu" items={colorImages} onItemsChange={setColorImages} files={colorFiles} onFilesChange={setColorFiles} max={1} disabled={busy} />
         {!colorFiles.length && !colorImages.length && sharedImage && <div className="flex items-center gap-3 rounded-xl border border-blue-100 bg-blue-50/50 p-3">
           <img src={sharedImage.url} alt={`Ảnh gợi ý màu ${form.colorName}`} className="h-16 w-16 shrink-0 rounded-lg bg-white object-contain p-1" onError={event => { if (!event.currentTarget.src.endsWith('/images/products/placeholder.svg')) event.currentTarget.src = '/images/products/placeholder.svg' }} />
-          <div className="text-xs text-slate-600"><p>Đã có ảnh màu này ở SKU cùng sản phẩm.</p>{sharedImage.publicId ? <button type="button" onClick={() => { setColorImages([sharedImage]); setUsingShared(true) }} className="mt-1 min-h-11 font-semibold text-blue-700">Dùng ảnh đã có</button> : <p className="mt-2">Ảnh cũ thiếu publicId, chỉ dùng để xem trước.</p>}</div>
+          <div className="text-xs text-slate-600"><p>Đã có ảnh màu này ở SKU cùng sản phẩm.</p><button type="button" onClick={() => { setColorImages([sharedImage]); setUsingShared(true) }} className="mt-1 min-h-11 font-semibold text-blue-700">Dùng ảnh đã có</button></div>
         </div>}
 
         <label className="flex min-h-11 items-center gap-2 text-sm"><input type="checkbox" name="isDefault" checked={form.isDefault} onChange={update} className="accent-primary" />SKU mặc định</label>

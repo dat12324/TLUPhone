@@ -1,253 +1,143 @@
-import { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react'
+import { createContext, useContext, useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import couponsData from '../data/coupons'
-import products from '../data/products'
-import { usePromotion } from './PromotionContext'
+import api from '../lib/api.js'
+import { useAuth } from './AuthContext'
+import { mapCartItems } from '../helpers/cart.js'
 
 const CartContext = createContext()
 
-const CART_STORAGE_KEY = 'tluphone_cart'
-const COUPON_STORAGE_KEY = 'tluphone_coupon'
-
 export const CartProvider = ({ children }) => {
-  const { applyPromotionToProduct, phase: promotionPhase } = usePromotion()
-  // Lấy dữ liệu giỏ hàng ban đầu từ localStorage (nếu có)
-  const [cartItems, setCartItems] = useState(() => {
-    try {
-      const savedCart = localStorage.getItem(CART_STORAGE_KEY)
-      return savedCart ? JSON.parse(savedCart) : []
-    } catch (error) {
-      console.error('Lỗi khi đọc giỏ hàng từ localStorage:', error)
-      return []
-    }
-  })
-
-  // State mã giảm giá đang áp dụng
-  const [appliedCoupon, setAppliedCoupon] = useState(() => {
-    try {
-      const saved = localStorage.getItem(COUPON_STORAGE_KEY)
-      return saved ? JSON.parse(saved) : null
-    } catch {
-      return null
-    }
-  })
-
-  // State thông báo Toast khi thêm vào giỏ hàng
+  const { user, authLoading, isAuthenticated } = useAuth()
+  const userId = user?._id || user?.id || null
+  const owner = useRef(userId)
+  owner.current = userId
+  const [cartState, setCartState] = useState({ userId: null, items: [] })
+  const cartItems = cartState.userId === userId ? cartState.items : []
+  const [cartLoading, setCartLoading] = useState(false)
+  const [cartBusy, setCartBusy] = useState(false)
+  const [cartError, setCartError] = useState('')
+  const [appliedCoupon, setAppliedCoupon] = useState(null)
   const [toastMessage, setToastMessage] = useState(null)
+  const toastTimer = useRef(null)
+  const loadController = useRef(null)
+  const queue = useRef(Promise.resolve())
+  const pending = useRef(0)
 
-  // Đồng bộ giỏ hàng vào localStorage mỗi khi cartItems thay đổi
-  useEffect(() => {
-    try {
-      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems))
-    } catch (error) {
-      console.error('Lỗi khi lưu giỏ hàng vào localStorage:', error)
-    }
-  }, [cartItems])
-
-  // Đồng bộ lại giá trong giỏ khi chương trình bắt đầu hoặc hết hạn.
-  useEffect(() => {
-    setCartItems((prevItems) => prevItems.map((item) => {
-      const baseProduct = products.find(
-        (product) => String(product.id) === String(item.productId)
-      )
-      if (!baseProduct) return item
-
-      const effectiveProduct = applyPromotionToProduct(baseProduct)
-      const effectiveVariant = item.selectedVariant
-        ? effectiveProduct.variants?.find(
-          (variant) => String(variant.id) === String(item.selectedVariant.id)
-        )
-        : null
-      const price = effectiveVariant?.price ?? effectiveProduct.price
-      const originalPrice = effectiveVariant?.originalPrice
-        ?? effectiveProduct.originalPrice
-        ?? price
-
-      if (item.price === price && item.originalPrice === originalPrice) return item
-
-      return {
-        ...item,
-        price,
-        originalPrice,
-        selectedVariant: item.selectedVariant && effectiveVariant
-          ? {
-              ...item.selectedVariant,
-              price: effectiveVariant.price,
-              originalPrice: effectiveVariant.originalPrice,
-            }
-          : item.selectedVariant,
-      }
-    }))
-  }, [applyPromotionToProduct, promotionPhase])
-
-  // Đồng bộ coupon vào localStorage
-  useEffect(() => {
-    try {
-      if (appliedCoupon) {
-        localStorage.setItem(COUPON_STORAGE_KEY, JSON.stringify(appliedCoupon))
-      } else {
-        localStorage.removeItem(COUPON_STORAGE_KEY)
-      }
-    } catch (error) {
-      console.error('Lỗi khi lưu coupon vào localStorage:', error)
-    }
-  }, [appliedCoupon])
-
-  // Hiện thông báo toast ngắn
-  const showToast = (message) => {
+  const showToast = message => {
+    clearTimeout(toastTimer.current)
     setToastMessage(message)
-    setTimeout(() => {
-      setToastMessage(null)
-    }, 2500)
+    toastTimer.current = setTimeout(() => setToastMessage(null), 2500)
   }
+  useEffect(() => () => clearTimeout(toastTimer.current), [])
 
-  /**
-   * Thêm sản phẩm vào giỏ hàng
-   * @param {Object} product - Sản phẩm gốc
-   * @param {Object} selectedVariant - Phiên bản bộ nhớ (RAM/ROM)
-   * @param {Object} selectedColor - Màu sắc
-   * @param {number} quantity - Số lượng mua
-   * @param {string} image - URL ảnh sản phẩm tương ứng
-   * @param {number} stock - Tồn kho khả dụng
-   */
-  const addToCart = (product, selectedVariant, selectedColor, quantity = 1, image, stock = 10) => {
-    if (!product) return false
+  const acceptCart = useCallback((data, requestOwner, selectedId) => {
+    if (owner.current !== requestOwner) return false
+    setCartState(current => ({ userId: requestOwner,
+      items: mapCartItems(data, current.userId === requestOwner ? current.items : [], selectedId) }))
+    return true
+  }, [])
 
-    // Tạo ID duy nhất cho mỗi tổ hợp sản phẩm (productId + variantId + colorId)
-    const variantId = selectedVariant?.id || 'default'
-    const colorId = selectedColor?.id || 'default'
-    const cartItemId = `${product.id}_${variantId}_${colorId}`
+  const reloadCart = useCallback(async () => {
+    if (!userId || pending.current) return false
+    loadController.current?.abort()
+    const controller = new AbortController()
+    loadController.current = controller
+    setCartLoading(true)
+    setCartError('')
+    try {
+      const { data } = await api.get('/cart', { signal: controller.signal })
+      if (controller.signal.aborted) return false
+      return acceptCart(data.data, userId)
+    } catch (error) {
+      if (!controller.signal.aborted && owner.current === userId) setCartError(error.message)
+      return false
+    } finally {
+      if (!controller.signal.aborted && owner.current === userId) setCartLoading(false)
+    }
+  }, [userId, acceptCart])
 
-    const itemPrice = selectedVariant?.price || product.price
-    const itemOriginalPrice = selectedVariant?.originalPrice || product.originalPrice || itemPrice
-    const itemImage = image || selectedColor?.image || product.images?.[0] || product.image
+  useEffect(() => {
+    setAppliedCoupon(null)
+    setToastMessage(null)
+    setCartError('')
+    setCartLoading(false)
+    if (!authLoading && userId) void reloadCart()
+    if (!userId) setCartState({ userId: null, items: [] })
+    return () => loadController.current?.abort()
+  }, [userId, authLoading, reloadCart])
 
-    setCartItems((prevItems) => {
-      const existingIndex = prevItems.findIndex((item) => item.id === cartItemId)
+  useEffect(() => {
+    const refresh = () => { if (!document.hidden) void reloadCart() }
+    window.addEventListener('focus', refresh)
+    return () => window.removeEventListener('focus', refresh)
+  }, [reloadCart])
 
-      if (existingIndex > -1) {
-        // Nếu đã tồn tại cùng tổ hợp -> tăng số lượng (không vượt quá tồn kho)
-        const existingItem = prevItems[existingIndex]
-        const newQuantity = Math.min(existingItem.quantity + quantity, stock)
-
-        const updated = [...prevItems]
-        updated[existingIndex] = {
-          ...existingItem,
-          quantity: newQuantity,
-          price: itemPrice,
-          originalPrice: itemOriginalPrice,
-          selectedVariant: selectedVariant
-            ? {
-                id: selectedVariant.id,
-                ram: selectedVariant.ram,
-                storage: selectedVariant.storage,
-                price: selectedVariant.price,
-                originalPrice: selectedVariant.originalPrice,
-              }
-            : null,
-          stock, // Cập nhật lại tồn kho mới nhất
-          selected: true, // Tự động tick chọn khi thêm lại
+  const mutateCart = (method, path, body, message, selectedId) => {
+    if (!userId || authLoading) {
+      showToast('Vui lòng đăng nhập để sử dụng giỏ hàng.')
+      return Promise.resolve(false)
+    }
+    const requestOwner = userId
+    pending.current += 1
+    setCartBusy(true)
+    loadController.current?.abort()
+    setCartLoading(false)
+    const task = queue.current.then(async () => {
+      if (owner.current !== requestOwner) return false
+      try {
+        const { data } = await api.request({ method, url: path, data: body })
+        if (!acceptCart(data.data, requestOwner, selectedId)) return false
+        setCartError('')
+        if (message) showToast(message)
+        return true
+      } catch (error) {
+        if (owner.current === requestOwner) {
+          setCartError(error.message)
+          showToast(error.message)
         }
-        return updated
-      } else {
-        // Nếu chưa có -> thêm dòng mới vào giỏ hàng
-        const newItem = {
-          id: cartItemId,
-          productId: product.id,
-          name: product.name,
-          brand: product.brand,
-          image: itemImage,
-          selectedVariant: selectedVariant
-            ? {
-                id: selectedVariant.id,
-                ram: selectedVariant.ram,
-                storage: selectedVariant.storage,
-                price: selectedVariant.price,
-                originalPrice: selectedVariant.originalPrice,
-              }
-            : null,
-          selectedColor: selectedColor
-            ? {
-                id: selectedColor.id,
-                name: selectedColor.name,
-                colorCode: selectedColor.colorCode,
-              }
-            : null,
-          price: itemPrice,
-          originalPrice: itemOriginalPrice,
-          quantity: Math.min(quantity, stock),
-          stock,
-          selected: true, // Mặc định được chọn để tính tiền
-        }
-        return [newItem, ...prevItems]
+        return false
       }
     })
+    queue.current = task
+    return task.finally(() => {
+      pending.current -= 1
+      if (!pending.current) setCartBusy(false)
+    })
+  }
 
-    showToast(`Đã thêm "${product.name}" vào giỏ hàng!`)
+  const addToCart = (product, selectedVariant, selectedColor, quantity = 1) => {
+    const sku = product?.skuByCombination?.[`${selectedVariant?.id}_${selectedColor?.id}`]
+    const variantId = selectedVariant?._id || sku?._id || selectedVariant?.id
+    if (!/^[a-f\d]{24}$/i.test(variantId || '')) {
+      showToast('Vui lòng chọn phiên bản và màu sắc hợp lệ.')
+      return Promise.resolve(false)
+    }
+    return mutateCart('post', '/cart/items', { productVariant: variantId, quantity }, 'Đã thêm sản phẩm vào giỏ hàng.', variantId)
+  }
+  const updateQuantity = (id, quantity) => mutateCart('patch', `/cart/items/${id}`, { quantity })
+  const removeFromCart = id => mutateCart('delete', `/cart/items/${id}`, undefined, 'Đã xóa sản phẩm khỏi giỏ hàng.')
+  const clearCart = async () => {
+    const success = await mutateCart('delete', '/cart')
+    if (success) setAppliedCoupon(null)
+    return success
+  }
+  const setCartItems = updater => setCartState(current => current.userId === userId
+    ? { ...current, items: updater(current.items) } : current)
+  const toggleSelectItem = id => setCartItems(items => items.map(item =>
+    item.id === id && item.isAvailable ? { ...item, selected: !item.selected } : item))
+  const toggleSelectAll = selected => setCartItems(items => items.map(item =>
+    ({ ...item, selected: item.isAvailable && selected })))
+  const removeSelectedItems = async () => {
+    const ids = cartItems.filter(item => item.selected).map(item => item.id)
+    for (const id of ids) {
+      if (!(await removeFromCart(id))) return false
+    }
     return true
-  }
-
-  /**
-   * Cập nhật số lượng sản phẩm trong giỏ
-   */
-  const updateQuantity = (cartItemId, newQuantity) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) => {
-        if (item.id === cartItemId) {
-          const validQty = Math.max(1, Math.min(newQuantity, item.stock || 99))
-          return { ...item, quantity: validQty }
-        }
-        return item
-      })
-    )
-  }
-
-  /**
-   * Xóa một sản phẩm khỏi giỏ hàng
-   */
-  const removeFromCart = (cartItemId) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== cartItemId))
-    showToast('Đã xóa sản phẩm khỏi giỏ hàng')
-  }
-
-  /**
-   * Chọn / Bỏ chọn một sản phẩm
-   */
-  const toggleSelectItem = (cartItemId) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === cartItemId ? { ...item, selected: !item.selected } : item
-      )
-    )
-  }
-
-  /**
-   * Chọn / Bỏ chọn tất cả sản phẩm
-   */
-  const toggleSelectAll = (selectAll) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) => ({ ...item, selected: selectAll }))
-    )
-  }
-
-  /**
-   * Xóa tất cả các sản phẩm đang được chọn
-   */
-  const removeSelectedItems = () => {
-    setCartItems((prevItems) => prevItems.filter((item) => !item.selected))
-    showToast('Đã xóa các sản phẩm được chọn')
-  }
-
-  /**
-   * Xóa toàn bộ giỏ hàng
-   */
-  const clearCart = () => {
-    setCartItems([])
-    setAppliedCoupon(null)
   }
 
   // These values must be initialized before applyCoupon captures them.
   const selectedItems = useMemo(() => {
-    return cartItems.filter((item) => item.selected)
+    return cartItems.filter((item) => item.selected && item.isAvailable)
   }, [cartItems])
 
   const selectedSubtotal = useMemo(() => {
@@ -255,7 +145,6 @@ export const CartProvider = ({ children }) => {
   }, [selectedItems])
 
   // Thu hồi coupon ngay khi giỏ hàng không còn đáp ứng giá trị đơn tối thiểu.
-  // Việc này cũng xóa coupon khỏi localStorage qua effect đồng bộ phía trên,
   // tránh để mã cũ tự xuất hiện lại ở bước thanh toán.
   useEffect(() => {
     if (!appliedCoupon || selectedSubtotal >= appliedCoupon.minOrder) return
@@ -319,7 +208,7 @@ export const CartProvider = ({ children }) => {
   // 2. Danh sách các sản phẩm đang được tick chọn
   // 3. Kiểm tra xem có đang chọn tất cả không
   const isAllSelected = useMemo(() => {
-    return cartItems.length > 0 && cartItems.every((item) => item.selected)
+    return cartItems.length > 0 && cartItems.filter(item => item.isAvailable).length > 0 && cartItems.filter(item => item.isAvailable).every((item) => item.selected)
   }, [cartItems])
 
   // 4. Tổng tiền tạm tính của các sản phẩm đang chọn
@@ -368,6 +257,8 @@ export const CartProvider = ({ children }) => {
 
   const value = {
     cartItems,
+    cartLoading: authLoading || cartLoading,
+    cartBusy, cartError, reloadCart, isAuthenticated,
     toastMessage,
     addToCart,
     updateQuantity,

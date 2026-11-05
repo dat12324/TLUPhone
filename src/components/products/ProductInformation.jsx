@@ -1,36 +1,25 @@
 import { FiCheckCircle, FiChevronDown, FiChevronUp, FiX } from 'react-icons/fi'
 
-const normalizeSpecKey = (value = '') =>
-  value
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-
-const findSpecification = (entries, patterns) => {
-  const match = entries.find(([key]) => patterns.some(pattern => key.includes(pattern)))
-  return match?.[1] || ''
-}
-
 const ProductInformation = ({
   product, selectedVariant, isDescriptionExpanded, onToggleDescription,
   isSpecificationsOpen, onSpecsToggle, modalCloseBtnRef,
 }) => {
   const technical = product.technicalSpecs || {}
-  const basic = [['Chipset', technical.chip], ['Hệ điều hành', technical.operatingSystem], ['Kích thước màn hình', technical.screenSize && `${technical.screenSize} inch`], ['Dung lượng pin', technical.batteryCapacity && `${technical.batteryCapacity} mAh`], ['Camera sau', technical.cameraMainMp && `${technical.cameraMainMp} MP`], ['Tần số quét', technical.refreshRate && `${technical.refreshRate} Hz`], ['Mạng', technical.network]].filter(([, value]) => value != null && value !== '')
-  const entries = [...Object.values(product.specifications || {})
-    .flatMap(group => Object.entries(group.items || {})), ...basic]
-    .map(([key, value]) => [normalizeSpecKey(key), value])
   const specificationSummary = [
-    ['Độ phân giải', findSpecification(entries, ['do phan giai', 'resolution'])],
-    ['Màn hình rộng', findSpecification(entries, ['kich thuoc man hinh', 'screen size', 'kich thuoc'])],
-    ['Camera sau', findSpecification(entries, ['camera sau', 'rear camera'])],
-    ['Quay phim', findSpecification(entries, ['quay phim', 'quay video', 'video'])],
-    ['Chipset', findSpecification(entries, ['chip xu ly', 'chipset', 'cpu'])],
-    ['Hệ điều hành', findSpecification(entries, ['he dieu hanh', 'operating system', 'os'])],
-    ['RAM', selectedVariant?.ram || findSpecification(entries, ['ram'])],
-    ['Bộ nhớ trong (ROM)', selectedVariant?.storage || findSpecification(entries, ['bo nho trong', 'storage', 'rom'])],
-    ['Dung lượng pin', findSpecification(entries, ['dung luong pin', 'battery capacity', 'pin'])],
-  ].filter(([, value]) => value)
+    ['Màn hình', technical.screenSize ? `${technical.screenSize} inch` : ''],
+    ['Camera chính', technical.cameraMainMp ? `${technical.cameraMainMp} MP` : ''],
+    ['Màu sắc', technical.colors],
+    ['Chipset', technical.chip],
+    ['Hãng chip', technical.chipBrand],
+    ['Hệ điều hành', technical.operatingSystem],
+    ['RAM', selectedVariant?.ram],
+    ['Bộ nhớ trong (ROM)', selectedVariant?.storage],
+    ['Dung lượng pin', technical.batteryCapacity ? `${technical.batteryCapacity} mAh` : ''],
+    ['Tần số quét', technical.refreshRate ? `${technical.refreshRate} Hz` : ''],
+    ['Mạng', technical.network],
+    ['Sạc không dây', technical.wirelessCharging == null ? '' : technical.wirelessCharging ? 'Có' : 'Không'],
+  ].filter(([, value]) => value != null && value !== '')
+  const hasDetailedSpecifications = Object.keys(product.specifications || {}).length > 0
 
   return (
     <>
@@ -97,33 +86,33 @@ const ProductInformation = ({
               Thông số kỹ thuật
             </h2>
 
-            {product.specifications ? (
-              <>
-                <div className="divide-y divide-gray-100 text-sm">
-                  {specificationSummary.map(([specKey, specValue]) => (
-                    <div key={specKey} className="grid min-w-0 grid-cols-1 gap-1 py-3 sm:grid-cols-12 sm:gap-3">
-                      <span className="min-w-0 text-gray-500 sm:col-span-5">{specKey}:</span>
-                      <span className="min-w-0 whitespace-pre-line text-gray-600 [overflow-wrap:anywhere] sm:col-span-7">
-                        {specValue}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-                <button
-                  type="button"
-                  onClick={() => onSpecsToggle(true)}
-                  className="mt-4 w-full rounded-xl border border-primary/30 py-2.5 text-sm font-semibold text-primary transition-all duration-200 hover:border-primary hover:bg-rose-50 active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-xs"
-                >
-                  Xem cấu hình chi tiết
-                </button>
-              </>
+            {specificationSummary.length > 0 ? (
+              <div className="divide-y divide-gray-100 text-sm">
+                {specificationSummary.map(([specKey, specValue]) => (
+                  <div key={specKey} className="grid min-w-0 grid-cols-1 gap-1 py-3 sm:grid-cols-12 sm:gap-3">
+                    <span className="min-w-0 text-gray-500 sm:col-span-5">{specKey}:</span>
+                    <span className="min-w-0 whitespace-pre-line text-gray-600 [overflow-wrap:anywhere] sm:col-span-7">
+                      {specValue}
+                    </span>
+                  </div>
+                ))}
+              </div>
             ) : (
               <p className="text-sm text-gray-400">Đang cập nhật thông số kỹ thuật...</p>
+            )}
+            {hasDetailedSpecifications && (
+              <button
+                type="button"
+                onClick={() => onSpecsToggle(true)}
+                className="mt-4 w-full rounded-xl border border-primary/30 py-2.5 text-sm font-semibold text-primary transition-all duration-200 hover:border-primary hover:bg-rose-50 active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-xs"
+              >
+                Xem cấu hình chi tiết
+              </button>
             )}
           </div>
         </div>
       </div>
-      {isSpecificationsOpen && product.specifications && (
+      {isSpecificationsOpen && hasDetailedSpecifications && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 sm:p-4 backdrop-blur-xs transition-opacity animate-fade-in"
           onClick={() => onSpecsToggle(false)}

@@ -76,7 +76,6 @@ const CheckoutPage = () => {
     appliedCoupon,
     applyCoupon,
     removeCoupon,
-    removeSelectedItems,
     couponDiscount,
   } = useCart()
 
@@ -156,7 +155,6 @@ const CheckoutPage = () => {
 
     setSubmittedOrder(order)
     setMockOrderCode(`TLU-${Date.now().toString().slice(-8)}`)
-    removeSelectedItems()
     if (appliedCoupon) removeCoupon()
   }
 
@@ -169,9 +167,7 @@ const CheckoutPage = () => {
               <FiShoppingBag />
             </span>
             <h1 className="text-2xl font-bold text-secondary">Chưa có sản phẩm để thanh toán</h1>
-            <p className="mt-2 text-sm leading-relaxed text-gray-500">
-              Hãy quay lại giỏ hàng và chọn ít nhất một sản phẩm trước khi tiếp tục.
-            </p>
+            <p className="mt-2 text-sm leading-relaxed text-gray-500">Hãy quay lại giỏ hàng và chọn ít nhất một sản phẩm trước khi tiếp tục.</p>
             <Link to="/cart" className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3.5 text-sm font-bold text-white shadow-md transition hover:bg-rose-700 active:scale-95">
               <FiArrowLeft /> Quay lại giỏ hàng
             </Link>
@@ -399,7 +395,7 @@ const CheckoutPage = () => {
           <div className="w-full max-w-md rounded-3xl bg-white p-6 text-center shadow-2xl sm:p-8">
             <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-3xl text-emerald-600"><FiCheckCircle /></span>
             <h2 className="mt-4 text-2xl font-extrabold text-secondary">Đặt hàng thành công</h2>
-            <p className="mt-2 text-sm leading-relaxed text-gray-500">Đơn hàng mô phỏng đã được tạo. Các sản phẩm vừa đặt đã được xóa khỏi giỏ hàng.</p>
+            <p className="mt-2 text-sm leading-relaxed text-gray-500">Đơn hàng mô phỏng đã được tạo. Giỏ hàng trên Backend được giữ nguyên.</p>
             <div className="mt-5 rounded-xl bg-slate-50 p-4 text-left text-sm">
               <div className="flex justify-between gap-4"><span className="text-gray-500">Mã tham chiếu</span><strong className="text-secondary">{mockOrderCode}</strong></div>
               <div className="mt-2 flex justify-between gap-4"><span className="text-gray-500">Số lượng sản phẩm</span><strong className="text-secondary">{submittedOrder.items.reduce((sum, item) => sum + item.quantity, 0)}</strong></div>

@@ -21,7 +21,7 @@ const formatPrice = (price) => {
 const CartPage = () => {
   const navigate = useNavigate()
   const {
-    cartItems,
+    cartItems, cartLoading, cartBusy, cartError, reloadCart, isAuthenticated,
     updateQuantity,
     removeFromCart,
     toggleSelectItem,
@@ -40,7 +40,7 @@ const CartPage = () => {
   } = useCart()
 
   const handleProceedToCheckout = () => {
-    if (selectedItems.length === 0) return
+    if (selectedItems.length === 0 || cartBusy || cartLoading || cartError) return
     navigate('/checkout')
   }
 
@@ -51,6 +51,19 @@ const CartPage = () => {
   )
 
   // Trường hợp Giỏ hàng trống
+  if (cartLoading && !cartItems.length) return <div role="status" className="container mx-auto min-h-[50vh] px-4 py-16 text-center text-slate-500">Đang tải giỏ hàng...</div>
+  if (!isAuthenticated) return (
+    <div className="container mx-auto flex min-h-[60vh] items-center justify-center px-4 py-12">
+      <div className="max-w-md rounded-2xl border border-slate-200 bg-white p-8 text-center">
+        <FiShoppingBag aria-hidden="true" className="mx-auto mb-4 text-4xl text-primary" />
+        <h1 className="text-xl font-bold text-secondary">Đăng nhập để xem giỏ hàng</h1>
+        <p className="mt-3 text-sm text-slate-500">Giỏ hàng được lưu theo tài khoản của bạn.</p>
+        <Link to="/login" state={{ from: { pathname: '/cart' } }} className="mt-6 inline-flex min-h-11 items-center justify-center rounded-xl bg-primary px-6 font-semibold text-white">Đăng nhập</Link>
+      </div>
+    </div>
+  )
+  if (cartError && !cartItems.length) return <div role="alert" className="container mx-auto min-h-[50vh] px-4 py-16 text-center"><p className="text-red-600">{cartError}</p><button type="button" onClick={reloadCart} className="mt-4 min-h-11 rounded-xl border border-slate-300 px-6">Thử lại</button></div>
+
   if (cartItems.length === 0) {
     return (
       <div className="bg-slate-50 min-h-[70vh] flex items-center justify-center py-16">
@@ -80,6 +93,7 @@ const CartPage = () => {
 
   return (
     <div className="bg-slate-50 min-h-screen pb-16">
+      {cartError && <div role="alert" className="container mx-auto px-4 py-3 text-sm text-red-600">{cartError}<button type="button" onClick={reloadCart} disabled={cartBusy} className="ml-3 underline">Thử lại</button></div>}
       {/* Breadcrumbs */}
       <div className="bg-white border-b border-gray-100">
         <div className="container mx-auto px-4 py-3">
@@ -118,6 +132,7 @@ const CartPage = () => {
                 <input
                   type="checkbox"
                   checked={isAllSelected}
+                    disabled={cartBusy}
                   onChange={(e) => toggleSelectAll(e.target.checked)}
                   className="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary cursor-pointer"
                 />
@@ -130,6 +145,7 @@ const CartPage = () => {
                 <button
                   type="button"
                   onClick={removeSelectedItems}
+                    disabled={cartBusy}
                   className="inline-flex items-center gap-1.5 text-xs font-semibold text-rose-600 hover:text-rose-800 transition-colors"
                 >
                   <FiTrash2 className="text-sm" />
@@ -142,7 +158,7 @@ const CartPage = () => {
             <div className="space-y-3">
               {cartItems.map((item) => {
                 const itemTotal = item.price * item.quantity
-                const isMaxStock = item.quantity >= (item.stock || 99)
+                const isMaxStock = !Number.isSafeInteger(item.stock) || item.quantity >= item.stock
 
                 return (
                   <div
@@ -158,6 +174,7 @@ const CartPage = () => {
                         <input
                           type="checkbox"
                           checked={item.selected}
+                          disabled={cartBusy || !item.isAvailable}
                           onChange={() => toggleSelectItem(item.id)}
                           className="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary cursor-pointer"
                         />
@@ -165,7 +182,7 @@ const CartPage = () => {
 
                       {/* Ảnh sản phẩm */}
                       <Link
-                        to={`/products/${item.productId}`}
+                        to={item.slug ? `/products/${item.slug}` : '/products'}
                         className="w-20 h-20 sm:w-24 sm:h-24 bg-slate-50 rounded-xl p-2 shrink-0 border border-gray-100 flex items-center justify-center group overflow-hidden"
                       >
                         <img
@@ -186,7 +203,7 @@ const CartPage = () => {
                               {item.brand}
                             </span>
                             <Link
-                              to={`/products/${item.productId}`}
+                              to={item.slug ? `/products/${item.slug}` : '/products'}
                               className="block text-sm sm:text-base font-bold text-secondary hover:text-primary transition-colors line-clamp-1"
                             >
                               {item.name}
@@ -197,6 +214,7 @@ const CartPage = () => {
                           <button
                             type="button"
                             onClick={() => removeFromCart(item.id)}
+                            disabled={cartBusy}
                             aria-label="Xóa sản phẩm"
                             title="Xóa sản phẩm"
                             className="p-1 text-gray-400 hover:text-rose-600 transition-colors"
@@ -251,7 +269,7 @@ const CartPage = () => {
                                 onClick={() =>
                                   updateQuantity(item.id, item.quantity - 1)
                                 }
-                                disabled={item.quantity <= 1}
+                                disabled={cartBusy || item.quantity <= 1}
                                 className="p-1.5 sm:p-2 text-gray-600 hover:bg-gray-100 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
                               >
                                 <FiMinus className="text-xs" />
@@ -264,7 +282,7 @@ const CartPage = () => {
                                 onClick={() =>
                                   updateQuantity(item.id, item.quantity + 1)
                                 }
-                                disabled={isMaxStock}
+                                disabled={cartBusy || isMaxStock || !item.isAvailable}
                                 className="p-1.5 sm:p-2 text-gray-600 hover:bg-gray-100 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
                               >
                                 <FiPlus className="text-xs" />
@@ -279,6 +297,7 @@ const CartPage = () => {
                         </div>
 
                         {/* Cảnh báo tồn kho nếu chạm mốc */}
+                        {!item.isAvailable && <p className="mt-2 text-xs text-red-600">SKU hiện không đủ hàng hoặc không còn kinh doanh. Vui lòng điều chỉnh số lượng hoặc xóa khỏi giỏ.</p>}
                         {isMaxStock && (
                           <div className="text-[11px] text-amber-600 mt-1">
                             * Đã đạt số lượng tồn kho khả dụng ({item.stock} máy)
@@ -359,7 +378,7 @@ const CartPage = () => {
               <button
                 type="button"
                 onClick={handleProceedToCheckout}
-                disabled={selectedItems.length === 0}
+                disabled={selectedItems.length === 0 || cartBusy || cartLoading || Boolean(cartError)}
                 className={`w-full py-3.5 px-6 rounded-xl font-bold text-sm transition-all shadow-md flex items-center justify-center gap-2 ${selectedItems.length === 0
                     ? 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'
                     : 'bg-primary hover:bg-rose-700 text-white hover:scale-[1.02] active:scale-[0.98]'

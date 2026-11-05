@@ -32,14 +32,14 @@ const AppLayout = () => {
 function App() {
   return (
     <PromotionProvider>
-      <CartProvider>
-        <AuthProvider>
+      <AuthProvider>
+        <CartProvider>
           <Router>
             <ScrollToTop />
             <AppLayout />
           </Router>
-        </AuthProvider>
-      </CartProvider>
+        </CartProvider>
+      </AuthProvider>
     </PromotionProvider>
   )
 }

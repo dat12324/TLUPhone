@@ -5,6 +5,7 @@ import { FiChevronRight } from 'react-icons/fi'
 import ProductPurchase from '../components/products/ProductPurchase'
 import ProductInformation from '../components/products/ProductInformation'
 import { useCart } from '../context/CartContext'
+import { useAuth } from '../context/AuthContext'
 import api from '../lib/api.js'
 import { mapCatalogProduct } from '../helpers/productAdapter.js'
 import { loadCatalogReferences } from '../helpers/catalog.js'
@@ -14,7 +15,8 @@ const PLACEHOLDER_IMAGE = '/images/products/placeholder.svg'
 const ProductDetailPage = () => {
   const { slug } = useParams()
   const navigate = useNavigate()
-  const { addToCart } = useCart()
+  const { addToCart, cartBusy } = useCart()
+  const { isAuthenticated } = useAuth()
   const [product, setProduct] = useState(null)
   const [relatedProducts, setRelatedProducts] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -174,7 +176,7 @@ const ProductDetailPage = () => {
 
   const purchase = {
     currentSku, currentStock, currentPrice, currentOriginalPrice, discountPercent,
-    isInventoryUnknown, isOutOfStock, isPurchaseUnavailable, purchaseLimit,
+    isInventoryUnknown, isOutOfStock, isPurchaseUnavailable: isPurchaseUnavailable || cartBusy, purchaseLimit,
   }
 
   // Tăng / giảm số lượng mua
@@ -189,9 +191,13 @@ const ProductDetailPage = () => {
   }
 
   // Thêm vào giỏ hàng
-  const handleAddToCart = () => {
-    if (isPurchaseUnavailable) return
-    addToCart(
+  const handleAddToCart = async () => {
+    if (isPurchaseUnavailable) return false
+    if (!isAuthenticated) {
+      navigate('/login', { state: { from: { pathname: '/products/' + slug } } })
+      return false
+    }
+    return addToCart(
       product,
       currentSku ? { ...selectedVariant, ...currentSku } : selectedVariant,
       selectedColor,
@@ -202,10 +208,9 @@ const ProductDetailPage = () => {
   }
 
   // Mua ngay (Thêm vào giỏ và chuyển đến trang Cart)
-  const handleBuyNow = () => {
+  const handleBuyNow = async () => {
     if (isPurchaseUnavailable) return
-    handleAddToCart()
-    navigate('/cart')
+    if (await handleAddToCart()) navigate('/cart')
   }
 
   if (isLoading) {

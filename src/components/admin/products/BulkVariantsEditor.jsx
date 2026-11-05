@@ -29,7 +29,7 @@ const BulkVariantsEditor = ({ product, variants = [], onClose, onSaved }) => {
     if (busy) return
     const capacities = groups.map(group => `${group.ram}-${group.storage}`)
     if (new Set(capacities).size !== groups.length) { setError('RAM/ROM đang trùng. Hãy thêm màu trong cùng một phiên bản.'); return }
-    const payload = groups.flatMap(group => group.colors.map(color => ({ product: product._id, ram: Number(group.ram), storage: Number(group.storage), sku: color.sku.trim() || undefined, color: { name: color.name.trim(), ...(color.code ? { code: color.code } : {}), ...(color.useSharedImage && findSharedColorImage(variants, product._id, color)?.publicId ? { image: findSharedColorImage(variants, product._id, color) } : {}) }, price: Number(color.price === '' ? group.price : color.price), stock: color.stock === '' ? null : Number(color.stock), isDefault: color.isDefault, status: 'active' })))
+    const payload = groups.flatMap(group => group.colors.map(color => ({ product: product._id, ram: Number(group.ram), storage: Number(group.storage), sku: color.sku.trim() || undefined, color: { name: color.name.trim(), ...(color.code ? { code: color.code } : {}), ...(color.useSharedImage && findSharedColorImage(variants, product._id, color)?.url ? { image: findSharedColorImage(variants, product._id, color) } : {}) }, price: Number(color.price === '' ? group.price : color.price), stock: color.stock === '' ? null : Number(color.stock), isDefault: color.isDefault, status: 'active' })))
     if (payload.filter(item => item.isDefault).length > 1) { setError('Chỉ chọn một màu/SKU mặc định cho sản phẩm.'); return }
     const files = []
     const indexes = groups.flatMap(group => group.colors).map(color => {
@@ -79,13 +79,13 @@ const BulkVariantsEditor = ({ product, variants = [], onClose, onSaved }) => {
                 <Field label="Mã SKU (tùy chọn)" placeholder={color.name.trim() ? skuPreview(group, color) : "Tự tạo khi lưu"} title={color.name.trim() ? skuPreview(group, color) : undefined} value={color.sku} onChange={event => updateColor(group.id, color.id, 'sku', event.target.value)} />
                 <Field label="Giá riêng (nếu có)" type="number" min="0" step="1" placeholder={group.price || 'Dùng giá chung'} value={color.price} onChange={event => updateColor(group.id, color.id, 'price', event.target.value)} />
               </div>
-              <div className="mt-3"><ImagePicker label="Ảnh màu" items={[]} onItemsChange={() => {}} files={color.file ? [color.file] : []} onFilesChange={files => updateColor(group.id, color.id, 'file', files[0] || null)} max={1} disabled={busy} /></div>
+              <div className="mt-3"><ImagePicker label="Ảnh màu" items={[]} onItemsChange={() => { }} files={color.file ? [color.file] : []} onFilesChange={files => updateColor(group.id, color.id, 'file', files[0] || null)} max={1} disabled={busy} /></div>
               {(() => {
                 const image = findSharedColorImage(variants, product._id, { name: color.name, code: color.code })
                 if (!image || color.file) return null
                 return <div className="mt-3 flex items-center gap-3 rounded-lg bg-blue-50/60 p-3">
                   <img src={image.url} alt={`Ảnh gợi ý màu ${color.name}`} className="h-14 w-14 shrink-0 rounded-lg border border-blue-100 bg-white object-contain p-1" onError={event => { if (!event.currentTarget.src.endsWith('/images/products/placeholder.svg')) event.currentTarget.src = '/images/products/placeholder.svg' }} />
-                  <div className="min-w-0 text-xs text-slate-600"><p>Ảnh màu đã có trong sản phẩm.</p>{image.publicId ? <label className="mt-1 flex min-h-11 cursor-pointer items-center gap-2 font-medium text-blue-700"><input type="checkbox" className="accent-primary" checked={color.useSharedImage} onChange={event => updateColor(group.id, color.id, 'useSharedImage', event.target.checked)} />Dùng ảnh</label> : <p className="mt-1">Ảnh cũ thiếu publicId, chỉ dùng để xem trước.</p>}</div>
+                  <div className="min-w-0 text-xs text-slate-600"><p>Ảnh màu đã có trong sản phẩm.</p><label className="mt-1 flex min-h-11 cursor-pointer items-center gap-2 font-medium text-blue-700"><input type="checkbox" className="accent-primary" checked={color.useSharedImage} onChange={event => updateColor(group.id, color.id, 'useSharedImage', event.target.checked)} />Dùng ảnh</label></div>
                 </div>
               })()}
 
