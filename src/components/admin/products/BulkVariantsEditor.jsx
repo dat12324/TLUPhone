@@ -23,13 +23,13 @@ const BulkVariantsEditor = ({ product, variants = [], onClose, onSaved }) => {
   const count = groups.reduce((sum, group) => sum + group.colors.length, 0)
   const update = (id, key, value) => setGroups(current => current.map(group => group.id === id ? { ...group, [key]: value } : group))
   const updateColor = (id, colorId, key, value) => setGroups(current => current.map(group => group.id === id ? { ...group, colors: group.colors.map(color => color.id === colorId ? { ...color, [key]: value, ...(['name', 'code', 'file'].includes(key) ? { useSharedImage: false } : {}), ...(key === 'useSharedImage' && value ? { file: null } : {}) } : color) } : group))
-  const skuPreview = (group, color) => [normalizeBrandSlug(product.name), formatSkuCapacity(group.ram), formatSkuCapacity(group.storage), normalizeBrandSlug(color.name)].join('-').toUpperCase()
+  const skuPreview = (group, color) => [normalizeBrandSlug(product.name), formatSkuCapacity(group.ram), formatSkuCapacity(group.storage), normalizeBrandSlug(color.name)].filter(Boolean).join('-').toUpperCase()
   const submit = async event => {
     event.preventDefault()
     if (busy) return
     const capacities = groups.map(group => `${group.ram}-${group.storage}`)
     if (new Set(capacities).size !== groups.length) { setError('RAM/ROM đang trùng. Hãy thêm màu trong cùng một phiên bản.'); return }
-    const payload = groups.flatMap(group => group.colors.map(color => ({ product: product._id, ram: Number(group.ram), storage: Number(group.storage), sku: color.sku.trim() || undefined, color: { name: color.name.trim(), ...(color.code ? { code: color.code } : {}), ...(color.useSharedImage && findSharedColorImage(variants, product._id, color)?.url ? { image: findSharedColorImage(variants, product._id, color) } : {}) }, price: Number(color.price === '' ? group.price : color.price), stock: color.stock === '' ? null : Number(color.stock), isDefault: color.isDefault, status: 'active' })))
+    const payload = groups.flatMap(group => group.colors.map(color => ({ product: product._id, ram: group.ram === '' ? null : Number(group.ram), storage: group.storage === '' ? null : Number(group.storage), sku: color.sku.trim() || undefined, color: { name: color.name.trim(), ...(color.code ? { code: color.code } : {}), ...(color.useSharedImage && findSharedColorImage(variants, product._id, color)?.url ? { image: findSharedColorImage(variants, product._id, color) } : {}) }, price: Number(color.price === '' ? group.price : color.price), stock: color.stock === '' ? null : Number(color.stock), isDefault: color.isDefault, status: 'active' })))
     if (payload.filter(item => item.isDefault).length > 1) { setError('Chỉ chọn một màu/SKU mặc định cho sản phẩm.'); return }
     const files = []
     const indexes = groups.flatMap(group => group.colors).map(color => {
@@ -60,11 +60,11 @@ const BulkVariantsEditor = ({ product, variants = [], onClose, onSaved }) => {
         <p className="text-sm text-slate-500">{product.name} · Mỗi phiên bản RAM/ROM có thể thêm nhiều màu.</p>
         {groups.map((group, index) => <section key={group.id} className="space-y-4 rounded-2xl border border-slate-200 bg-slate-50/50 p-4">
           <div className="flex items-center justify-between gap-2">
-            <h3 className="flex flex-wrap items-center gap-2 text-sm font-bold"><span className="rounded-full bg-blue-50 px-2 py-1 text-xs text-blue-600">Phiên bản {index + 1}</span>{formatSkuCapacity(group.ram)} / {formatSkuCapacity(group.storage)}</h3>
+            <h3 className="flex flex-wrap items-center gap-2 text-sm font-bold"><span className="rounded-full bg-blue-50 px-2 py-1 text-xs text-blue-600">Phiên bản {index + 1}</span>{[group.ram, group.storage].filter(value => value !== '').map(formatSkuCapacity).join(' / ') || 'Tiêu chuẩn'}</h3>
             <button type="button" disabled={groups.length === 1} onClick={() => setGroups(current => current.filter(item => item.id !== group.id))} aria-label={`Xóa phiên bản ${index + 1}`} className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-slate-500 hover:bg-red-50 hover:text-red-600 disabled:opacity-30"><FiTrash2 /></button>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            {['ram', 'storage'].map(key => <Field key={key} label={key === 'ram' ? 'RAM (GB) *' : 'ROM (GB) *'}><select required value={group[key]} onChange={event => update(group.id, key, event.target.value)} className={inputClass}>{capacityChoices[key].map(value => <option key={value} value={value}>{formatSkuCapacity(value)}</option>)}</select></Field>)}
+            {['ram', 'storage'].map(key => <Field key={key} label={key === 'ram' ? 'RAM (GB)' : 'ROM (GB)'}><select value={group[key]} onChange={event => update(group.id, key, event.target.value)} className={inputClass}><option value="">Không áp dụng</option>{capacityChoices[key].map(value => <option key={value} value={value}>{formatSkuCapacity(value)}</option>)}</select></Field>)}
           </div>
           <Field label="Giá bán chung (VND) *" type="number" min="0" step="1" required value={group.price} onChange={event => update(group.id, 'price', event.target.value)} />
           <div className="flex items-center justify-between gap-2"><h4 className="text-sm font-semibold">Màu sắc & tồn kho</h4><button type="button" disabled={count >= 50} onClick={() => update(group.id, 'colors', [...group.colors, newColor()])} className="inline-flex min-h-11 items-center gap-1 rounded-full border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-600 hover:border-primary hover:text-primary disabled:opacity-40"><FiPlus />Thêm màu</button></div>

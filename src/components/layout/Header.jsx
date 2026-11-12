@@ -14,6 +14,7 @@ import {
 import { useCart } from '../../context/CartContext'
 import { useAuth } from '../../context/AuthContext'
 import BrandLogo from '../common/BrandLogo'
+import NotificationBell from './NotificationBell'
 
 const SearchBar = ({ mobile = false }) => {
   const navigate = useNavigate()
@@ -167,6 +168,8 @@ const Header = () => {
           </Link>
 
           <span className="hidden h-5 w-px bg-slate-200 sm:block" aria-hidden="true" />
+
+          {!authLoading && isAuthenticated && <NotificationBell key={user?._id || user?.id} />}
 
           <div className="relative shrink-0" ref={accountMenuRef}>
             {authLoading ? <div role="status" className="flex h-11 w-28 items-center gap-2 rounded-lg px-2"><span className="h-8 w-8 animate-pulse rounded-full bg-slate-100" aria-hidden="true" /><span className="h-3 w-16 animate-pulse rounded bg-slate-100" aria-hidden="true" /><span className="sr-only">Đang khôi phục phiên đăng nhập…</span></div> : isAuthenticated ? (

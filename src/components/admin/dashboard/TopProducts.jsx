@@ -4,7 +4,6 @@ const TopProducts = ({ products }) => (
   <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" aria-labelledby="top-products-title">
     <div className="mb-5">
       <h2 id="top-products-title" className="text-lg font-bold text-secondary">Sản phẩm bán chạy</h2>
-      <p className="mt-1 text-sm text-slate-500">Tính từ đơn hàng đã hoàn thành</p>
     </div>
 
     {products.length === 0 ? (

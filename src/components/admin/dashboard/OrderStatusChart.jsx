@@ -2,7 +2,7 @@ const STATUS_STYLES = {
   pending: 'bg-amber-500',
   confirmed: 'bg-blue-500',
   shipping: 'bg-violet-500',
-  completed: 'bg-emerald-500',
+  delivered: 'bg-emerald-500',
   cancelled: 'bg-slate-400',
 }
 

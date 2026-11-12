@@ -25,7 +25,7 @@ const RevenueChart = ({ data, periodLabel }) => {
       <div className="mb-5 flex flex-wrap items-start justify-between gap-2">
         <div>
           <h2 id={titleId} className="text-lg font-bold text-secondary">Doanh thu</h2>
-          <p className="mt-1 text-sm text-slate-500">Đơn hoàn thành · {periodLabel}</p>
+          <p className="mt-1 text-sm text-slate-500">Đơn đã giao, đã thanh toán · {periodLabel}</p>
         </div>
         <span className="rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600">VNĐ</span>
       </div>
@@ -41,7 +41,7 @@ const RevenueChart = ({ data, periodLabel }) => {
             aria-labelledby={`${titleId}-chart-title ${titleId}-chart-desc`}
           >
             <title id={`${titleId}-chart-title`}>Biểu đồ doanh thu {periodLabel}</title>
-            <desc id={`${titleId}-chart-desc`}>Doanh thu chỉ tính các đơn hàng đã hoàn thành.</desc>
+            <desc id={`${titleId}-chart-desc`}>Doanh thu tính theo ngày giao của đơn đã giao và đã thanh toán.</desc>
             {[0, 0.25, 0.5, 0.75, 1].map((ratio) => {
               const y = MARGIN.top + plotHeight - ratio * plotHeight
               const value = roundedMax * ratio

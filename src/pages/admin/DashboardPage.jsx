@@ -6,8 +6,8 @@ import RecentOrders from '../../components/admin/dashboard/RecentOrders'
 import RevenueChart from '../../components/admin/dashboard/RevenueChart'
 import StatCard from '../../components/admin/dashboard/StatCard'
 import TopProducts from '../../components/admin/dashboard/TopProducts'
-import { DASHBOARD_PERIODS, calculateDashboardData } from '../../helpers/dashboardAnalytics'
-import { dashboardMockData, LOW_STOCK_THRESHOLD } from '../../data/mock/dashboard'
+import { DASHBOARD_PERIODS } from '../../helpers/dashboardAnalytics'
+import api from '../../lib/api'
 import { formatAdminDate, formatVnd } from '../../utils/adminFormatters'
 
 const DashboardSkeleton = () => (
@@ -33,12 +33,18 @@ const DashboardPage = () => {
   useEffect(() => {
     setLoading(true)
     setError('')
-    const timer = setTimeout(() => {
-      try { setDashboard(calculateDashboardData(dashboardMockData, period, LOW_STOCK_THRESHOLD)) }
-      catch { setError('Không thể tải dữ liệu Dashboard. Vui lòng thử lại.') }
-      finally { setLoading(false) }
-    }, 280)
-    return () => clearTimeout(timer)
+    const controller = new AbortController()
+    api.get('/dashboard', { params: { period }, signal: controller.signal })
+      .then(({ data }) => {
+        if (!controller.signal.aborted) setDashboard(data.data)
+      })
+      .catch(error => {
+        if (!controller.signal.aborted) setError(error.response?.data?.message || 'Không thể tải dữ liệu Dashboard. Vui lòng thử lại.')
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setLoading(false)
+      })
+    return () => controller.abort()
   }, [period, reloadKey])
 
   return (
@@ -79,11 +85,11 @@ const DashboardPage = () => {
       ) : (
         <div className="space-y-6">
           <p className="text-xs text-slate-500">
-            Dữ liệu mẫu cập nhật đến {formatAdminDate(dashboard.meta.referenceDate)} · Bộ lọc đang áp dụng: {dashboard.meta.periodLabel}
+            Cập nhật lúc {formatAdminDate(dashboard.meta.referenceDate)} · Bộ lọc đang áp dụng: {dashboard.meta.periodLabel}
           </p>
 
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            <StatCard icon={FiDollarSign} label="Tổng doanh thu" value={formatVnd(dashboard.summary.revenue)} note="Chỉ tính đơn hàng đã hoàn thành" tone="rose" />
+            <StatCard icon={FiDollarSign} label="Tổng doanh thu" value={formatVnd(dashboard.summary.revenue)} note="Đơn đã giao, đã thanh toán theo ngày giao" tone="rose" />
             <StatCard icon={FiShoppingBag} label="Tổng đơn hàng" value={dashboard.summary.orderCount.toLocaleString('vi-VN')} note={`Đơn tạo trong ${dashboard.meta.periodLabel.toLowerCase()}`} tone="blue" />
             <StatCard icon={FiPackage} label="Sản phẩm đang bán" value={dashboard.summary.activeProductCount.toLocaleString('vi-VN')} note="Sản phẩm có trạng thái đang kinh doanh" tone="amber" />
             <StatCard icon={FiUsers} label="Tổng khách hàng" value={dashboard.summary.customerCount.toLocaleString('vi-VN')} note="Tổng số tài khoản khách hàng" tone="emerald" />
@@ -100,7 +106,7 @@ const DashboardPage = () => {
 
           <div className="grid items-start gap-6 xl:grid-cols-2">
             <TopProducts products={dashboard.topProducts} />
-            <LowStockProducts products={dashboard.lowStockProducts} threshold={dashboard.meta.lowStockThreshold} />
+            <LowStockProducts products={dashboard.lowStockProducts} />
           </div>
         </div>
       )}

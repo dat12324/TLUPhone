@@ -22,7 +22,7 @@ const VariantEditor = ({ product, variant, variants = [], onClose, onSaved }) =>
     setForm(current => {
       const updated = { ...current, [name]: type === 'checkbox' ? checked : value }
       if (['ram', 'storage', 'colorName'].includes(name)) {
-        updated.sku = [normalizeBrandSlug(product.name), formatSkuCapacity(updated.ram), formatSkuCapacity(updated.storage), normalizeBrandSlug(updated.colorName)].join('-').toUpperCase()
+        updated.sku = [normalizeBrandSlug(product.name), formatSkuCapacity(updated.ram), formatSkuCapacity(updated.storage), normalizeBrandSlug(updated.colorName)].filter(Boolean).join('-').toUpperCase()
       }
       return updated
     })
@@ -35,7 +35,7 @@ const VariantEditor = ({ product, variant, variants = [], onClose, onSaved }) =>
     try {
       const color = { name: form.colorName, ...(form.colorCode ? { code: form.colorCode } : {}) }
       if (!colorFiles.length) color.image = colorImages[0] || null
-      const data = { sku: form.sku.trim() || undefined, ram: Number(form.ram), storage: Number(form.storage), price: Number(form.price), compareAtPrice: form.compareAtPrice === '' ? null : Number(form.compareAtPrice), lowStockThreshold: Number(form.lowStockThreshold), isDefault: form.isDefault, status: form.status, color }
+      const data = { sku: form.sku.trim() || undefined, ram: form.ram === '' ? null : Number(form.ram), storage: form.storage === '' ? null : Number(form.storage), price: Number(form.price), compareAtPrice: form.compareAtPrice === '' ? null : Number(form.compareAtPrice), lowStockThreshold: Number(form.lowStockThreshold), isDefault: form.isDefault, status: form.status, color }
       const input = variant ? data : { ...data, product: product._id, stock: form.stock === '' ? null : Number(form.stock) }
       const body = mutationBody(input, variant ? VARIANT_FIELDS : ['product', 'stock', ...VARIANT_FIELDS], [], colorFiles[0])
       const response = variant ? await api.patch(`/product-variants/${encodeURIComponent(variant._id)}`, body) : await api.post('/product-variants', body)
@@ -50,9 +50,9 @@ const VariantEditor = ({ product, variant, variants = [], onClose, onSaved }) =>
         <p className="text-sm font-semibold text-slate-600">{product.name}</p>
         <Field label={variant ? "Mã SKU *" : "Mã SKU (tùy chọn)"} name="sku" value={form.sku} onChange={update} required={Boolean(variant)} placeholder="Để trống để tự tạo khi lưu" />
         <div className="grid grid-cols-2 gap-3">
-          {['ram', 'storage'].map(name => <Field key={name} label={name === 'ram' ? 'RAM (GB) *' : 'ROM (GB) *'}>
-            <select name={name} required value={form[name]} onChange={update} className={inputClass}>
-              <option value="" disabled hidden>{name === 'ram' ? 'Chọn RAM' : 'Chọn ROM'}</option>
+          {['ram', 'storage'].map(name => <Field key={name} label={name === 'ram' ? 'RAM (GB)' : 'ROM (GB)'}>
+            <select name={name} value={form[name]} onChange={update} className={inputClass}>
+              <option value="">{name === 'ram' ? 'Không áp dụng RAM' : 'Không áp dụng ROM'}</option>
               {[...new Set([...capacityChoices[name], ...(form[name] !== '' ? [Number(form[name])] : [])])].sort((a, b) => a - b).map(value => <option key={value} value={value}>{formatSkuCapacity(value)}</option>)}
             </select>
           </Field>)}
@@ -62,7 +62,7 @@ const VariantEditor = ({ product, variant, variants = [], onClose, onSaved }) =>
           if (nameChanged || usingShared) { setColorImages([]); setColorFiles([]); setUsingShared(false) }
           setForm(current => ({
             ...current, colorName: next.name, colorCode: next.code,
-            ...(nameChanged ? { sku: [normalizeBrandSlug(product.name), formatSkuCapacity(current.ram), formatSkuCapacity(current.storage), normalizeBrandSlug(next.name)].join('-').toUpperCase() } : {}),
+            ...(nameChanged ? { sku: [normalizeBrandSlug(product.name), formatSkuCapacity(current.ram), formatSkuCapacity(current.storage), normalizeBrandSlug(next.name)].filter(Boolean).join('-').toUpperCase() } : {}),
           }))
         }} />
         <div className="grid grid-cols-2 gap-3"><Field label="Giá bán (VND) *" type="number" min="0" step="1" required name="price" value={form.price} onChange={update} /><Field label="Giá gốc (VND)" type="number" min="0" step="1" name="compareAtPrice" value={form.compareAtPrice} onChange={update} /></div>

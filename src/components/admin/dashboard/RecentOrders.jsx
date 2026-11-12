@@ -6,7 +6,7 @@ const STATUS_STYLES = {
   pending: 'bg-amber-50 text-amber-700 ring-amber-200',
   confirmed: 'bg-blue-50 text-blue-700 ring-blue-200',
   shipping: 'bg-violet-50 text-violet-700 ring-violet-200',
-  completed: 'bg-emerald-50 text-emerald-700 ring-emerald-200',
+  delivered: 'bg-emerald-50 text-emerald-700 ring-emerald-200',
   cancelled: 'bg-slate-100 text-slate-600 ring-slate-200',
 }
 
@@ -15,7 +15,6 @@ const RecentOrders = ({ orders }) => (
     <div className="flex items-center justify-between gap-4 border-b border-slate-100 px-5 py-4 sm:px-6">
       <div>
         <h2 id="recent-orders-title" className="text-lg font-bold text-secondary">Đơn hàng gần đây</h2>
-        <p className="mt-1 text-sm text-slate-500">5 đơn mới nhất trong khoảng đã chọn</p>
       </div>
       <Link to="/admin/orders" className="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-lg px-2 text-sm font-semibold text-primary hover:bg-rose-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
         Xem tất cả <FiArrowUpRight aria-hidden="true" />

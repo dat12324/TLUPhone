@@ -1,5 +1,4 @@
 import { createContext, useContext, useState, useEffect, useMemo, useCallback, useRef } from 'react'
-import couponsData from '../data/coupons'
 import api from '../lib/api.js'
 import { useAuth } from './AuthContext'
 import { mapCartItems } from '../helpers/cart.js'
@@ -17,6 +16,8 @@ export const CartProvider = ({ children }) => {
   const [cartBusy, setCartBusy] = useState(false)
   const [cartError, setCartError] = useState('')
   const [appliedCoupon, setAppliedCoupon] = useState(null)
+  const [couponBusy, setCouponBusy] = useState(false)
+  const couponRequest = useRef(false)
   const [toastMessage, setToastMessage] = useState(null)
   const toastTimer = useRef(null)
   const loadController = useRef(null)
@@ -144,52 +145,49 @@ export const CartProvider = ({ children }) => {
     return selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
   }, [selectedItems])
 
-  // Thu hồi coupon ngay khi giỏ hàng không còn đáp ứng giá trị đơn tối thiểu.
-  // tránh để mã cũ tự xuất hiện lại ở bước thanh toán.
+  const couponSelectionKey = JSON.stringify(selectedItems.map(item => [item.id, item.quantity, item.price]))
+  const couponSelection = useRef(couponSelectionKey)
+  couponSelection.current = couponSelectionKey
+
   useEffect(() => {
-    if (!appliedCoupon || selectedSubtotal >= appliedCoupon.minOrder) return
-
-    const couponCode = appliedCoupon.code
-    const minFormatted = appliedCoupon.minOrder.toLocaleString('vi-VN') + '₫'
-
-    setAppliedCoupon(null)
-    showToast(`Mã "${couponCode}" đã được gỡ vì đơn hàng chưa đạt ${minFormatted}`)
-  }, [appliedCoupon, selectedSubtotal])
-
-  /**
-   * Áp dụng mã giảm giá
-   * @param {string} code - Mã giảm giá nhập vào
-   * @returns {{ success: boolean, message: string }}
-   */
-  const applyCoupon = useCallback((code) => {
-    if (!code || !code.trim()) {
-      return { success: false, message: 'Vui lòng nhập mã giảm giá' }
+    if (appliedCoupon && appliedCoupon.selectionKey !== couponSelectionKey) {
+      setAppliedCoupon(null)
+      showToast('Giỏ hàng đã thay đổi. Vui lòng áp dụng lại mã giảm giá.')
     }
+  }, [appliedCoupon, couponSelectionKey])
 
-    const normalizedCode = code.trim().toUpperCase()
-
-    // Tìm coupon trong danh sách (sau này thay bằng API)
-    const coupon = couponsData.find(
-      (c) => c.code.toUpperCase() === normalizedCode && c.active
-    )
-
-    if (!coupon) {
-      return { success: false, message: 'Mã giảm giá không hợp lệ hoặc đã hết hạn' }
-    }
-
-    // Kiểm tra giá trị đơn hàng tối thiểu
-    if (selectedSubtotal < coupon.minOrder) {
-      const minFormatted = coupon.minOrder.toLocaleString('vi-VN') + '₫'
-      return {
-        success: false,
-        message: `Đơn hàng tối thiểu ${minFormatted} để sử dụng mã này`,
+  const applyCoupon = useCallback(async code => {
+    if (!userId || !selectedItems.length) return { success: false, message: 'Vui lòng chọn sản phẩm trong giỏ hàng.' }
+    if (!code?.trim()) return { success: false, message: 'Vui lòng nhập mã giảm giá.' }
+    if (couponRequest.current) return { success: false, message: 'Đang kiểm tra mã giảm giá.' }
+    const requestOwner = userId
+    const selectionKey = couponSelectionKey
+    couponRequest.current = true
+    setCouponBusy(true)
+    try {
+      const { data } = await api.post('/vouchers/check', {
+        code: code.trim().toUpperCase(),
+        variantIds: selectedItems.map(item => item.productVariantId || item.id),
+      })
+      if (owner.current !== requestOwner || couponSelection.current !== selectionKey) {
+        return { success: false, message: 'Giỏ hàng đã thay đổi. Vui lòng thử lại.' }
       }
+      if (data.data.subtotal !== selectedSubtotal) {
+        void reloadCart()
+        return { success: false, message: 'Giá giỏ hàng đã thay đổi. Vui lòng kiểm tra lại.' }
+      }
+      setAppliedCoupon({ ...data.data, selectionKey,
+        description: `Giảm ${data.data.discountAmount.toLocaleString('vi-VN')}₫`,
+      })
+      showToast(`Đã áp dụng mã "${data.data.code}".`)
+      return { success: true }
+    } catch (error) {
+      return { success: false, message: error.message }
+    } finally {
+      couponRequest.current = false
+      setCouponBusy(false)
     }
-
-    setAppliedCoupon(coupon)
-    showToast(`Áp dụng mã "${coupon.code}" thành công!`)
-    return { success: true, message: `Đã áp dụng mã "${coupon.code}"` }
-  }, [selectedSubtotal])
+  }, [userId, selectedItems, selectedSubtotal, couponSelectionKey, reloadCart])
 
   /**
    * Hủy mã giảm giá đang áp dụng
@@ -227,23 +225,8 @@ export const CartProvider = ({ children }) => {
   }, [selectedOriginalSubtotal, selectedSubtotal])
 
   // 7. Số tiền giảm từ coupon
-  const couponDiscount = useMemo(() => {
-    if (!appliedCoupon) return 0
-
-    // Kiểm tra lại điều kiện đơn tối thiểu (phòng trường hợp user bỏ chọn SP)
-    if (selectedSubtotal < appliedCoupon.minOrder) return 0
-
-    if (appliedCoupon.type === 'percent') {
-      const discount = Math.round((selectedSubtotal * appliedCoupon.value) / 100)
-      return Math.min(discount, appliedCoupon.maxDiscount)
-    }
-
-    if (appliedCoupon.type === 'fixed') {
-      return Math.min(appliedCoupon.value, selectedSubtotal)
-    }
-
-    return 0
-  }, [appliedCoupon, selectedSubtotal])
+  const couponDiscount = appliedCoupon?.selectionKey === couponSelectionKey
+    ? appliedCoupon.discountAmount : 0
 
   // 8. Tổng tiền cuối cùng sau coupon
   const finalTotal = useMemo(() => {
@@ -273,7 +256,8 @@ export const CartProvider = ({ children }) => {
     selectedSubtotal,
     selectedOriginalSubtotal,
     selectedDiscount,
-    appliedCoupon,
+    appliedCoupon: appliedCoupon?.selectionKey === couponSelectionKey ? appliedCoupon : null,
+    couponBusy,
     applyCoupon,
     removeCoupon,
     couponDiscount,

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import ProductCard from '../components/ProductCard'
 import { FiChevronRight } from 'react-icons/fi'
@@ -29,7 +29,6 @@ const ProductDetailPage = () => {
   const [quantity, setQuantity] = useState(1)
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
   const [isSpecificationsOpen, setIsSpecificationsOpen] = useState(false)
-  const modalCloseBtnRef = useRef(null)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -90,32 +89,6 @@ const ProductDetailPage = () => {
     loadProduct()
     return () => controller.abort()
   }, [slug, retryKey])
-
-  // Khóa cuộn trang nền và lắng nghe phím Escape khi Modal thông số mở
-  useEffect(() => {
-    if (!isSpecificationsOpen) return undefined
-
-    const originalOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-
-    // Focus tự động vào nút đóng khi mở modal để hỗ trợ bàn phím / accessibility
-    const focusTimer = setTimeout(() => {
-      modalCloseBtnRef.current?.focus()
-    }, 50)
-
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        setIsSpecificationsOpen(false)
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => {
-      clearTimeout(focusTimer)
-      document.body.style.overflow = originalOverflow
-      window.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [isSpecificationsOpen])
 
   // Đồng bộ state khi đổi sản phẩm
   useEffect(() => {
@@ -311,7 +284,6 @@ const ProductDetailPage = () => {
           onToggleDescription={() => setIsDescriptionExpanded(value => !value)}
           isSpecificationsOpen={isSpecificationsOpen}
           onSpecsToggle={setIsSpecificationsOpen}
-          modalCloseBtnRef={modalCloseBtnRef}
         />
 
         {relatedProducts.length > 0 && (

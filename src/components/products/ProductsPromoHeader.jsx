@@ -2,7 +2,6 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { FiArrowRight } from 'react-icons/fi'
 import BannerCarousel from '../common/BannerCarousel'
 import BannerLink from '../common/BannerLink'
-import { productBrands } from '../../data/banners'
 import useBanners from '../../hooks/useBanners'
 import { bannerThemes } from '../../helpers/banner.js'
 
@@ -24,10 +23,7 @@ const ProductsPromoHeader = ({ activeBrands, loading }) => {
   const android = useBanners('product-android')
   const [searchParams] = useSearchParams()
   const selectedBrand = searchParams.get('brand')
-  const visibleBrands = activeBrands.map(brand => ({
-    ...brand,
-    wordmark: productBrands.find(item => item.name.toLocaleLowerCase('vi-VN') === brand.name.toLocaleLowerCase('vi-VN'))?.logo || brand.name,
-  }))
+
 
   return (
     <section className="mb-8">
@@ -41,7 +37,7 @@ const ProductsPromoHeader = ({ activeBrands, loading }) => {
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-10">
         {loading ? Array.from({ length: 10 }).map((_, index) => (
           <span key={index} className="h-14 animate-pulse rounded-lg border border-slate-200 bg-white" aria-hidden="true" />
-        )) : visibleBrands.map((brand) => {
+        )) : activeBrands.map((brand) => {
           const isSelected = selectedBrand?.toLowerCase() === brand.slug.toLowerCase()
 
           return (
@@ -56,7 +52,7 @@ const ProductsPromoHeader = ({ activeBrands, loading }) => {
               }`}
             >
               <span className={brand.name === 'OPPO' || brand.name === 'realme' ? 'text-xl font-medium' : ''}>
-                {brand.wordmark}
+                {brand.name}
               </span>
             </Link>
           )

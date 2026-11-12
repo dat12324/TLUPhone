@@ -33,7 +33,7 @@ export const groupProductVariants = (items, mode = 'capacity') => {
     const colorKey = color.toLocaleLowerCase('vi-VN')
     const capacityKey = `${ram}/${storage}`
     const key = mode === 'color' ? colorKey : capacityKey
-    if (!groups.has(key)) groups.set(key, { key, label: mode === 'color' ? color : `${ram} / ${storage}`, image: null, code: item.color?.code, items: [], members: new Set() })
+    if (!groups.has(key)) groups.set(key, { key, label: mode === 'color' ? color : [item.ram, item.storage].filter(value => value != null && value !== '').map(formatSkuCapacity).join(' / ') || 'Tiêu chuẩn', image: null, code: item.color?.code, items: [], members: new Set() })
     const group = groups.get(key)
     group.image ||= item.color?.image?.url
     group.code ||= item.color?.code

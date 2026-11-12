@@ -36,6 +36,7 @@ const HomePage = () => {
     promotion,
     phase: promotionPhase,
     promotionItems,
+    promotionProducts,
   } = usePromotion()
   const [retryKey, setRetryKey] = useState(0)
   const hotDeals = useCatalog({ isHotDeal: true, limit: 5 }, retryKey)
@@ -43,10 +44,10 @@ const HomePage = () => {
   const newest = useCatalog({ isNew: true, sort: 'newest', limit: 4 }, retryKey)
   const catalogLoading = hotDeals.loading || featured.loading || newest.loading
   const catalogError = hotDeals.error || featured.error || newest.error
-  const hotDealProducts = hotDeals.products
   const featuredProducts = featured.products
   const newProducts = newest.products
   const hasActivePromotion = promotionItems.length > 0 && promotionPhase === 'active'
+  const hotDealProducts = hasActivePromotion ? promotionProducts.slice(0, 5) : hotDeals.products
 
   return (
     <div className="bg-slate-50 min-h-screen pb-16">

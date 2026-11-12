@@ -1,7 +1,7 @@
 import { FiAlertTriangle, FiArrowUpRight } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 
-const LowStockProducts = ({ products, threshold }) => (
+const LowStockProducts = ({ products }) => (
   <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" aria-labelledby="low-stock-title">
     <div className="mb-5 flex items-start justify-between gap-4">
       <div>
@@ -9,7 +9,7 @@ const LowStockProducts = ({ products, threshold }) => (
           <FiAlertTriangle className="text-amber-600" aria-hidden="true" />
           Cảnh báo tồn kho
         </h2>
-        <p className="mt-1 text-sm text-slate-500">SKU đang bán còn dưới {threshold} sản phẩm</p>
+        <p className="mt-1 text-sm text-slate-500">SKU có tồn khả dụng dưới ngưỡng cảnh báo</p>
       </div>
       <Link to="/admin/products" className="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-lg px-2 text-sm font-semibold text-primary hover:bg-rose-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
         Sản phẩm <FiArrowUpRight aria-hidden="true" />

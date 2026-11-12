@@ -1,8 +1,9 @@
-import { FiCheckCircle, FiChevronDown, FiChevronUp, FiX } from 'react-icons/fi'
+import ProductSpecificationsDrawer from './ProductSpecificationsDrawer'
+import { FiCheckCircle, FiChevronDown, FiChevronUp } from 'react-icons/fi'
 
 const ProductInformation = ({
   product, selectedVariant, isDescriptionExpanded, onToggleDescription,
-  isSpecificationsOpen, onSpecsToggle, modalCloseBtnRef,
+  isSpecificationsOpen, onSpecsToggle,
 }) => {
   const technical = product.technicalSpecs || {}
   const specificationSummary = [
@@ -113,80 +114,7 @@ const ProductInformation = ({
         </div>
       </div>
       {isSpecificationsOpen && hasDetailedSpecifications && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 sm:p-4 backdrop-blur-xs transition-opacity animate-fade-in"
-          onClick={() => onSpecsToggle(false)}
-          role="presentation"
-        >
-          <div
-            className="flex max-h-[88vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl border border-gray-100"
-            onClick={(e) => e.stopPropagation()}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="spec-modal-title"
-          >
-            <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4 sm:px-6 sm:py-5 bg-white shrink-0">
-              <div>
-                <h2 id="spec-modal-title" className="text-lg sm:text-xl font-bold text-secondary flex items-center gap-2">
-                  Thông số kỹ thuật chi tiết
-                </h2>
-                <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
-                  {product.name}
-                  {selectedVariant?.ram && selectedVariant?.storage
-                    ? ` • ${selectedVariant.ram} / ${selectedVariant.storage}`
-                    : ''}
-                </p>
-              </div>
-              <button
-                type="button"
-                ref={modalCloseBtnRef}
-                onClick={() => onSpecsToggle(false)}
-                className="rounded-full p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-secondary focus:outline-none focus:ring-2 focus:ring-primary/20"
-                aria-label="Đóng thông số kỹ thuật"
-              >
-                <FiX className="text-xl" />
-              </button>
-            </div>
-            <div className="overflow-y-auto p-4 sm:p-6 space-y-4">
-              {Object.entries(product.specifications).map(([key, group]) => (
-                <section key={key} className="rounded-xl border border-gray-100 overflow-hidden shadow-xs">
-                  <div className="bg-rose-50/60 px-4 py-2.5 border-b border-rose-100/60 flex items-center gap-2">
-                    <span className="w-1.5 h-3.5 bg-primary rounded-full inline-block" />
-                    <h3 className="text-xs sm:text-sm font-bold text-primary uppercase tracking-wider">
-                      {group.title}
-                    </h3>
-                  </div>
-                  <div className="divide-y divide-gray-100 text-sm">
-                    {Object.entries(group.items || {}).map(([specKey, specValue], rowIndex) => (
-                      <div
-                        key={specKey}
-                        className={`grid grid-cols-1 sm:grid-cols-12 gap-1 sm:gap-4 px-4 py-3 transition-colors ${
-                          rowIndex % 2 === 1 ? 'bg-gray-50/60' : 'bg-white'
-                        }`}
-                      >
-                        <span className="font-medium text-gray-500 sm:col-span-4 text-xs sm:text-sm">
-                          {specKey}
-                        </span>
-                        <span className="min-w-0 whitespace-pre-line text-xs leading-relaxed text-secondary [overflow-wrap:anywhere] sm:col-span-8 sm:text-sm">
-                          {specValue}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              ))}
-            </div>
-            <div className="border-t border-gray-100 px-5 py-3 sm:px-6 bg-gray-50/70 flex justify-end shrink-0">
-              <button
-                type="button"
-                onClick={() => onSpecsToggle(false)}
-                className="rounded-xl bg-gray-200 hover:bg-gray-300 px-5 py-2 text-sm font-semibold text-gray-700 transition-colors"
-              >
-                Đóng
-              </button>
-            </div>
-          </div>
-        </div>
+        <ProductSpecificationsDrawer product={product} onClose={() => onSpecsToggle(false)} />
       )}
 
     </>

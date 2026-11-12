@@ -39,60 +39,25 @@ export const validateCheckout = ({ form, shippingMethod, selectedStoreId, paymen
   return errors
 }
 
-export const buildCheckoutOrder = ({
-  form,
-  selectedItems,
-  shippingMethod,
-  selectedStore,
-  paymentMethod,
-  appliedCoupon,
-  subtotal,
-  discount,
-  shippingFee,
-  total,
-}) => ({
-  customer: {
-    fullName: form.fullName.trim(),
-    phone: form.phone.trim(),
-    email: form.email.trim(),
-    note: form.note.trim(),
+export const buildCheckoutOrder = ({ form, selectedItems, paymentMethod, voucherCode }) => ({
+  items: selectedItems.map(item => ({ productVariant: item.productVariantId || item.id, quantity: item.quantity })),
+  shippingAddress: {
+    fullName: form.fullName.trim(), phone: form.phone.trim(), province: form.province,
+    district: form.district, ward: form.ward, detailAddress: form.addressLine.trim(),
   },
-  shippingAddress: shippingMethod === 'delivery'
-    ? {
-        province: form.province,
-        district: form.district,
-        ward: form.ward,
-        addressLine: form.addressLine.trim(),
-        saveForLater: Boolean(form.saveAddress),
-      }
-    : null,
-  items: selectedItems.map((item) => ({
-    cartItemId: item.id,
-    productId: item.productId,
-    name: item.name,
-    image: item.image,
-    variant: item.selectedVariant,
-    color: item.selectedColor,
-    quantity: item.quantity,
-    unitPrice: item.price,
-    lineTotal: item.price * item.quantity,
-  })),
-  shippingMethod: {
-    type: shippingMethod,
-    store: shippingMethod === 'store_pickup' ? selectedStore : null,
-  },
-  paymentMethod,
-  // Không ghi nhận voucher đã mất điều kiện vào đơn hàng.
-  voucher: appliedCoupon && discount > 0
-    ? {
-        id: appliedCoupon.id,
-        code: appliedCoupon.code,
-        type: appliedCoupon.type,
-        value: appliedCoupon.value,
-      }
-    : null,
-  subtotal,
-  discount,
-  shippingFee,
-  total,
+  paymentMethod: paymentMethod.toUpperCase(),
+  note: form.note.trim(),
+  ...(voucherCode ? { voucherCode } : {}),
 })
+
+
+export const readCheckoutAddress = userId => {
+  if (!userId) return {}
+  try {
+    const saved = JSON.parse(localStorage.getItem(`tluphone:checkout-address:${userId}`))
+    if (!saved || typeof saved !== 'object' || Array.isArray(saved)) return {}
+    const fields = ['fullName', 'phone', 'province', 'district', 'ward', 'addressLine']
+    const address = Object.fromEntries(fields.filter(field => typeof saved[field] === 'string').map(field => [field, saved[field]]))
+    return Object.keys(address).length ? { ...address, saveAddress: true } : {}
+  } catch { return {} }
+}

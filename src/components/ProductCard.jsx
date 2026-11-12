@@ -37,7 +37,7 @@ const ProductCard = ({ product }) => {
 
   return (
     <div
-      className="group relative flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white transition-[border-color,box-shadow] duration-200 hover:border-rose-200 hover:shadow-sm"
+      className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-xl border border-gray-200 bg-white transition-[border-color,box-shadow] duration-200 hover:border-rose-200 hover:shadow-sm"
     >
       <Link
         to={detailPath}
@@ -69,39 +69,41 @@ const ProductCard = ({ product }) => {
           </span>
 
           {/* Tên sản phẩm */}
-          <h3 className="text-xs sm:text-sm font-bold text-secondary mt-1 line-clamp-2
+          <h3 className="min-h-[2.75em] text-xs sm:text-sm font-bold text-secondary mt-1 line-clamp-2
                          group-hover:text-primary transition-colors leading-snug">
             {displayedProduct.name}
           </h3>
 
           {/* Thông số (hiển thị dạng pill tag gọn gàng) */}
-          {displayedProduct.specs && (
-            <div className="mt-1.5">
+          <div className="mt-1.5 min-h-7">
+            {displayedProduct.specs && (
               <span className="inline-block bg-slate-100 text-gray-600 text-[11px] px-2 py-0.5 rounded border border-gray-200/60">
                 {displayedProduct.specs}
               </span>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* Đánh giá */}
-          <div className="flex items-center gap-1 mt-2">
+          <div className="flex items-center gap-1 mt-2 mb-3">
             <FiStar className="text-amber-400 fill-amber-400 text-xs" />
             <span className="text-xs font-bold text-secondary">{displayedProduct.rating}</span>
             <span className="text-[11px] text-gray-500">({displayedProduct.reviewCount})</span>
           </div>
 
           {/* Giá */}
-          <div className="mt-2 pt-2 border-t border-gray-50">
+          <div className="mt-auto pt-2 border-t border-gray-50">
             <div className="flex items-baseline gap-1.5">
               <span className="text-base sm:text-lg font-extrabold text-primary">
                 {displayedProduct.price == null ? 'Chưa có giá' : formatPrice(displayedProduct.price)}
               </span>
             </div>
-            {discount > 0 && (
-              <span className="text-xs text-gray-400 line-through block">
-                {formatPrice(displayedProduct.originalPrice)}
-              </span>
-            )}
+            <div className="min-h-4">
+              {discount > 0 && (
+                <span className="text-xs text-gray-400 line-through block">
+                  {formatPrice(displayedProduct.originalPrice)}
+                </span>
+              )}
+            </div>
           </div>
         </div>
       </Link>

@@ -75,7 +75,7 @@ const ProductsAdminPage = () => {
       (!term || `${item.name} ${item.slug} ${item.skuSearch}`.toLocaleLowerCase('vi-VN').includes(term)) &&
       (!filters.brand || String(item.brand?._id ?? item.brand) === String(brandId)) &&
       (!filters.category || String(item.category?._id ?? item.category) === String(categoryId)) &&
-      (!filters.status || item.status === filters.status) &&
+      (!filters.status || (filters.status === 'out' ? item.status === 'active' && item.inventory === 'out' : item.status === filters.status)) &&
       (!filters.inventory || item.inventory === filters.inventory) &&
       (filters.minPrice === '' || item.sellingPrice !== null && item.sellingPrice >= Number(filters.minPrice)) &&
       (filters.maxPrice === '' || item.sellingPrice !== null && item.sellingPrice <= Number(filters.maxPrice)))
@@ -136,7 +136,7 @@ const ProductsAdminPage = () => {
           <label className="relative"><span className="sr-only">Tìm sản phẩm hoặc SKU</span><FiSearch className="pointer-events-none absolute left-3 top-3.5 text-slate-400" /><input value={search} onChange={event => setSearch(event.target.value)} className={`${inputClass} pl-9`} placeholder="Tìm tên sản phẩm, SKU…" /></label>
           <label><span className="sr-only">Thương hiệu</span><select name="brand" value={filters.brand} onChange={filter} className={inputClass}><option value="">Mọi thương hiệu</option>{brands.map(item => <option key={item._id} value={item.slug}>{item.name}</option>)}</select></label>
           <label><span className="sr-only">Danh mục</span><select name="category" value={filters.category} onChange={filter} className={inputClass}><option value="">Mọi danh mục</option>{categories.map(item => <option key={item._id} value={item.slug}>{item.name}</option>)}</select></label>
-          <label><span className="sr-only">Trạng thái</span><select name="status" value={filters.status} onChange={filter} className={inputClass}><option value="">Mọi trạng thái</option>{Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+          <label><span className="sr-only">Trạng thái</span><select name="status" value={filters.status} onChange={filter} className={inputClass}><option value="">Mọi trạng thái</option>{Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}<option value="out">Hết hàng</option></select></label>
           <button type="button" aria-expanded={advanced} aria-controls="product-advanced-filters" onClick={() => setAdvanced(value => !value)} className="inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-slate-200 px-4 text-sm font-medium text-slate-600 hover:bg-slate-50"><FiFilter />Bộ lọc nâng cao</button>
         </div>
         {advanced && <div id="product-advanced-filters" className="grid gap-3 border-t border-slate-100 pt-4 sm:grid-cols-2 xl:grid-cols-4">

@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { homePromotion } from '../data/banners'
+import api from '../lib/api.js'
+import { flashSaleProducts } from '../helpers/flashSale.js'
 
 const PromotionContext = createContext(null)
 const MAX_TIMEOUT = 2_147_483_647
@@ -24,12 +25,42 @@ const getPromotionPhase = (promotion, now = Date.now()) => {
   return 'active'
 }
 
-const validPrice = (value) => Number.isFinite(value) && value >= 0
-
 export const PromotionProvider = ({ children }) => {
-  // Sau này thay homePromotion bằng dữ liệu GET /api/promotions/active.
-  const [promotion, setPromotion] = useState(homePromotion)
-  const [phase, setPhase] = useState(() => getPromotionPhase(homePromotion))
+  const [promotion, setPromotion] = useState(null)
+  const [promotionProducts, setPromotionProducts] = useState([])
+  const [phase, setPhase] = useState('inactive')
+
+  useEffect(() => {
+    let active = true
+    let timer
+    let controller
+    const load = async () => {
+      clearTimeout(timer)
+      controller?.abort()
+      controller = new AbortController()
+      const signal = controller.signal
+      try {
+        const { data } = await api.get('/flash-sales', { skipAuth: true, signal })
+        if (!active || signal.aborted) return
+        const sale = data.data
+        const products = flashSaleProducts(sale)
+        setPromotionProducts(products)
+        setPromotion(sale ? { id: sale._id, title: sale.name, description: sale.description, status: sale.isEnabled ? 'active' : 'inactive', startsAt: sale.startAt, endsAt: sale.endAt,
+          products: products.map(product => ({ productId: product.id, price: product.price, originalPrice: product.originalPrice })) } : null)
+        const nextTime = sale?.isEnabled ? [sale.startAt, sale.endAt].map(value => new Date(value).getTime()).filter(value => value > Date.now()).sort((a, b) => a - b)[0] : null
+        const boundary = nextTime ? nextTime - Date.now() + 100 : 60000
+        timer = setTimeout(load, Math.min(60000, Math.max(100, boundary)))
+      } catch {
+        if (!active || signal.aborted) return
+        setPromotion(null)
+        setPromotionProducts([])
+        timer = setTimeout(load, 60000)
+      }
+    }
+    load()
+    window.addEventListener('flash-sales-updated', load)
+    return () => { active = false; controller?.abort(); clearTimeout(timer); window.removeEventListener('flash-sales-updated', load) }
+  }, [])
 
   useEffect(() => {
     let timeoutId
@@ -71,46 +102,7 @@ export const PromotionProvider = ({ children }) => {
     [promotionItems]
   )
 
-  const applyPromotionToProduct = useCallback((product) => {
-    if (product?.source === 'api') return product
-    if (!product || phase !== 'active') return product
-
-    const promotionItem = getPromotionItem(product.id)
-    if (!promotionItem) return product
-
-    const promotionalPrice = validPrice(promotionItem.price)
-      ? promotionItem.price
-      : product.price
-    const variantPromotions = Array.isArray(promotionItem.variants)
-      ? promotionItem.variants
-      : []
-
-    const variants = product.variants?.map((variant) => {
-      const variantPromotion = variantPromotions.find(
-        (item) => String(item.variantId) === String(variant.id)
-      )
-
-      if (!variantPromotion || !validPrice(variantPromotion.price)) return variant
-
-      return {
-        ...variant,
-        price: variantPromotion.price,
-        originalPrice: validPrice(variantPromotion.originalPrice)
-          ? variantPromotion.originalPrice
-          : variant.price,
-      }
-    })
-
-    return {
-      ...product,
-      price: promotionalPrice,
-      originalPrice: validPrice(promotionItem.originalPrice)
-        ? promotionItem.originalPrice
-        : product.price,
-      variants,
-      activePromotionId: promotion.id,
-    }
-  }, [getPromotionItem, phase, promotion?.id])
+  const applyPromotionToProduct = useCallback(product => product, [])
 
   const value = useMemo(() => ({
     promotion,
@@ -120,7 +112,8 @@ export const PromotionProvider = ({ children }) => {
     promotionItems,
     getPromotionItem,
     applyPromotionToProduct,
-  }), [promotion, phase, promotionItems, getPromotionItem, applyPromotionToProduct])
+    promotionProducts,
+  }), [promotion, phase, promotionItems, getPromotionItem, applyPromotionToProduct, promotionProducts])
 
   return (
     <PromotionContext.Provider value={value}>
