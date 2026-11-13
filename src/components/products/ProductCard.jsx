@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FiArrowRight, FiHeart, FiStar } from 'react-icons/fi'
-import { usePromotion } from '../context/PromotionContext'
+import { usePromotion } from '../../context/PromotionContext'
 
 const PLACEHOLDER_IMAGE = '/images/products/placeholder.svg'
 

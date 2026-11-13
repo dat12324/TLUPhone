@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FiChevronRight } from 'react-icons/fi'
-import ProductCard from '../ProductCard'
+import ProductCard from '../products/ProductCard'
 import useActiveBrands from '../../hooks/useActiveBrands'
 import useCatalog from '../../hooks/useCatalog.js'
 

@@ -1,6 +1,7 @@
+import ProductReviews from '../components/products/ProductReviews'
 import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import ProductCard from '../components/ProductCard'
+import ProductCard from '../components/products/ProductCard'
 import { FiChevronRight } from 'react-icons/fi'
 import ProductPurchase from '../components/products/ProductPurchase'
 import ProductInformation from '../components/products/ProductInformation'
@@ -284,6 +285,12 @@ const ProductDetailPage = () => {
           onToggleDescription={() => setIsDescriptionExpanded(value => !value)}
           isSpecificationsOpen={isSpecificationsOpen}
           onSpecsToggle={setIsSpecificationsOpen}
+        />
+
+        <ProductReviews
+          key={product.databaseId}
+          product={product}
+          onRatingUpdated={(rating, reviewCount) => setProduct(current => current?.databaseId === product.databaseId ? { ...current, rating, ratingAverage: rating, reviewCount } : current)}
         />
 
         {relatedProducts.length > 0 && (

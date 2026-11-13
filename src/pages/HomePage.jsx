@@ -7,7 +7,7 @@ import BrandList from '../components/home/BrandList'
 import PromoBanners from '../components/home/PromoBanners'
 import BrandTabsSection from '../components/home/BrandTabsSection'
 import PromotionCountdown from '../components/home/PromotionCountdown'
-import ProductCard from '../components/ProductCard'
+import ProductCard from '../components/products/ProductCard'
 import { usePromotion } from '../context/PromotionContext'
 import useCatalog from '../hooks/useCatalog.js'
 

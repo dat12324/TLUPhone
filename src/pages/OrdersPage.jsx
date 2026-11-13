@@ -1,3 +1,4 @@
+import OrderReviews from '../components/orders/OrderReviews'
 import { useEffect, useRef, useState } from 'react'
 import { Navigate, useSearchParams } from 'react-router-dom'
 import { FiArrowLeft } from 'react-icons/fi'
@@ -116,6 +117,7 @@ const OrdersPage = ({ admin = false }) => {
       {notice && <p role="status" className="rounded-xl bg-emerald-50 p-3 text-sm text-emerald-700">{notice}</p>}
       {actionError && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-600">{actionError}</p>}
       <OrderDetail order={detail} />
+      {user?.role === 'user' && <OrderReviews key={detail._id} order={detail} />}
     </div>
     {cancelTarget && <CancelOrderModal order={cancelTarget} busy={busy} onClose={() => setCancelTarget(null)} onConfirm={(order, reason) => changeStatus(order, 'cancelled', reason)} />}
   </div>

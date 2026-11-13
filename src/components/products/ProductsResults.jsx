@@ -1,5 +1,5 @@
 import { FiChevronDown } from 'react-icons/fi'
-import ProductCard from '../ProductCard'
+import ProductCard from './ProductCard'
 
 const ProductsResults = ({ products, isLoading, isLoadingMore, error, remaining, onRetry, onLoadMore, onClear }) => {
   if (isLoading && products.length === 0) {
