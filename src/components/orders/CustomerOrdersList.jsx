@@ -55,7 +55,7 @@ export default function CustomerOrdersList({user, orders, pagination, page, sear
                 </li>)}</ul>
                 <div className="flex flex-wrap items-center justify-between gap-4 border-t border-slate-100 pt-4 xl:justify-end xl:border-l xl:border-t-0 xl:pl-5 xl:pt-0">
                   <div><p className="text-xs text-slate-500">Tổng tiền:</p><p className="mt-1 whitespace-nowrap text-lg font-bold tabular-nums text-primary">{formatVnd(order.totalAmount)}</p></div>
-                  <div className="flex flex-wrap gap-2"><button type="button" disabled={busy} onClick={()=>onDetail(order._id)} className={button}>Xem chi tiết</button>{['pending','confirmed'].includes(order.status) && <button type="button" disabled={busy} onClick={()=>onCancel(order)} aria-label={`Hủy đơn ${order.orderCode}`} className={`${button} border-red-200 text-red-600 hover:border-red-400 hover:bg-red-50`}><FiX aria-hidden="true" />Hủy đơn</button>}</div>
+                  <div className="flex flex-wrap gap-2"><button type="button" disabled={busy} onClick={()=>onDetail(order._id)} className={button}>Xem chi tiết</button>{(['pending','confirmed'].includes(order.status) && (order.paymentMethod !== 'VNPAY' || order.paymentStatus === 'failed')) && <button type="button" disabled={busy} onClick={()=>onCancel(order)} aria-label={`Hủy đơn ${order.orderCode}`} className={`${button} border-red-200 text-red-600 hover:border-red-400 hover:bg-red-50`}><FiX aria-hidden="true" />Hủy đơn</button>}</div>
                 </div>
               </div>
             </article>

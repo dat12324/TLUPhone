@@ -16,7 +16,7 @@ const useCatalog = (params, reloadKey = 0) => {
     let entry = cache.get(key)
     if (!entry || (!entry.pending && entry.expires <= Date.now())) {
       entry = { pending: true, expires: 0 }
-      entry.promise = api.get('/products', { params: { page: 1, ...JSON.parse(key) }, skipAuth: true })
+      entry.promise = api.get('/products', { params: { page: 1, ...JSON.parse(key) }, skipAuth: true, timeout: 15000 })
         .then(({ data }) => {
           const products = data.data.map(product => ({
             ...mapCatalogProduct(product, product.skus, [product.brandInfo].filter(Boolean), [product.categoryInfo].filter(Boolean)),

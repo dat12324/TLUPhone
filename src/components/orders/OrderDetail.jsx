@@ -1,4 +1,4 @@
-import { FiCheck, FiPhone, FiShoppingBag, FiTruck, FiX } from 'react-icons/fi'
+import { FiCheck, FiCheckCircle, FiPhone, FiShoppingBag, FiTruck, FiX } from 'react-icons/fi'
 import { formatVnd } from '../../helpers/checkout'
 import { formatSkuCapacity } from '../../utils/adminFormatters'
 
@@ -29,6 +29,23 @@ export default function OrderDetail({ order }) {
   const badge = cancelled ? 'bg-red-50 text-red-700' : order.status === 'delivered' ? 'bg-emerald-50 text-emerald-700' : 'bg-blue-50 text-blue-700'
 
   return <div className="space-y-4 text-sm">
+    {order.paymentMethod === 'VNPAY' && order.paymentStatus === 'paid' && (
+      <section className={panel} aria-labelledby="payment-success" role="status">
+        <div className="flex items-start gap-3">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
+            <FiCheckCircle aria-hidden="true" className="h-5 w-5" />
+          </span>
+          <div className="min-w-0">
+            <h2 id="payment-success" className="text-base font-bold text-secondary sm:text-lg">Thanh toán thành công!</h2>
+            <p className="mt-1 leading-6 text-slate-500">Đơn hàng của bạn đã được thanh toán qua VNPay. Cửa hàng sẽ sớm xác nhận và xử lý đơn hàng.</p>
+          </div>
+        </div>
+        <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4">
+          <span className="text-slate-500">Trạng thái thanh toán</span>
+          <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-700">Đã thanh toán</span>
+        </div>
+      </section>
+    )}
     <section className={panel} aria-labelledby="order-overview">
       <h2 id="order-overview" className="mb-4 text-base font-bold text-secondary">Tổng quan đơn hàng</h2>
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-slate-100 pb-4 text-slate-500">

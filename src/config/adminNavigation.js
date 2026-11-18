@@ -9,7 +9,6 @@ import {
   FiShoppingBag,
   FiTag,
   FiUsers,
-  FiZap,
 } from 'react-icons/fi'
 
 export const adminNavigation = [
@@ -32,7 +31,6 @@ export const adminNavigation = [
   {
     label: 'Marketing',
     items: [
-      { path: '/admin/flash-sales', segment: 'flash-sales', label: 'Flash Sale', title: 'Quản lý Flash Sale', icon: FiZap },
       { path: '/admin/vouchers', segment: 'vouchers', label: 'Voucher', title: 'Quản lý voucher', icon: FiTag },
       { path: '/admin/banners', segment: 'banners', label: 'Banner', title: 'Quản lý banner', icon: FiImage },
     ],

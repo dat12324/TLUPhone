@@ -64,8 +64,8 @@ const CheckoutSummary = ({
       <div className="space-y-3">
         {paymentMethods.filter(method => method.available).map((method) => (
           <label key={method.id} className={`block cursor-pointer rounded-xl border p-4 transition ${paymentMethod === method.id ? 'border-primary bg-rose-50 ring-1 ring-primary' : 'border-gray-200 hover:border-rose-300'}`}>
-            <input type="radio" name="paymentMethod" value={method.id} checked={paymentMethod === method.id} onChange={() => onPaymentChange(method.id)} className="sr-only" />
-            <span className="flex items-start gap-3">
+            <input type="radio" name="paymentMethod" value={method.id} checked={paymentMethod === method.id} onChange={() => onPaymentChange(method.id)} className="peer sr-only" />
+            <span className="flex items-start gap-3 rounded-lg peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-primary">
               <span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 ${paymentMethod === method.id ? 'border-primary' : 'border-gray-300'}`}>
                 {paymentMethod === method.id && <span className="h-2.5 w-2.5 rounded-full bg-primary" />}
               </span>
@@ -85,7 +85,7 @@ const CheckoutSummary = ({
     </CheckoutSection>
     <section className="rounded-2xl border border-slate-200 bg-white p-5">
       <button type="submit" disabled={busy || cartBusy || couponBusy || Boolean(cartError) || Boolean(submittedOrder)} className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-white transition hover:bg-rose-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50">
-        <FiCheckCircle /> {busy ? 'ĐANG ĐẶT HÀNG…' : 'ĐẶT HÀNG'}
+        <FiCheckCircle aria-hidden="true" /> {busy ? (paymentMethod === 'vnpay' ? 'ĐANG CHUYỂN SANG VNPAY…' : 'ĐANG ĐẶT HÀNG…') : paymentMethod === 'vnpay' ? 'THANH TOÁN VNPAY' : 'ĐẶT HÀNG'}
       </button>
       <p className="mt-3 flex items-start justify-center gap-1.5 text-center text-[11px] leading-relaxed text-gray-500"><FiShield className="mt-0.5 shrink-0 text-emerald-600" /> Giá và tồn kho được xác nhận lại khi tạo đơn.</p>
     </section>

@@ -8,7 +8,7 @@ export const priceRanges = [
 
 export const catalogSortMap = {
   default: 'popular',
-  hot: 'newest',
+  hot: 'discount_desc',
   'price-asc': 'price_asc',
   'price-desc': 'price_desc',
 }

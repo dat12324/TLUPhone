@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FiBox, FiChevronLeft, FiChevronRight, FiEdit2, FiExternalLink, FiEye, FiEyeOff, FiFilter, FiGrid, FiList, FiPlus, FiSearch, FiX } from 'react-icons/fi'
 import ProductEditor from '../../components/admin/products/ProductEditor'
@@ -23,7 +23,7 @@ const ProductsAdminPage = () => {
   const [view, setView] = useState('list')
   const [advanced, setAdvanced] = useState(false)
   const [products, setProducts] = useState([])
-  const [variants, setVariants] = useState([])
+  const [pagination, setPagination] = useState({ total: 0, totalPages: 0 })
   const [brands, setBrands] = useState([])
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
@@ -34,71 +34,107 @@ const ProductsAdminPage = () => {
   const [editor, setEditor] = useState(null)
   const [skuProduct, setSkuProduct] = useState(null)
 
-  useEffect(() => { const timer = setTimeout(() => { setFilters(current => ({ ...current, search: search.trim() })); setPage(1) }, 350); return () => clearTimeout(timer) }, [search])
+  useEffect(() => {
+    if (search.trim() === filters.search) return
+    const timer = setTimeout(() => {
+      setFilters(current => ({ ...current, search: search.trim() }))
+      setPage(1)
+    }, 350)
+    return () => clearTimeout(timer)
+  }, [search, filters.search])
   useEffect(() => { if (!notice) return; const timer = setTimeout(() => setNotice(''), 4000); return () => clearTimeout(timer) }, [notice])
+
   useEffect(() => {
     const controller = new AbortController()
-    setLoading(true); setError('')
-    Promise.all(['products', 'product-variants', 'brands', 'categories'].map(async resource => {
-      const items = []
-      let page = 1
-      let totalPages = 1
-      do {
-        const { data } = await api.get(`/${resource}`, { params: { page, limit: 100 }, signal: controller.signal })
-        items.push(...data.data)
-        totalPages = data.pagination.totalPages
-        page += 1
-      } while (page <= totalPages)
-      return items
-    })).then(([items, skus, brands, categories]) => {
-      if (controller.signal.aborted) return
-      setProducts(items); setVariants(skus); setBrands(brands); setCategories(categories)
-    }).catch(failure => { if (failure.name !== 'AbortError') setError(failure.message) })
-      .finally(() => { if (!controller.signal.aborted) setLoading(false) })
-    return () => controller.abort()
-  }, [reload])
-
-  const rows = useMemo(() => {
-    const byProduct = new Map()
-    for (const sku of variants) {
-      const id = String(sku.product?._id ?? sku.product)
-      if (!byProduct.has(id)) byProduct.set(id, [])
-      byProduct.get(id).push(sku)
-    }
-    return products.map(product => summarizeAdminProduct(product, byProduct.get(String(product._id)) || []))
-  }, [products, variants])
-  const filtered = useMemo(() => {
-    const brandId = brands.find(item => item.slug === filters.brand)?._id
-    const categoryId = categories.find(item => item.slug === filters.category)?._id
-    const term = filters.search.toLocaleLowerCase('vi-VN')
-    const items = rows.filter(item =>
-      (!term || `${item.name} ${item.slug} ${item.skuSearch}`.toLocaleLowerCase('vi-VN').includes(term)) &&
-      (!filters.brand || String(item.brand?._id ?? item.brand) === String(brandId)) &&
-      (!filters.category || String(item.category?._id ?? item.category) === String(categoryId)) &&
-      (!filters.status || (filters.status === 'out' ? item.status === 'active' && item.inventory === 'out' : item.status === filters.status)) &&
-      (!filters.inventory || item.inventory === filters.inventory) &&
-      (filters.minPrice === '' || item.sellingPrice !== null && item.sellingPrice >= Number(filters.minPrice)) &&
-      (filters.maxPrice === '' || item.sellingPrice !== null && item.sellingPrice <= Number(filters.maxPrice)))
-    return items.sort((a, b) => {
-      if (sort === 'name') return a.name.localeCompare(b.name, 'vi')
-      if (sort === 'priceAsc' || sort === 'priceDesc') {
-        if (a.sellingPrice === null) return b.sellingPrice === null ? 0 : 1
-        if (b.sellingPrice === null) return -1
-        return (a.sellingPrice - b.sellingPrice) * (sort === 'priceDesc' ? -1 : 1)
+    const loadReferences = async () => {
+      const lists = await Promise.all(['brands', 'categories'].map(async resource => {
+        const items = []
+        let page = 1
+        let totalPages = 1
+        do {
+          const { data } = await api.get(`/${resource}`, { params: { page, limit: 100 }, signal: controller.signal })
+          items.push(...data.data)
+          totalPages = data.pagination.totalPages
+          page += 1
+        } while (page <= totalPages)
+        return items
+      }))
+      if (!controller.signal.aborted) {
+        setBrands(lists[0])
+        setCategories(lists[1])
       }
-      return (new Date(b.createdAt).getTime() || 0) - (new Date(a.createdAt).getTime() || 0)
-    })
-  }, [rows, brands, categories, filters, sort])
-  const totalPages = Math.max(1, Math.ceil(filtered.length / limit))
-  const currentPage = Math.min(page, totalPages)
-  const visible = filtered.slice((currentPage - 1) * limit, currentPage * limit)
+    }
+    loadReferences().catch(failure => { if (!controller.signal.aborted) setError(failure.message) })
+    return () => controller.abort()
+  }, [])
+
+  useEffect(() => {
+    const controller = new AbortController()
+    const loadProducts = async () => {
+      setLoading(true)
+      setError('')
+      try {
+        const params = { page, limit, sort: { priceAsc: 'price_asc', priceDesc: 'price_desc' }[sort] || sort }
+        for (const field of ['search', 'brand', 'category', 'status', 'minPrice', 'maxPrice']) {
+          if (filters[field] !== '') params[field] = filters[field]
+        }
+        if (filters.status === 'active') params.inStock = true
+        if (filters.status === 'out') {
+          params.status = 'active'
+          params.inStock = false
+        }
+        if (filters.inventory === 'out') params.inStock = false
+        if (filters.inventory === 'available' && filters.status !== 'out') params.inStock = true
+        const { data } = await api.get('/products', { params, signal: controller.signal })
+        if (controller.signal.aborted) return
+        const lastPage = Math.max(1, data.pagination.totalPages)
+        if (page > lastPage) { setPage(lastPage); return }
+        // Chỉ đọc SKU của những sản phẩm thuộc trang đang xem, kể cả SKU ngừng bán.
+        const rows = await Promise.all(data.data.map(async product => {
+          const skus = []
+          let skuPage = 1
+          let totalPages = 1
+          do {
+            const result = await api.get('/product-variants', {
+              params: { product: product._id, page: skuPage, limit: 100 }, signal: controller.signal,
+            })
+            skus.push(...result.data.data)
+            totalPages = result.data.pagination.totalPages
+            skuPage += 1
+          } while (skuPage <= totalPages)
+          return summarizeAdminProduct(product, skus)
+        }))
+        if (controller.signal.aborted) return
+        setProducts(rows)
+        setPagination(data.pagination)
+      } catch (failure) {
+        if (!controller.signal.aborted) setError(failure.message)
+      } finally {
+        if (!controller.signal.aborted) setLoading(false)
+      }
+    }
+    void loadProducts()
+    return () => controller.abort()
+  }, [page, limit, filters, sort, reload])
+
+  const totalPages = Math.max(1, pagination.totalPages)
+  const currentPage = page
+  const visible = products
   const stats = [
-    { label: 'Tổng số sản phẩm', value: filtered.length, tone: 'bg-primary' },
-    { label: 'Đang bán', value: filtered.filter(item => item.status === 'active' && item.inventory !== 'out').length, tone: 'bg-emerald-500' },
-    { label: 'Tạm ẩn / Nháp', value: filtered.filter(item => item.status !== 'active').length, tone: 'bg-amber-500' },
-    { label: 'Hết hàng', value: filtered.filter(item => item.status === 'active' && item.inventory === 'out').length, tone: 'bg-rose-500' },
+    { label: 'Tổng kết quả', value: pagination.total, tone: 'bg-primary' },
+    { label: 'Đang bán · trang này', value: products.filter(item => item.status === 'active' && item.inventory !== 'out').length, tone: 'bg-emerald-500' },
+    { label: 'Tạm ẩn / Nháp · trang này', value: products.filter(item => item.status !== 'active').length, tone: 'bg-amber-500' },
+    { label: 'Hết hàng · trang này', value: products.filter(item => item.status === 'active' && item.inventory === 'out').length, tone: 'bg-rose-500' },
   ]
-  const filter = event => { const { name, value } = event.target; setFilters(current => ({ ...current, [name]: value })); setPage(1) }
+  const filter = event => {
+    const { name, value } = event.target
+    setFilters(current => ({
+      ...current, [name]: value,
+      ...(name === 'status' && ['active', 'out'].includes(value) ? { inventory: '' } : {}),
+      ...(name === 'inventory' && value === 'out' && current.status === 'active' ? { status: '' } : {}),
+    }))
+    setPage(1)
+  }
   const edit = async item => { setBusy(true); setError(''); try { setEditor({ product: (await api.get(`/products/getByID/${encodeURIComponent(item._id)}`)).data.data }) } catch (failure) { setError(failure.message) } finally { setBusy(false) } }
   const status = async item => {
     if (busy) return
@@ -106,7 +142,7 @@ const ProductsAdminPage = () => {
     try {
       const { data: { data: updated } } = await api.patch(`/products/${encodeURIComponent(item._id)}/status`, { status: item.status === 'active' ? 'inactive' : 'active' })
       invalidateProductCatalog()
-      setProducts(current => current.map(product => product._id === updated._id ? { ...product, ...updated } : product))
+      setReload(value => value + 1)
       setNotice(updated.status === 'inactive' ? 'Đã tạm ẩn sản phẩm.' : 'Đã kích hoạt sản phẩm.')
     } catch (failure) { setError(failure.message) }
     finally { setBusy(false) }
@@ -133,16 +169,16 @@ const ProductsAdminPage = () => {
       <div className="flex flex-wrap items-center justify-between gap-4"><div><h1 className="text-2xl font-bold tracking-tight">Quản lý sản phẩm</h1><p className="mt-1.5 text-sm text-slate-500">Danh sách sản phẩm, hình ảnh và các phiên bản bán hàng.</p></div><button type="button" onClick={() => setEditor({ product: null })} className={`${actionClass} gap-2 shadow-sm shadow-rose-200`}><FiPlus />Thêm sản phẩm</button></div>
       <section aria-label="Bộ lọc sản phẩm" className="space-y-4 rounded-2xl border border-slate-200/80 bg-white p-3 sm:p-4">
         <div className="grid items-center gap-3 sm:grid-cols-2 xl:grid-cols-[minmax(200px,1.5fr)_1fr_1fr_1fr_auto]">
-          <label className="relative"><span className="sr-only">Tìm sản phẩm hoặc SKU</span><FiSearch className="pointer-events-none absolute left-3 top-3.5 text-slate-400" /><input value={search} onChange={event => setSearch(event.target.value)} className={`${inputClass} pl-9`} placeholder="Tìm tên sản phẩm, SKU…" /></label>
+          <label className="relative"><span className="sr-only">Tìm sản phẩm theo tên</span><FiSearch className="pointer-events-none absolute left-3 top-3.5 text-slate-400" /><input value={search} onChange={event => setSearch(event.target.value)} className={`${inputClass} pl-9`} placeholder="Tìm tên sản phẩm…" /></label>
           <label><span className="sr-only">Thương hiệu</span><select name="brand" value={filters.brand} onChange={filter} className={inputClass}><option value="">Mọi thương hiệu</option>{brands.map(item => <option key={item._id} value={item.slug}>{item.name}</option>)}</select></label>
           <label><span className="sr-only">Danh mục</span><select name="category" value={filters.category} onChange={filter} className={inputClass}><option value="">Mọi danh mục</option>{categories.map(item => <option key={item._id} value={item.slug}>{item.name}</option>)}</select></label>
           <label><span className="sr-only">Trạng thái</span><select name="status" value={filters.status} onChange={filter} className={inputClass}><option value="">Mọi trạng thái</option>{Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}<option value="out">Hết hàng</option></select></label>
           <button type="button" aria-expanded={advanced} aria-controls="product-advanced-filters" onClick={() => setAdvanced(value => !value)} className="inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap rounded-xl border border-slate-200 px-4 text-sm font-medium text-slate-600 hover:bg-slate-50"><FiFilter />Bộ lọc nâng cao</button>
         </div>
         {advanced && <div id="product-advanced-filters" className="grid gap-3 border-t border-slate-100 pt-4 sm:grid-cols-2 xl:grid-cols-4">
-          <label className="space-y-1.5 text-xs text-slate-500"><span>Giá SKU thấp nhất từ (đ)</span><input type="number" min="0" name="minPrice" value={filters.minPrice} onChange={filter} placeholder="Không giới hạn" className={inputClass} /></label>
-          <label className="space-y-1.5 text-xs text-slate-500"><span>Đến (đ)</span><input type="number" min="0" name="maxPrice" value={filters.maxPrice} onChange={filter} placeholder="Không giới hạn" className={inputClass} /></label>
-          <label className="space-y-1.5 text-xs text-slate-500"><span>Tồn kho SKU đang bán</span><select name="inventory" value={filters.inventory} onChange={filter} className={inputClass}><option value="">Mọi tồn kho</option><option value="available">Còn hàng</option><option value="out">Hết hàng</option><option value="unknown">Chưa xác nhận</option></select></label>
+          <label className="space-y-1.5 text-xs text-slate-500"><span>Giá SKU từ (đ)</span><input type="number" min="0" name="minPrice" value={filters.minPrice} onChange={filter} placeholder="Không giới hạn" className={inputClass} /></label>
+          <label className="space-y-1.5 text-xs text-slate-500"><span>Dưới (đ)</span><input type="number" min="0" name="maxPrice" value={filters.maxPrice} onChange={filter} placeholder="Không giới hạn" className={inputClass} /></label>
+          <label className="space-y-1.5 text-xs text-slate-500"><span>Tồn kho SKU đang bán</span><select name="inventory" value={filters.inventory} onChange={filter} className={inputClass}><option value="">Mọi tồn kho</option><option value="available">Còn hàng</option><option value="out">Hết hàng</option><option value="unknown" disabled>Chưa xác nhận (API chưa hỗ trợ)</option></select></label>
           <button type="button" onClick={() => { setSearch(''); setFilters({ search: '', brand: '', category: '', status: '', minPrice: '', maxPrice: '', inventory: '' }); setPage(1) }} className="mt-auto inline-flex min-h-11 items-center justify-center gap-2 text-sm text-slate-500 hover:text-primary"><FiX />Xóa bộ lọc</button>
         </div>}
       </section>
@@ -150,14 +186,14 @@ const ProductsAdminPage = () => {
       <section aria-label="Danh sách sản phẩm" aria-busy={loading} className="rounded-2xl border border-slate-200/80 bg-white">
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 px-4 py-4 sm:px-5">
           <div className="grid w-full grid-cols-2 gap-x-6 gap-y-4 lg:w-auto lg:flex lg:gap-0">{stats.map((stat, index) => <div key={stat.label} className={`flex items-center gap-2.5 lg:px-5 ${index ? 'lg:border-l lg:border-slate-100' : 'lg:pl-0'}`}><span className={`h-2 w-2 rounded-full ${stat.tone}`} /><div><p className="text-xs text-slate-500">{stat.label}</p><p className="mt-0.5 text-base font-bold tabular-nums">{loading ? '—' : stat.value}</p></div></div>)}</div>
-          <div className="ml-auto flex items-center gap-3"><label><span className="sr-only">Sắp xếp sản phẩm</span><select value={sort} onChange={event => { setSort(event.target.value); setPage(1) }} className={`${inputClass} w-auto`}><option value="newest">Mới nhất</option><option value="name">Tên A–Z</option><option value="priceAsc">Giá tăng dần</option><option value="priceDesc">Giá giảm dần</option></select></label><div className="flex gap-1 rounded-xl bg-slate-50 p-1">{[['list', FiList, 'Dạng bảng'], ['grid', FiGrid, 'Dạng lưới']].map(([value, Icon, label]) => <button key={value} type="button" onClick={() => setView(value)} title={label} aria-label={label} aria-pressed={view === value} className={`flex h-10 w-10 items-center justify-center rounded-lg ${view === value ? 'bg-rose-50 text-primary' : 'text-slate-400 hover:bg-slate-100'}`}><Icon /></button>)}</div></div>
+          <div className="ml-auto flex items-center gap-3"><label><span className="sr-only">Sắp xếp sản phẩm</span><select value={sort} onChange={event => { setSort(event.target.value); setPage(1) }} className={`${inputClass} w-auto`}><option value="newest">Mới nhất</option><option value="priceAsc">Giá tăng dần</option><option value="priceDesc">Giá giảm dần</option></select></label><div className="flex gap-1 rounded-xl bg-slate-50 p-1">{[['list', FiList, 'Dạng bảng'], ['grid', FiGrid, 'Dạng lưới']].map(([value, Icon, label]) => <button key={value} type="button" onClick={() => setView(value)} title={label} aria-label={label} aria-pressed={view === value} className={`flex h-10 w-10 items-center justify-center rounded-lg ${view === value ? 'bg-rose-50 text-primary' : 'text-slate-400 hover:bg-slate-100'}`}><Icon /></button>)}</div></div>
         </div>
         {loading ? <div role="status" className="space-y-4 p-5"><span className="sr-only">Đang tải sản phẩm…</span>{Array.from({ length: 6 }, (_, index) => <div key={index} className="h-16 animate-pulse rounded-xl bg-slate-50" />)}</div> : !visible.length ? <div className="py-16 text-center"><FiBox className="mx-auto mb-3 text-3xl text-slate-300" /><p className="font-medium">Không có sản phẩm phù hợp</p><p className="mt-1 text-sm text-slate-400">Thử thay đổi từ khóa hoặc bộ lọc.</p></div> : view === 'list' ? <div className="overflow-x-auto"><table className="w-full min-w-[1080px] text-left text-sm"><thead className="bg-slate-50/80 text-[11px] uppercase tracking-wide text-slate-500"><tr>{['Sản phẩm', 'Thương hiệu / Danh mục', 'Giá bán', 'Phiên bản (SKU)', 'Trạng thái', 'Thao tác'].map(label => <th key={label} className={`px-4 py-3 font-semibold ${label === 'Thao tác' ? 'text-right' : ''}`}>{label}</th>)}</tr></thead><tbody className="divide-y divide-slate-100">{visible.map(item => <tr key={item._id} className="transition-colors hover:bg-slate-50/60">
           <td className="px-4 py-4"><div className="flex items-center gap-3"><img src={item.displayImage} onError={imageFallback} alt="" className="h-14 w-14 shrink-0 rounded-xl border border-slate-100 bg-white object-contain p-1" /><div className="max-w-[250px]"><p className="line-clamp-2 font-semibold leading-5">{item.name}</p><p className="mt-1 max-w-[240px] truncate text-xs text-slate-400" title={item.slug}>{item.slug}</p></div></div></td>
           <td className="px-4 py-4"><p>{brands.find(brand => String(brand._id) === String(item.brand?._id ?? item.brand))?.name || '—'}</p><p className="mt-1 text-xs text-slate-400">{categories.find(category => String(category._id) === String(item.category?._id ?? item.category))?.name || '—'}</p></td>
           <td className="px-4 py-4">{price(item)}</td><td className="px-4 py-4">{colors(item)}</td><td className="px-4 py-4">{badge(item)}</td><td className="px-4 py-4">{actions(item)}</td>
         </tr>)}</tbody></table></div> : <div className="grid gap-4 p-4 sm:grid-cols-2 xl:grid-cols-3">{visible.map(item => <article key={item._id} className="space-y-4 rounded-xl border border-slate-200 p-4"><div className="flex items-start justify-between gap-3"><img src={item.displayImage} onError={imageFallback} alt="" className="h-24 w-24 rounded-xl bg-slate-50 object-contain p-2" />{badge(item)}</div><div><p className="line-clamp-2 min-h-10 text-sm font-semibold">{item.name}</p><p className="mt-1 truncate text-xs text-slate-400">{item.slug}</p></div>{price(item)}{colors(item)}<div className="border-t border-slate-100 pt-3">{actions(item)}</div></article>)}</div>}
-        <footer className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 px-4 py-4 text-xs text-slate-500 sm:px-5"><span>{loading ? 'Đang tải…' : `Hiển thị ${filtered.length ? (currentPage - 1) * limit + 1 : 0}–${Math.min(currentPage * limit, filtered.length)} trong ${filtered.length} sản phẩm`}</span><div className="flex flex-wrap items-center gap-2"><label className="mr-3 flex items-center gap-2">Số dòng:<select value={limit} onChange={event => { setLimit(Number(event.target.value)); setPage(1) }} className="min-h-10 rounded-lg border border-slate-200 bg-white px-2">{[6, 12, 24, 48].map(value => <option key={value}>{value}</option>)}</select></label><button type="button" disabled={currentPage <= 1 || loading} onClick={() => setPage(currentPage - 1)} aria-label="Trang trước" className={`${iconButton} disabled:opacity-30`}><FiChevronLeft /></button>{Array.from({ length: Math.min(5, totalPages) }, (_, index) => Math.min(Math.max(1, currentPage - 2), Math.max(1, totalPages - 4)) + index).map(value => <button key={value} type="button" disabled={loading} aria-current={currentPage === value ? 'page' : undefined} onClick={() => setPage(value)} className={`h-10 min-w-10 rounded-lg border px-2 font-medium ${currentPage === value ? 'border-primary/30 bg-rose-50 text-primary' : 'border-slate-200 hover:bg-slate-50'}`}>{value}</button>)}<button type="button" disabled={currentPage >= totalPages || loading} onClick={() => setPage(currentPage + 1)} aria-label="Trang sau" className={`${iconButton} disabled:opacity-30`}><FiChevronRight /></button></div></footer>
+        <footer className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 px-4 py-4 text-xs text-slate-500 sm:px-5"><span>{loading ? 'Đang tải…' : `Hiển thị ${pagination.total ? (currentPage - 1) * limit + 1 : 0}–${Math.min(currentPage * limit, pagination.total)} trong ${pagination.total} sản phẩm`}</span><div className="flex flex-wrap items-center gap-2"><label className="mr-3 flex items-center gap-2">Số dòng:<select value={limit} onChange={event => { setLimit(Number(event.target.value)); setPage(1) }} className="min-h-10 rounded-lg border border-slate-200 bg-white px-2">{[6, 12, 24, 48].map(value => <option key={value}>{value}</option>)}</select></label><button type="button" disabled={currentPage <= 1 || loading} onClick={() => setPage(currentPage - 1)} aria-label="Trang trước" className={`${iconButton} disabled:opacity-30`}><FiChevronLeft /></button>{Array.from({ length: Math.min(5, totalPages) }, (_, index) => Math.min(Math.max(1, currentPage - 2), Math.max(1, totalPages - 4)) + index).map(value => <button key={value} type="button" disabled={loading} aria-current={currentPage === value ? 'page' : undefined} onClick={() => setPage(value)} className={`h-10 min-w-10 rounded-lg border px-2 font-medium ${currentPage === value ? 'border-primary/30 bg-rose-50 text-primary' : 'border-slate-200 hover:bg-slate-50'}`}>{value}</button>)}<button type="button" disabled={currentPage >= totalPages || loading} onClick={() => setPage(currentPage + 1)} aria-label="Trang sau" className={`${iconButton} disabled:opacity-30`}><FiChevronRight /></button></div></footer>
       </section>
     </>}
     {editor && <ProductEditor product={editor.product} brands={brands} categories={categories} onClose={() => setEditor(null)} onSaved={saved} />}

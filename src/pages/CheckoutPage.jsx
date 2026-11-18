@@ -55,6 +55,7 @@ const CheckoutPage = () => {
   const [paymentMethod, setPaymentMethod] = useState('cod')
   const [submitError, setSubmitError] = useState('')
   const [submittedOrder, setSubmittedOrder] = useState(null)
+  const [paymentUrl, setPaymentUrl] = useState('')
 
   const shippingFee = calculateShippingFee(shippingMethod, selectedSubtotal)
   const total = Math.max(0, selectedSubtotal - couponDiscount + shippingFee)
@@ -121,8 +122,8 @@ const CheckoutPage = () => {
     setSubmitError('')
     if (!selectedItems.length) { setSubmitError('Không có sản phẩm nào được chọn để đặt hàng.'); return }
     if (cartError) { setSubmitError(cartError); return }
-    if (shippingMethod !== 'delivery' || paymentMethod !== 'cod') {
-      setSubmitError('Hiện chỉ hỗ trợ giao hàng tận nơi và thanh toán COD.')
+    if (shippingMethod !== 'delivery' || !['cod', 'vnpay'].includes(paymentMethod)) {
+      setSubmitError('Vui lòng chọn giao hàng tận nơi và thanh toán COD hoặc VNPay.')
       return
     }
     const validationErrors = validateCheckout({ form, shippingMethod, selectedStoreId, paymentMethod })
@@ -137,6 +138,10 @@ const CheckoutPage = () => {
     try {
       const { data } = await api.post('/orders', buildCheckoutOrder({ form, selectedItems: purchased, paymentMethod, voucherCode: appliedCoupon?.code }))
       setSubmittedOrder(data.data)
+      if (paymentMethod === 'vnpay') {
+        if (!data.data.paymentUrl) throw new Error('Đơn đã tạo nhưng chưa có liên kết thanh toán. Vui lòng kiểm tra trong đơn hàng của bạn.')
+        setPaymentUrl(data.data.paymentUrl)
+      }
       setCleanupWarning('')
       if (appliedCoupon) removeCoupon()
       try {
@@ -155,6 +160,7 @@ const CheckoutPage = () => {
       } catch {
         setCleanupWarning('Đơn đã được tạo. Chưa hoàn tất cập nhật giỏ hàng; bạn có thể kiểm tra lại trong tài khoản.')
       }
+      if (paymentMethod === 'vnpay') window.location.assign(data.data.paymentUrl)
     } catch (failure) {
       setSubmitError(failure.message)
       void reloadCart()
@@ -203,6 +209,17 @@ const CheckoutPage = () => {
           </div>
         )}
 
+        {submittedOrder?.paymentMethod === 'VNPAY' && (
+          <div role="status" className="mb-4 rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900">
+            <p className="font-semibold">Đơn {submittedOrder.orderCode} đang chờ thanh toán VNPay.</p>
+            <p className="mt-1">{busy ? 'Đang chuyển sang VNPay…' : 'Nếu chưa được chuyển trang, chọn tiếp tục thanh toán.'}</p>
+            {cleanupWarning && <p className="mt-2">{cleanupWarning}</p>}
+            <div className="mt-3 flex flex-wrap gap-4">
+              {paymentUrl && <a href={paymentUrl} className="font-semibold underline">Tiếp tục thanh toán</a>}
+              <Link to={`/orders?orderId=${submittedOrder._id}`} className="underline">Xem đơn hàng</Link>
+            </div>
+          </div>
+        )}
         <fieldset className="grid min-w-0 grid-cols-1 items-start gap-4 lg:grid-cols-12" disabled={busy || cartBusy}>
           <div className="min-w-0 space-y-4 lg:col-span-8">
             <CheckoutItems selectedItems={selectedItems} selectedTotalQuantity={selectedTotalQuantity} />
@@ -231,7 +248,7 @@ const CheckoutPage = () => {
         />
       )}
 
-      {submittedOrder && (
+      {submittedOrder && submittedOrder.paymentMethod !== 'VNPAY' && (
         <OrderSuccessModal
           submittedOrder={submittedOrder} cleanupWarning={cleanupWarning} busy={busy}
           onViewOrders={() => navigate('/orders')} onContinueShopping={() => navigate('/products')}

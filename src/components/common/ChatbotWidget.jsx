@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
+import api from '../../lib/api'
 import {
   FiCpu,
   FiMessageCircle,
@@ -11,7 +13,7 @@ const suggestedQuestions = [
   'Điện thoại dưới 10 triệu',
   'Điện thoại chơi game tốt',
   'Điện thoại chụp ảnh đẹp',
-  'Điện thoại pin tốt',
+  '5 điện thoại pin trâu nhất',
   'So sánh điện thoại',
 ]
 
@@ -24,7 +26,6 @@ const initialMessages = [
   },
 ]
 
-const MOCK_RESPONSE = 'Chức năng tư vấn AI đang được hoàn thiện.'
 const GREETING_SEEN_KEY = 'tluphone_chat_greeting_seen'
 
 const ChatAvatar = ({ small = false }) => (
@@ -39,13 +40,41 @@ const ChatMessage = ({ message }) => {
   return (
     <div className={`flex items-end gap-2 ${isUser ? 'justify-end' : 'justify-start'}`}>
       {!isUser && <ChatAvatar small />}
-      <div className={`max-w-[78%] rounded-2xl px-3.5 py-2.5 text-sm leading-5 ${isUser ? 'rounded-br-md bg-primary text-white' : 'rounded-bl-md bg-slate-100 text-slate-700'}`}>
+      <div className={`max-w-[88%] rounded-2xl px-3.5 py-2.5 text-sm leading-5 ${isUser ? 'rounded-br-md bg-primary text-white' : 'rounded-bl-md bg-slate-100 text-slate-700'}`}>
         {message.content.split('\n').map((line, index) => (
           <span key={`${message.id}-${index}`}>
             {line}
             {index < message.content.split('\n').length - 1 && <br />}
           </span>
         ))}
+        {message.products?.length > 0 && (
+          <div className="mt-3 space-y-2">
+            {message.products.map(product => (
+              <Link
+                key={product.slug}
+                to={`/products/${product.slug}`}
+                className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-2 text-slate-800 transition hover:border-primary focus-visible:outline-primary"
+              >
+                <img
+                  src={product.image || '/images/products/placeholder.svg'}
+                  alt={product.name}
+                  loading="lazy"
+                  className="h-16 w-16 shrink-0 rounded-lg object-contain"
+                  onError={event => {
+                    event.currentTarget.onerror = null
+                    event.currentTarget.src = '/images/products/placeholder.svg'
+                  }}
+                />
+                <span className="min-w-0">
+                  <span className="line-clamp-2 font-semibold">{product.name}</span>
+                  <span className="mt-1 block font-semibold text-primary">
+                    {product.price == null ? 'Xem giá chi tiết' : `${product.price.toLocaleString('vi-VN')}₫`}
+                  </span>
+                </span>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )
@@ -64,7 +93,8 @@ const ChatbotWidget = () => {
   const [messages, setMessages] = useState(initialMessages)
   const [isTyping, setIsTyping] = useState(false)
   const messagesEndRef = useRef(null)
-  const responseTimersRef = useRef([])
+  const [error, setError] = useState('')
+  const requestRef = useRef(null)
 
   useEffect(() => {
     if (isOpen) {
@@ -73,7 +103,7 @@ const ChatbotWidget = () => {
   }, [isOpen, messages, isTyping])
 
   useEffect(() => () => {
-    responseTimersRef.current.forEach((timer) => window.clearTimeout(timer))
+    requestRef.current?.abort()
   }, [])
 
   const markGreetingSeen = () => {
@@ -92,35 +122,37 @@ const ChatbotWidget = () => {
     setIsOpen(true)
   }
 
-  const handleSend = (event, presetContent = '') => {
+  const handleSend = async (event, presetContent = '') => {
     event?.preventDefault()
     const content = (presetContent || input).trim()
-    if (!content) return
-
-    const userMessage = {
-      id: `user-${Date.now()}`,
-      role: 'user',
-      content,
-      timestamp: Date.now(),
-    }
-    setMessages((current) => [...current, userMessage])
+    if (!content || requestRef.current) return
+    const controller = new AbortController()
+    requestRef.current = controller
+    const history = messages.filter(message => message.id !== 'welcome')
+      .slice(-10).map(({ role, content }) => ({ role, content: content.slice(0, 2000) }))
+    const userMessage = { id: `user-${Date.now()}`, role: 'user', content }
+    setMessages(current => [...current, userMessage])
     setInput('')
+    setError('')
     setIsTyping(true)
-
-    // Điểm kết nối dự kiến sau này: POST /api/chat với danh sách messages.
-    const responseTimer = window.setTimeout(() => {
-      setMessages((current) => [...current, {
-        id: `assistant-${Date.now()}`,
-        role: 'assistant',
-        content: MOCK_RESPONSE,
-        timestamp: Date.now(),
+    try {
+      const { data } = await api.post('/chat/messages', { message: content, history }, {
+        skipAuth: true, signal: controller.signal, timeout: 65000,
+      })
+      setMessages(current => [...current, {
+        id: `assistant-${Date.now()}`, role: 'assistant', content: data.message, products: data.products,
       }])
+    } catch (error) {
+      if (!controller.signal.aborted) {
+        setError(error.message)
+        setInput(content)
+        setMessages(current => current.filter(message => message.id !== userMessage.id))
+      }
+    } finally {
+      requestRef.current = null
       setIsTyping(false)
-      responseTimersRef.current = responseTimersRef.current.filter((timer) => timer !== responseTimer)
-    }, 500)
-    responseTimersRef.current.push(responseTimer)
+    }
   }
-
   return (
     <div className="fixed bottom-4 right-4 z-[60] sm:bottom-6 sm:right-6">
       {!isOpen && isGreetingVisible && (
@@ -199,15 +231,18 @@ const ChatbotWidget = () => {
             <div ref={messagesEndRef} />
           </div>
 
+          {error && <p role="alert" className="border-t border-rose-100 px-3 pt-2 text-sm text-red-600">{error}</p>}
           <form onSubmit={handleSend} className="flex shrink-0 items-center gap-2 border-t border-slate-100 bg-white p-3">
             <input
               value={input}
+              maxLength={1000}
+              disabled={isTyping}
               onChange={(event) => setInput(event.target.value)}
               placeholder="Nhập câu hỏi của bạn..."
               className="min-w-0 flex-1 rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none transition placeholder:text-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/15"
               aria-label="Nhập câu hỏi cho trợ lý AI"
             />
-            <button type="submit" disabled={!input.trim()} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary text-white transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-50" aria-label="Gửi tin nhắn">
+            <button type="submit" disabled={isTyping || !input.trim()} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary text-white transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-50" aria-label="Gửi tin nhắn">
               <FiSend />
             </button>
           </form>

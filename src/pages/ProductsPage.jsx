@@ -202,6 +202,8 @@ const ProductsPage = () => {
     if (['priceRange', 'storage', 'capacity'].includes(key)) {
       const value = key === 'priceRange' ? null : []
       setAppliedFilters(current => ({ ...current, [key]: value }))
+    } else if (key === 'isHotDeal') {
+      setAppliedFilters(current => ({ ...current }))
     } else if (key === 'search') handleSearchChange('')
     else {
       setSearchParams(current => {

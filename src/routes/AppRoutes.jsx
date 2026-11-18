@@ -17,7 +17,6 @@ import AdminPlaceholderPage from '../pages/admin/AdminPlaceholderPage'
 import DashboardPage from '../pages/admin/DashboardPage'
 import BrandsPage from '../pages/admin/BrandsPage'
 import CategoriesPage from '../pages/admin/CategoriesPage'
-import FlashSalesPage from '../pages/admin/FlashSalesPage'
 import ProductsAdminPage from '../pages/admin/ProductsAdminPage'
 import BannersPage from '../pages/admin/BannersPage'
 import VouchersPage from '../pages/admin/VouchersPage'
@@ -43,11 +42,10 @@ const AppRoutes = () => (
       <Route path="brands" element={<BrandsPage />} />
       <Route path="products" element={<ProductsAdminPage />} />
       <Route path="categories" element={<CategoriesPage />} />
-      <Route path="flash-sales" element={<FlashSalesPage />} />
       <Route path="orders" element={<OrdersPage admin />} />
       <Route path="banners" element={<BannersPage />} />
       <Route path="vouchers" element={<VouchersPage />} />
-      {adminPages.filter((page) => !['dashboard', 'brands', 'categories', 'flash-sales', 'products', 'banners', 'orders', 'vouchers'].includes(page.segment)).map((page) => (
+      {adminPages.filter((page) => !['dashboard', 'brands', 'categories', 'products', 'banners', 'orders', 'vouchers'].includes(page.segment)).map((page) => (
         <Route
           key={page.path}
           path={page.segment}

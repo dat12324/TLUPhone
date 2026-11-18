@@ -35,6 +35,7 @@ const OrdersPage = ({ admin = false }) => {
   const userId = user?._id || user?.id
   const [searchParams] = useSearchParams()
   const notificationOrderId = searchParams.get('orderId')
+  const paymentReturn = searchParams.has('paymentStatus')
 
   useEffect(() => {
     setDetail(null)
@@ -73,10 +74,33 @@ const OrdersPage = ({ admin = false }) => {
   }
 
   useEffect(() => {
-    if (authLoading || !isAuthenticated || !notificationOrderId) return
-    openDetail(notificationOrderId)
-    return () => detailRequest.current?.abort()
-  }, [authLoading, isAuthenticated, userId, notificationOrderId])
+    if (authLoading || !isAuthenticated) return
+    if (!notificationOrderId) {
+      if (paymentReturn) setActionError('Không xác minh được kết quả VNPay. Vui lòng xem trạng thái trong chi tiết đơn hàng.')
+      return
+    }
+    if (!paymentReturn || admin) {
+      openDetail(notificationOrderId)
+      return () => detailRequest.current?.abort()
+    }
+    const controller = new AbortController()
+    detailRequest.current = controller
+    let timer, attempts = 0
+    const checkPayment = async () => {
+      try {
+        const { data } = await api.get(`/orders/${notificationOrderId}`, { signal: controller.signal })
+        if (controller.signal.aborted) return
+        setDetail(data.data)
+        if (data.data.paymentStatus === 'pending' && ++attempts < 10) {
+          timer = setTimeout(checkPayment, 3000)
+        }
+      } catch (failure) {
+        if (!controller.signal.aborted) setActionError(failure.message)
+      }
+    }
+    void checkPayment()
+    return () => { controller.abort(); clearTimeout(timer) }
+  }, [authLoading, isAuthenticated, userId, notificationOrderId, paymentReturn, admin])
 
   const changeStatus = async (order, target, cancelReason) => {
     if (action.current) return
@@ -112,7 +136,7 @@ const OrdersPage = ({ admin = false }) => {
           <button type="button" disabled={busy} onClick={() => { detailRequest.current?.abort(); setDetail(null); setActionError('') }} className="mb-2 inline-flex min-h-10 items-center gap-2 text-sm text-slate-600 transition hover:text-primary disabled:opacity-40"><FiArrowLeft aria-hidden="true" />Lịch sử mua hàng</button>
           <h1 className="text-2xl font-bold text-secondary">Chi tiết đơn hàng</h1>
         </div>
-        {['pending', 'confirmed'].includes(detail.status) && <button type="button" disabled={busy} onClick={() => setCancelTarget(detail)} className={`${buttonClass} text-red-600 hover:border-red-300 hover:bg-red-50`}>{busy ? 'Đang xử lý…' : 'Hủy đơn hàng'}</button>}
+        {(['pending', 'confirmed'].includes(detail.status) && (detail.paymentMethod !== 'VNPAY' || detail.paymentStatus === 'failed')) && <button type="button" disabled={busy} onClick={() => setCancelTarget(detail)} className={`${buttonClass} text-red-600 hover:border-red-300 hover:bg-red-50`}>{busy ? 'Đang xử lý…' : 'Hủy đơn hàng'}</button>}
       </header>
       {notice && <p role="status" className="rounded-xl bg-emerald-50 p-3 text-sm text-emerald-700">{notice}</p>}
       {actionError && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-600">{actionError}</p>}
@@ -137,7 +161,7 @@ const OrdersPage = ({ admin = false }) => {
         <OrderDetail order={detail} />
         {actionError && <p role="alert" className="mt-4 text-sm text-red-600">{actionError}</p>}
       </div>
-      <footer className="flex flex-wrap justify-end gap-2 border-t border-slate-200 p-5">{(admin ? nextStatuses[detail.status] || [] : ['pending', 'confirmed'].includes(detail.status) ? ['cancelled'] : []).map(target => <button key={target} type="button" disabled={busy} onClick={() => admin ? changeStatus(detail, target) : setCancelTarget(detail)} className={`${buttonClass} ${target === 'cancelled' ? 'text-red-600' : 'text-primary'}`}>{busy ? 'Đang xử lý…' : target === 'cancelled' ? 'Hủy đơn hàng' : labels[target]}</button>)}</footer>
+      <footer className="flex flex-wrap justify-end gap-2 border-t border-slate-200 p-5">{(admin ? nextStatuses[detail.status] || [] : (['pending', 'confirmed'].includes(detail.status) && (detail.paymentMethod !== 'VNPAY' || detail.paymentStatus === 'failed')) ? ['cancelled'] : []).map(target => <button key={target} type="button" disabled={busy} onClick={() => admin ? changeStatus(detail, target) : setCancelTarget(detail)} className={`${buttonClass} ${target === 'cancelled' ? 'text-red-600' : 'text-primary'}`}>{busy ? 'Đang xử lý…' : target === 'cancelled' ? 'Hủy đơn hàng' : labels[target]}</button>)}</footer>
     </SideDrawer>}
     {cancelTarget && <CancelOrderModal order={cancelTarget} busy={busy} onClose={() => setCancelTarget(null)} onConfirm={(order, reason) => changeStatus(order, 'cancelled', reason)} />}
   </div>

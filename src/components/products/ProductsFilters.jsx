@@ -20,7 +20,7 @@ const filterGroups = [
 const sortOptions = [
   { value: 'default', label: 'Phổ biến', Icon: FiStar },
   { value: 'newest', label: 'Mới nhất', desktop: false },
-  { value: 'hot', label: 'Khuyến mãi HOT', Icon: FiTag, mobile: false },
+  { value: 'hot', label: 'Khuyến mãi HOT', Icon: FiTag },
   { value: 'price-asc', label: 'Giá: Thấp → Cao', desktopLabel: 'Giá thấp - Cao', Icon: FiArrowUp },
   { value: 'price-desc', label: 'Giá: Cao → Thấp', desktopLabel: 'Giá cao - Thấp', Icon: FiArrowDown },
 ]
@@ -283,7 +283,7 @@ const ProductsFilters = ({
         </button>
       </div>
 
-      <div className="lg:hidden">{activeFiltersContent}</div>
+      <div className="space-y-3 lg:hidden">{activeFiltersContent}</div>
 
       {/* Bộ lọc và sắp xếp ngang trên desktop */}
       <div ref={filterContainerRef} className="relative hidden lg:block mb-8">
@@ -362,6 +362,7 @@ const ProductsFilters = ({
                 key={value}
                 type="button"
                 onClick={() => handleSortChange(value)}
+                aria-pressed={sortBy === value}
                 className={`inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm transition-all duration-200 ${
                   sortBy === value
                     ? 'border-primary bg-rose-50 text-primary font-semibold shadow-xs'

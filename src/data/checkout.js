@@ -19,6 +19,12 @@ export const paymentMethods = [
     available: true,
   },
   {
+    id: 'vnpay',
+    label: 'VNPay Sandbox',
+    description: 'Thanh toán trực tuyến qua cổng VNPay thử nghiệm',
+    available: true,
+  },
+  {
     id: 'momo',
     label: 'Ví MoMo',
     description: 'Thanh toán qua ví điện tử MoMo',

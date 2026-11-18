@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FiArrowRight, FiHeart, FiStar } from 'react-icons/fi'
-import { usePromotion } from '../../context/PromotionContext'
 
 const PLACEHOLDER_IMAGE = '/images/products/placeholder.svg'
 
@@ -18,8 +17,7 @@ const getDiscountPercent = (originalPrice, price) => {
 
 const ProductCard = ({ product }) => {
   const [isFavorite, setIsFavorite] = useState(false)
-  const { applyPromotionToProduct } = usePromotion()
-  const displayedProduct = applyPromotionToProduct(product)
+  const displayedProduct = product
   const discount = getDiscountPercent(displayedProduct.originalPrice, displayedProduct.price)
   const detailPath = `/products/${displayedProduct.slug || displayedProduct.id}`
 
